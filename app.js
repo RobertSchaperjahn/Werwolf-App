@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
 let playerCount = 0;
 let players = [];
 
+// Rollenzuweisung nach Anzahl Spieler
 const roleDistribution = {
     8: { villagers: 4, werewolves: 2 },
     9: { villagers: 6, werewolves: 2 },
@@ -111,17 +112,31 @@ function assignRolesAutomatically() {
         players.push({ name: `Spieler ${i + 1}`, role: allRoles[i], alive: true });
     }
 
-    updatePlayerList();
+    setupPlayerNames(); // Ermöglicht Namensänderungen nach der automatischen Verteilung
 }
 
-function updatePlayerList() {
+function setupPlayerNames() {
     const playerList = document.getElementById('playerList');
     playerList.innerHTML = '';
-    players.forEach(player => {
+
+    players.forEach((player, index) => {
         const li = document.createElement('li');
-        li.textContent = `${player.name} - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`;
+
+        // Eingabefeld für den Namen des Spielers
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.placeholder = `Name Spieler ${index + 1}`;
+        nameInput.value = player.name;
+        nameInput.addEventListener('input', (event) => {
+            player.name = event.target.value;
+        });
+
+        li.appendChild(nameInput);
+        li.append(` - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`);
         playerList.appendChild(li);
     });
+
+    document.getElementById('nextPhase').classList.remove('hidden');
 }
 
 function shuffleArray(array) {
@@ -130,3 +145,4 @@ function shuffleArray(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
