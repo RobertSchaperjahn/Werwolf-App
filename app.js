@@ -100,27 +100,28 @@ function assignRolesAutomatically() {
     const totalVillagers = distribution.villagers;
     const totalWerewolves = distribution.werewolves;
 
-    // Erstellen der Rollenarrays für Werwölfe und Dorfbewohner
+    // Bereitstellung der genauen Anzahl an Werwolf- und Dorfbewohnerrollen basierend auf Spieleranzahl
     const werewolves = Array(totalWerewolves).fill("Werwolf");
     const villagers = roles.slice(0, totalVillagers);
 
-    // Wenn die Rollenanzahl nicht exakt zur Spieleranzahl passt, geben wir eine spezifische Meldung aus
-    if (werewolves.length + villagers.length !== playerCount) {
+    // Prüfen, ob die Rollenanzahl (Werwölfe + Dorfbewohner) der Spieleranzahl entspricht
+    if ((werewolves.length + villagers.length) !== playerCount) {
         console.error(`Fehler: Die Summe der Dorfbewohner (${villagers.length}) und Werwölfe (${werewolves.length}) stimmt nicht mit der Spieleranzahl (${playerCount}) überein.`);
         return;
     }
 
-    players = [];
+    // Kombinierte Rollenliste aus Werwölfen und Dorfbewohnern erstellen
     const allRoles = [...werewolves, ...villagers];
     shuffleArray(allRoles);
 
-    // Spielerrollen verteilen
+    // Spieler-Array basierend auf der Spieleranzahl auffüllen
+    players = [];
     for (let i = 0; i < playerCount; i++) {
         players.push({ name: `Spieler ${i + 1}`, role: allRoles[i], alive: true });
     }
 
     console.log("Automatische Rollenverteilung abgeschlossen:", players);
-    setupPlayerNames(); // Zeigt die Spieler zur Namensbearbeitung an
+    setupPlayerNames(); // Spieler zur Namensbearbeitung bereitstellen
 }
 
 function setupPlayerNames() {
@@ -143,7 +144,6 @@ function setupPlayerNames() {
         playerList.appendChild(li);
     });
 
-    console.log("Spielernamen-Setup abgeschlossen:", players);
     document.getElementById('nextPhase').classList.remove('hidden');
 }
 
@@ -153,6 +153,7 @@ function shuffleArray(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
 
 function updatePlayerList() {
     const playerList = document.getElementById('playerList');
