@@ -126,3 +126,64 @@ function nextPhase() {
     alert("Die nächste Phase beginnt!");
     // Hier können wir zur nächsten Phase übergehen und den nächsten Satz von Ereignissen starten
 }
+function checkForConnectionRoles() {
+    const valentin = players.find(player => player.role === "Vollsuff-Valentin");
+    const waltraud = players.find(player => player.role === "Wahrsager-Weberin Waltraud");
+
+    if (valentin) {
+        connectPlayers(valentin, 3);
+    }
+    if (waltraud) {
+        connectPlayers(waltraud, 2);
+    }
+}
+
+function connectPlayers(player, numConnections) {
+    alert(`${player.name} (Rolle: ${player.role}) soll ${numConnections} Spieler verbinden.`);
+
+    const selectedPlayers = [];
+    let connected = 0;
+
+    while (connected < numConnections) {
+        const playerName = prompt(`Wähle den Namen des Spielers, der verbunden werden soll (${connected + 1}/${numConnections}):`);
+        const targetPlayer = players.find(p => p.name === playerName);
+
+        if (!targetPlayer) {
+            alert("Spieler nicht gefunden. Bitte einen gültigen Namen eingeben.");
+            continue;
+        }
+        // Prüfen, ob es sich um Konny oder Der Priester handelt
+        if ((targetPlayer.role === "Konversionstherapie Konny" || targetPlayer.role === "Der geile Priester") && player.role === "Vollsuff-Valentin") {
+            alert("Verbindung zu diesem Spieler ist nicht möglich, aber es wird nicht angezeigt.");
+            continue;
+        }
+        
+        selectedPlayers.push(targetPlayer);
+        connected++;
+    }
+
+    // Herzen hinzufügen, außer es handelt sich um verbotene Verbindungen
+    selectedPlayers.forEach(selected => {
+        if (selected.role !== "Konversionstherapie Konny" && selected.role !== "Der geile Priester") {
+            selected.connected = true;  // Markiere die Verbindung
+        }
+    });
+    updatePlayerListWithConnections();
+}
+
+function updatePlayerListWithConnections() {
+    const playerList = document.getElementById('playerList');
+    playerList.innerHTML = '';
+
+    players.forEach(player => {
+        const li = document.createElement('li');
+        li.textContent = `${player.name} - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`;
+
+        // Herzsymbol für verbundene Spieler anzeigen
+        if (player.connected) {
+            li.innerHTML += " ❤️";
+        }
+
+        playerList.appendChild(li);
+    });
+}
