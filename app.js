@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 let playerCount = 0;
 let players = [];
+let currentPhase = "Nacht";
+let phaseStep = 0;
 
 const roles = [
     "Werwolf", "Dielenschleiferin", "Heimscheißerin", "Prokrastinations Paula", "Schutzschild-Sigrid",
@@ -23,6 +25,11 @@ const roles = [
     "Gloryhole Günni", "Blutmagierin Beatrix", "Klatsch-Käthe", "Vollsuff-Valentin", 
     "Wahrsager-Weberin Waltraud", "Keta-Zieherin Claudia", "Iltussy", "Trip-Sitterin Tanja", 
     "Giftmischerin Gertrud", "Travestiekünstler Tristan", "Der Twink", "Der geile Priester"
+];
+
+const nightEvents = [
+    einaeugigeDealerinEvent,
+    // Weitere Ereignisse können hier hinzugefügt werden
 ];
 
 function setPlayerCount(count, button) {
@@ -85,7 +92,6 @@ function assignRolesManually() {
     alert("Rollen wurden manuell zugewiesen.");
     updatePlayerList();
     document.getElementById('assignRoles').classList.add('hidden');
-    document.getElementById('nextPhase').classList.remove('hidden');
 
     // Startet die erste Nachtphase automatisch nach der Rollenzuweisung
     nextPhase();
@@ -100,16 +106,8 @@ function updatePlayerList() {
         playerList.appendChild(li);
     });
 }
-let currentPhase = "Nacht";
-let phaseStep = 0;
 
-// Liste der Ereignisse für die Nachtphase
-const nightEvents = [
-    einaeugigeDealerinEvent,
-    // Hier können weitere Ereignisse hinzugefügt werden, z.B. werewolfAttackEvent
-];
-
-// Beispiel: Die einäugige Dealerin als Event
+// Funktion für das erste Ereignis: einäugige Dealerin
 function einaeugigeDealerinEvent() {
     alert("Die einäugige Dealerin ist jetzt aktiv! Spieler (außer Werwölfe) können auf Wunsch eine neue Rolle erhalten.");
 
@@ -125,7 +123,8 @@ function einaeugigeDealerinEvent() {
     });
     nextPhase();
 }
-// Funktion, um zum nächsten Ereignis überzugehen
+
+// Ereignissteuerung: führt durch die Nacht- und Tagphasen
 function nextPhase() {
     if (currentPhase === "Nacht") {
         if (phaseStep < nightEvents.length) {
@@ -145,8 +144,8 @@ function nextPhase() {
     }
 }
 
-// Funktion für die Tagphase-Diskussion mit Timer
-function startDiscussionTimer(duration = 60) {  // Dauer in Sekunden
+// Timer für die Tagphase-Diskussion
+function startDiscussionTimer(duration = 60) {
     let timer = duration;
     const interval = setInterval(() => {
         if (timer > 0) {
