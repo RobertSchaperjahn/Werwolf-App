@@ -145,19 +145,22 @@ function assignRolesAutomatically() {
 
     let availableRoles = getAllRoles().filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud");
 
+    players = [];  // Setzt die Spielerliste zurück
+
     for (let i = 1; i <= playerCount; i++) {
         const isWerewolf = i <= totalWerewolves;
-        const roleType = isWerewolf ? "werewolves" : "villagers";
-
+        
+        // Wählt zufällig eine Rolle aus den verfügbaren Rollen
         const randomRoleIndex = Math.floor(Math.random() * availableRoles.length);
         const assignedRole = availableRoles.splice(randomRoleIndex, 1)[0];
 
-        players.push({ name: `Spieler ${i}`, role: assignedRole, alive: true });
-        roles[roleType].push(assignedRole);
+        const playerName = `Spieler ${i}`;
+        players.push({ name: playerName, role: assignedRole, alive: true });
     }
 
     updatePlayerList();
     document.getElementById('nextPhase').classList.remove('hidden');
+    alert("Rollen wurden automatisch zugewiesen.");
 }
 
 function assignRoles() {
