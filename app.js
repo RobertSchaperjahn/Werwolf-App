@@ -122,10 +122,13 @@ function swapRole(index) {
     updatePlayerListWithRoleSwap(); // Liste nach Rollentausch aktualisieren
 }
 
-function nextPhase() {
-    alert("Die nächste Phase beginnt!");
-    // Hier können wir zur nächsten Phase übergehen und den nächsten Satz von Ereignissen starten
+// Startet die Nachtphase und überprüft die Verbindungsrollen
+function startNightPhase() {
+    console.log("Nachtphase gestartet.");
+    checkForConnectionRoles();
 }
+
+// Prüft auf Rollen, die Verbindungen herstellen können
 function checkForConnectionRoles() {
     const valentin = players.find(player => player.role === "Vollsuff-Valentin");
     const waltraud = players.find(player => player.role === "Wahrsager-Weberin Waltraud");
@@ -140,9 +143,8 @@ function checkForConnectionRoles() {
     }
 }
 
+// Verbindet die angegebenen Spieler, ohne dass Konny oder der Priester ein Herz bekommen
 function connectPlayers(player, numConnections) {
-    alert(`${player.name} (Rolle: ${player.role}) soll ${numConnections} Spieler verbinden.`);
-    
     const selectedPlayers = [];
     let connected = 0;
 
@@ -157,19 +159,20 @@ function connectPlayers(player, numConnections) {
 
         if (targetPlayer.role === "Konversionstherapie Konny" || targetPlayer.role === "Der geile Priester") {
             alert(`Verbindung mit ${targetPlayer.name} ist nicht möglich, wird aber zum Schein angezeigt.`);
-            selectedPlayers.push(targetPlayer);  // Hinzufügen, aber ohne Herz
+            selectedPlayers.push(targetPlayer);
         } else {
             selectedPlayers.push(targetPlayer);
-            targetPlayer.connected = true; // Herzsymbol soll angezeigt werden
-            alert(`${targetPlayer.name} wurde erfolgreich verbunden.`);
+            targetPlayer.connected = true;
+            alert(`${targetPlayer.name} wurde erfolgreich verbunden und hat ein Herz erhalten.`);
         }
-        
+
         connected++;
     }
 
     updatePlayerListWithConnections();
 }
 
+// Aktualisiert die Anzeige der Spieler und fügt Herzen für verbundene Spieler hinzu
 function updatePlayerListWithConnections() {
     const playerList = document.getElementById('playerList');
     playerList.innerHTML = '';
@@ -178,7 +181,7 @@ function updatePlayerListWithConnections() {
         const li = document.createElement('li');
         li.textContent = `${player.name} - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`;
 
-        // Herzsymbol für verbundene Spieler anzeigen, falls "connected" gesetzt ist
+        // Herzsymbol für verbundene Spieler anzeigen
         if (player.connected) {
             li.innerHTML += " ❤️";
         }
@@ -187,8 +190,5 @@ function updatePlayerListWithConnections() {
     });
 }
 
-// Diese Funktion sollte einmal zu Beginn der Nachtphase aufgerufen werden
-function startNightPhase() {
-    checkForConnectionRoles();
-    nextPhase();
-}
+// Beispiel: Nachtphase manuell starten, wenn das Spiel beginnt
+document.getElementById('startNightPhaseButton').addEventListener('click', startNightPhase);
