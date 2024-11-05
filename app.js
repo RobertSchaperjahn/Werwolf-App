@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById('startGame').addEventListener('click', startGame);
+    document.getElementById('manualStart').addEventListener('click', startManualGame);
+    document.getElementById('autoStart').addEventListener('click', startAutoGame);
     document.getElementById('assignRoles').addEventListener('click', assignRoles);
     document.getElementById('nextPhase').addEventListener('click', nextPhase);
 
@@ -86,21 +87,24 @@ function setPlayerCount(count, button) {
     button.classList.add("active");
 }
 
-// Start des Spiels und Wahl zwischen manueller und automatischer Rollenvergabe
-function startGame() {
+// Start des Spiels mit manueller Rollenvergabe
+function startManualGame() {
     if (!playerCount) {
         alert("Bitte wähle die Anzahl der Spieler.");
         return;
     }
+    setupPlayers();
+    document.getElementById('setup').classList.add('hidden');
+    document.getElementById('gameArea').classList.remove('hidden');
+}
 
-    const isManualAssignment = confirm("Möchtest du die Rollen manuell zuweisen? OK für Ja, Abbrechen für Nein (automatisch)");
-
-    if (isManualAssignment) {
-        setupPlayers();
-    } else {
-        assignRolesAutomatically();
+// Start des Spiels mit automatischer Rollenvergabe
+function startAutoGame() {
+    if (!playerCount) {
+        alert("Bitte wähle die Anzahl der Spieler.");
+        return;
     }
-
+    assignRolesAutomatically();
     document.getElementById('setup').classList.add('hidden');
     document.getElementById('gameArea').classList.remove('hidden');
 }
@@ -160,7 +164,6 @@ function assignRolesAutomatically() {
 
     updatePlayerList();
     document.getElementById('nextPhase').classList.remove('hidden');
-    alert("Rollen wurden automatisch zugewiesen.");
 }
 
 function assignRoles() {
@@ -171,7 +174,6 @@ function assignRoles() {
         player.name = nameInput.value || `Spieler ${index + 1}`;
         player.role = roleSelect.value;
     });
-    alert("Rollen wurden manuell zugewiesen.");
     updatePlayerList();
     document.getElementById('assignRoles').classList.add('hidden');
     document.getElementById('nextPhase').classList.remove('hidden');
@@ -183,6 +185,4 @@ function updatePlayerList() {
     players.forEach(player => {
         const li = document.createElement('li');
         li.textContent = `${player.name} - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`;
-        playerList.appendChild(li);
-    });
-}
+        playerList
