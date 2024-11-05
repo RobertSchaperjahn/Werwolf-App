@@ -17,23 +17,6 @@ const roleDistribution = {
     15: { villagers: 10, werewolves: 4 }
 };
 
-
-// Setzt die Spieleranzahl basierend auf dem geklickten Button
-function setPlayerCount(count) {
-    playerCount = count;
-    alert(`Spieleranzahl auf ${playerCount} festgelegt.`);
-}
-
-// Füge Event Listener zu den Spieleranzahl-Buttons hinzu
-document.querySelectorAll("#playerCountButtons button").forEach(button => {
-    button.addEventListener("click", function() {
-        setPlayerCount(parseInt(button.innerText));
-    });
-});
-
-// Füge Event Listener für den Start des Spiels hinzu
-document.getElementById('startGame').addEventListener('click', startGame);
-
 // Vollständige Rollenliste nach Kategorien
 const roles = {
     dorfbewohner_neutral: [
@@ -84,21 +67,18 @@ function getAllRoles() {
     return Object.values(roles).flat();
 }
 
-let currentPhase = "Nacht";
-let phaseCount = 0; // Zählt die Anzahl der durchlaufenen Phasen
-let eventsEnabled = true; 
-let eventProbability = 0.2; // 20% Wahrscheinlichkeit ab der vierten Nachtphase
-
-function nextPhase() {
-    if (currentPhase === "Nacht") {
-        nightPhase();
-        currentPhase = "Tag";
-        phaseCount++;  // Erhöhe den Zähler für jede Nachtphase
-    } else {
-        dayPhase();
-        currentPhase = "Nacht";
-    }
+// Funktion zur Festlegung der Spieleranzahl über die Buttons
+function setPlayerCount(count) {
+    playerCount = count;
+    alert(`Spieleranzahl auf ${playerCount} festgelegt.`);
 }
+
+// Füge Event Listener zu den Spieleranzahl-Buttons hinzu
+document.querySelectorAll("#playerCountButtons button").forEach(button => {
+    button.addEventListener("click", function() {
+        setPlayerCount(parseInt(button.innerText));
+    });
+});
 
 // Start des Spiels und Wahl zwischen manueller und automatischer Rollenvergabe
 function startGame() {
@@ -198,76 +178,4 @@ function updatePlayerList() {
         li.textContent = `${player.name} - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`;
         playerList.appendChild(li);
     });
-}
-
-function nextPhase() {
-    if (currentPhase === "Nacht") {
-        nightPhase();
-        currentPhase = "Tag";
-    } else {
-        dayPhase();
-        currentPhase = "Nacht";
-    }
-}
-
-function nightPhase() {
-    alert("Nachtphase beginnt!");
-    let targetIndex;
-    do {
-        targetIndex = Math.floor(Math.random() * players.length);
-    } while (!players[targetIndex].alive);  // Wählt nur lebendige Spieler
-
-    players[targetIndex].alive = false; // Beispiel: Werwölfe eliminieren Spieler
-    updatePlayerList();
-
-    // Überprüfe, ob mindestens 3 Nachtphasen vergangen sind, bevor Events möglich sind
-    if (phaseCount >= 4) {
-        checkForRandomEvent();
-    }
-}
-
-function dayPhase() {
-    alert("Tagphase beginnt! Diskussion startet.");
-    startDiscussionTimer();
-    // Beispielaktion in der Tagphase – Abstimmung, um einen Spieler zu eliminieren
-    let voteTargetIndex;
-    do {
-        voteTargetIndex = Math.floor(Math.random() * players.length);
-    } while (!players[voteTargetIndex].alive);  // Wählt nur lebendige Spieler
-
-    players[voteTargetIndex].alive = false;  // Beispiel: Abstimmung eliminiert einen Spieler
-    updatePlayerList();
-}
-
-function startDiscussionTimer(duration = 60) {  // Dauer in Sekunden
-    let timer = duration;
-    const interval = setInterval(() => {
-        if (timer > 0) {
-            console.log(`Diskussionszeit: ${timer} Sekunden`);
-            timer--;
-        } else {
-            clearInterval(interval);
-            alert("Diskussionszeit ist abgelaufen.");
-        }
-    }, 1000);
-}
-
-function checkForRandomEvent() {
-    if (eventsEnabled && Math.random() < eventProbability) {
-        triggerRandomEvent();
-    }
-}
-
-function triggerRandomEvent() {
-    const event = Math.random() < 0.5 ? "Unwetter" : "Epidemie";
-    if (event === "Unwetter") {
-        alert("Unwetter! Die Diskussionszeit wird in der nächsten Tagphase verkürzt.");
-        startDiscussionTimer(30); // Verkürzte Diskussionszeit
-    } else {
-        alert("Epidemie! Einige Spieler können sich nicht an der Diskussion beteiligen.");
-        players.forEach(player => {
-            if (Math.random() < 0.3) player.alive = false; // Beispielhafte Erkrankung
-        });
-        updatePlayerList();
-    }
 }
