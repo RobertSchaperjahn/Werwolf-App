@@ -147,33 +147,41 @@ function shuffleArray(array) {
     }
 }
 
+function assignRolesAutomatically() {
+    const distribution = roleDistribution[playerCount];
+    const totalVillagers = distribution.villagers;
+    const totalWerewolves = distribution.werewolves;
 
+    // Erstellen der Werwolf-Rollen
+    const werewolves = Array(totalWerewolves).fill("Werwolf");
 
-// Funktion zum Anpassen der Spielernamen nach der Rollenzuweisung
-function setupPlayerNames() {
-    const playerList = document.getElementById('playerList');
-    playerList.innerHTML = '';
+    // Auswahl der spezifischen Dorfbewohner-Rollen, basierend auf der Anzahl der benötigten Dorfbewohner
+    let villagers = getAllRoles()
+        .filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud")
+        .slice(0, totalVillagers);
 
-    players.forEach((player, index) => {
-        const li = document.createElement('li');
+    // Sicherstellen, dass die Anzahl der Rollen genau der Spieleranzahl entspricht
+    if (werewolves.length + villagers.length !== playerCount) {
+        console.error("Die Anzahl der verfügbaren Rollen stimmt nicht mit der Anzahl der Spieler überein.");
+        return;
+    }
 
-        // Eingabefeld für den Namen des Spielers
-        const nameInput = document.createElement('input');
-        nameInput.type = 'text';
-        nameInput.placeholder = `Name Spieler ${index + 1}`;
-        nameInput.value = player.name;
-        nameInput.addEventListener('input', (event) => {
-            player.name = event.target.value;
-        });
+    // Spielerliste zurücksetzen
+    players = [];
 
-        li.appendChild(nameInput);
-        li.append(` - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`);
-        playerList.appendChild(li);
-    });
+    // Kombinieren und Mischen der Rollen
+    const allRoles = [...werewolves, ...villagers];
+    shuffleArray(allRoles);
 
-    document.getElementById('nextPhase').classList.remove('hidden');
+    // Rollen den Spielern zuweisen
+    for (let i = 0; i < playerCount; i++) {
+        const assignedRole = allRoles[i];
+        players.push({ name: `Spieler ${i + 1}`, role: assignedRole, alive: true });
+    }
+
+    // Namen der Spieler anpassen lassen
+    setupPlayerNames();
 }
-
 
 // Hilfsfunktion zum Mischen eines Arrays
 function shuffleArray(array) {
@@ -182,6 +190,7 @@ function shuffleArray(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
 
 function assignRoles() {
     players.forEach((player, index) => {
