@@ -3,11 +3,13 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('assignRoles').addEventListener('click', assignRoles);
     document.getElementById('nextPhase').addEventListener('click', nextPhase);
 
-    // Füge Event Listener zu den Spieleranzahl-Buttons hinzu
+    // Einmaliger Event Listener für Spieleranzahl-Buttons
     document.querySelectorAll("#playerCountButtons button").forEach(button => {
         button.addEventListener("click", function() {
             const count = parseInt(button.getAttribute("data-count"));
-            setPlayerCount(count);
+            if (!isNaN(count)) {
+                setPlayerCount(count);
+            }
         });
     });
 });
@@ -77,7 +79,28 @@ function getAllRoles() {
     return Object.values(roles).flat();
 }
 
-// Funktion zur Festlegung der Spieleranzahl über die Buttons
+// Beispielhafte CSS-Regeln zur Einbindung für das Styling und die `.hidden`-Klasse
+// Dies kannst du in einem `<style>`-Block im `<head>`-Bereich der `index.html` testen, falls keine separate CSS-Datei vorhanden ist:
+
+/*
+<style>
+    .hidden {
+        display: none;
+    }
+    #setup, #gameArea {
+        font-family: Arial, sans-serif;
+    }
+    button {
+        padding: 10px;
+        margin: 5px;
+        cursor: pointer;
+    }
+</style>
+*/
+
+// Funktionsdefinitionen und weitere Logik bleiben gleich...
+
+// Setzt die Spieleranzahl und stellt sicher, dass der Alert nur einmal ausgelöst wird
 function setPlayerCount(count) {
     playerCount = count;
     alert(`Spieleranzahl auf ${playerCount} festgelegt.`);
