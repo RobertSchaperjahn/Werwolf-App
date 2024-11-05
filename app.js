@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
 let playerCount = 0;
 let players = [];
 
+// Rollenzuweisung nach Anzahl Spieler
 const roleDistribution = {
     8: { villagers: 4, werewolves: 2 },
     9: { villagers: 6, werewolves: 2 },
@@ -26,25 +27,16 @@ const roleDistribution = {
     15: { villagers: 10, werewolves: 4 }
 };
 
-const roles = {
-    dorfbewohner_neutral: ["Dielenschleiferin", "Heimscheißerin", "Prokrastinations Paula", "Schutzschild-Sigrid"],
-    dorfbewohner_besondere_faehigkeiten: ["Bordell Bärbel", "Mansplaining Martin", "Kräuterhexe Hilde", "Nekromant Norbert", "Boy-Butter Bäuerin", "Öko Sabine", "Bestatterin Brunhilde", "Nicht-binäre Türsteherperson Toni", "Wachmann Wenzel"],
-    eigene_ziele: ["Wut Wiebke", "Suizid Susie", "Doppelmoral-Dörthe", "Konversionstherapie Konny", "Gloryhole Günni", "Blutmagierin Beatrix"],
-    manipulation_verwirrung: ["Klatsch-Käthe", "Vollsuff-Valentin", "Wahrsager-Weberin Waltraud"],
-    unberechenbar_gefaehrlich: ["Keta-Zieherin Claudia", "Iltussy", "Trip-Sitterin Tanja", "Giftmischerin Gertrud", "Travestiekünstler Tristan"],
-    beziehungsdynamik: ["Der Twink", "Der geile Priester"]
-};
-
-function getAllRoles() {
-    return [
-        ...roles.dorfbewohner_neutral,
-        ...roles.dorfbewohner_besondere_faehigkeiten,
-        ...roles.eigene_ziele,
-        ...roles.manipulation_verwirrung,
-        ...roles.unberechenbar_gefaehrlich,
-        ...roles.beziehungsdynamik
-    ];
-}
+// Alle spezifischen Rollen in flacher Struktur
+const roles = [
+    "Dielenschleiferin", "Heimscheißerin", "Prokrastinations Paula", "Schutzschild-Sigrid",
+    "Bordell Bärbel", "Mansplaining Martin", "Kräuterhexe Hilde", "Nekromant Norbert", 
+    "Boy-Butter Bäuerin", "Öko Sabine", "Bestatterin Brunhilde", "Nicht-binäre Türsteherperson Toni", 
+    "Wachmann Wenzel", "Wut Wiebke", "Suizid Susie", "Doppelmoral-Dörthe", "Konversionstherapie Konny", 
+    "Gloryhole Günni", "Blutmagierin Beatrix", "Klatsch-Käthe", "Vollsuff-Valentin", 
+    "Wahrsager-Weberin Waltraud", "Keta-Zieherin Claudia", "Iltussy", "Trip-Sitterin Tanja", 
+    "Giftmischerin Gertrud", "Travestiekünstler Tristan", "Der Twink", "Der geile Priester"
+];
 
 function setPlayerCount(count, button) {
     playerCount = count;
@@ -58,6 +50,8 @@ function startManualGame() {
         return;
     }
     setupPlayers();
+    document.getElementById('setup').classList.add('hidden');
+    document.getElementById('gameArea').classList.remove('hidden');
 }
 
 function startAutoGame() {
@@ -66,6 +60,8 @@ function startAutoGame() {
         return;
     }
     assignRolesAutomatically();
+    document.getElementById('setup').classList.add('hidden');
+    document.getElementById('gameArea').classList.remove('hidden');
 }
 
 function setupPlayers() {
@@ -83,7 +79,7 @@ function setupPlayers() {
 
         const roleSelect = document.createElement('select');
         roleSelect.id = `playerRole${i}`;
-        getAllRoles().forEach(role => {
+        roles.forEach(role => {
             const option = document.createElement('option');
             option.value = role;
             option.textContent = role;
@@ -96,15 +92,17 @@ function setupPlayers() {
 
         players.push({ name: `Spieler ${i}`, role: null, alive: true });
     }
+    document.getElementById('assignRoles').classList.remove('hidden');
 }
 
+// Funktion zur automatischen Rollenzuweisung
 function assignRolesAutomatically() {
     const distribution = roleDistribution[playerCount];
     const totalVillagers = distribution.villagers;
     const totalWerewolves = distribution.werewolves;
 
     const werewolves = Array(totalWerewolves).fill("Werwolf");
-    let villagers = getAllRoles().slice(0, totalVillagers);
+    let villagers = roles.slice(0, totalVillagers);
 
     if (werewolves.length + villagers.length !== playerCount) {
         console.error("Die Anzahl der spezifischen Rollen stimmt nicht mit der Spieleranzahl überein.");
