@@ -111,7 +111,16 @@ function updatePlayerList() {
 function einaeugigeDealerinEvent() {
     alert("Die einäugige Dealerin ist jetzt aktiv! Spieler (außer Werwölfe) können auf Wunsch eine neue Rolle erhalten.");
 
-    players.forEach((player) => {
+    let playerIndex = 0; // Startet bei Spieler 0
+
+    function askForNewRole() {
+        if (playerIndex >= players.length) {
+            // Wenn alle Spieler durchlaufen wurden, zur nächsten Phase übergehen
+            nextPhase();
+            return;
+        }
+
+        const player = players[playerIndex];
         if (player.role !== "Werwolf") {
             const wantsNewRole = confirm(`Soll ${player.name} eine neue Rolle erhalten?`);
             if (wantsNewRole) {
@@ -120,8 +129,12 @@ function einaeugigeDealerinEvent() {
                 alert(`${player.name} hat jetzt die Rolle: ${player.role}`);
             }
         }
-    });
-    nextPhase();
+
+        playerIndex++;
+        askForNewRole(); // Nächsten Spieler aufrufen
+    }
+
+    askForNewRole(); // Starte mit dem ersten Spieler
 }
 
 // Ereignissteuerung: führt durch die Nacht- und Tagphasen
