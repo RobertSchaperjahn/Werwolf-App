@@ -124,22 +124,28 @@ function swapRole(index) {
 
 // Startet die Nachtphase und überprüft die Verbindungsrollen
 function startNightPhase() {
-    console.log("Nachtphase gestartet.");
+    console.log("Nachtphase gestartet.");  // Debug-Log
+    alert("Nachtphase beginnt jetzt!");
     checkForConnectionRoles();
 }
 
 // Prüft auf Rollen, die Verbindungen herstellen können
 function checkForConnectionRoles() {
+    console.log("Überprüfung der Verbindungsrollen gestartet.");  // Debug-Log
     const valentin = players.find(player => player.role === "Vollsuff-Valentin");
     const waltraud = players.find(player => player.role === "Wahrsager-Weberin Waltraud");
 
     if (valentin) {
         alert(`${valentin.name} ist Vollsuff-Valentin und soll 3 Spieler verbinden.`);
         connectPlayers(valentin, 3);
+    } else {
+        console.log("Kein Vollsuff-Valentin im Spiel.");
     }
     if (waltraud) {
         alert(`${waltraud.name} ist Wahrsager-Weberin Waltraud und soll 2 Spieler verbinden.`);
         connectPlayers(waltraud, 2);
+    } else {
+        console.log("Keine Wahrsager-Weberin Waltraud im Spiel.");
     }
 }
 
