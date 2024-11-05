@@ -117,26 +117,25 @@ function assignRolesAutomatically() {
         .filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud")
         .slice(0, totalVillagers);
 
-    // Überprüfen, ob die Anzahl der Rollen mit der Anzahl der Spieler übereinstimmt
-    if (werewolves.length + villagers.length < playerCount) {
-        console.error("Nicht genug spezifische Rollen vorhanden, um alle Spieler abzudecken.");
-        return;
+    // Überprüfen, ob die Anzahl der Rollen genau der Anzahl der Spieler entspricht
+    if (werewolves.length + villagers.length !== playerCount) {
+        console.warn("Die Anzahl der Rollen stimmt möglicherweise nicht mit der Anzahl der Spieler überein.");
     }
 
     // Spielerliste zurücksetzen
     players = [];
 
-    // Kombinieren und Mischen der Rollen
+    // Kombinieren und Mischen der Rollen, um eine zufällige Verteilung sicherzustellen
     const allRoles = [...werewolves, ...villagers];
     shuffleArray(allRoles);
 
-    // Rollen den Spielern zuweisen
+    // Zuweisung der Rollen an die Spieler
     for (let i = 0; i < playerCount; i++) {
         const assignedRole = allRoles[i];
         players.push({ name: `Spieler ${i + 1}`, role: assignedRole, alive: true });
     }
 
-    // Namen der Spieler anpassen lassen
+    // Rufe die Funktion auf, um Namen anzupassen
     setupPlayerNames();
 }
 
@@ -147,9 +146,6 @@ function shuffleArray(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
-
-
-
 
 // Funktion zum Anpassen der Spielernamen nach der Rollenzuweisung
 function setupPlayerNames() {
@@ -175,6 +171,7 @@ function setupPlayerNames() {
 
     document.getElementById('nextPhase').classList.remove('hidden');
 }
+
 
 // Hilfsfunktion zum Mischen eines Arrays
 function shuffleArray(array) {
