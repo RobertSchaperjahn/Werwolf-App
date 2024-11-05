@@ -17,10 +17,21 @@
 
         <!-- Spielsteuerung -->
         <main>
-            <div id="setup">
-                <input type="number" id="playerCount" placeholder="Anzahl der Spieler" min="8" max="15">
-                <button id="startGame">Neues Spiel starten</button>
-            </div>
+<div id="setup">
+    <p>Wähle die Anzahl der Spieler:</p>
+    <div id="playerCountButtons">
+        <button onclick="setPlayerCount(8)">8</button>
+        <button onclick="setPlayerCount(9)">9</button>
+        <button onclick="setPlayerCount(10)">10</button>
+        <button onclick="setPlayerCount(11)">11</button>
+        <button onclick="setPlayerCount(12)">12</button>
+        <button onclick="setPlayerCount(13)">13</button>
+        <button onclick="setPlayerCount(14)">14</button>
+        <button onclick="setPlayerCount(15)">15</button>
+    </div>
+    <button id="startGame">Neues Spiel starten</button>
+</div>
+
 
             <!-- Bereich für Spielerliste und Rollenvergabe -->
             <div id="gameArea" class="hidden">
