@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Event Listener für die Start-Buttons
+    console.log("Script geladen und bereit."); // Testausgabe
     document.getElementById('manualStart').addEventListener('click', startManualGame);
     document.getElementById('autoStart').addEventListener('click', startAutoGame);
     document.getElementById('assignRoles').addEventListener('click', assignRoles);
@@ -55,6 +55,7 @@ function setPlayerCount(count, button) {
 
 // Start des Spiels mit manueller Rollenvergabe
 function startManualGame() {
+    console.log("Manuelles Spiel gestartet"); // Testausgabe
     if (!playerCount) {
         alert("Bitte wähle die Anzahl der Spieler.");
         return;
@@ -66,6 +67,7 @@ function startManualGame() {
 
 // Start des Spiels mit automatischer Rollenvergabe
 function startAutoGame() {
+    console.log("Automatisches Spiel gestartet"); // Testausgabe
     if (!playerCount) {
         alert("Bitte wähle die Anzahl der Spieler.");
         return;
@@ -136,4 +138,17 @@ function updatePlayerList() {
         li.textContent = `${player.name} - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`;
         playerList.appendChild(li);
     });
+}
+
+function assignRoles() {
+    players.forEach((player, index) => {
+        const nameInput = document.getElementById(`playerName${index + 1}`);
+        const roleSelect = document.getElementById(`playerRole${index + 1}`);
+        
+        player.name = nameInput.value || `Spieler ${index + 1}`;
+        player.role = roleSelect.value;
+    });
+    updatePlayerList();
+    document.getElementById('assignRoles').classList.add('hidden');
+    document.getElementById('nextPhase').classList.remove('hidden');
 }
