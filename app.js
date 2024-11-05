@@ -1,46 +1,3 @@
-// Spielsteuerung
-document.getElementById('startGame').addEventListener('click', startGame);
-document.getElementById('assignRoles').addEventListener('click', assignRoles);
-document.getElementById('nextPhase').addEventListener('click', nextPhase);
-
-let playerCount;
-let players = [];
-
-function startGame() {
-    playerCount = parseInt(document.getElementById('playerCount').value);
-    if (playerCount < 8 || playerCount > 15) {
-        alert("Bitte gib eine Spieleranzahl zwischen 8 und 15 ein.");
-        return;
-    }
-    document.getElementById('setup').classList.add('hidden');
-    document.getElementById('gameArea').classList.remove('hidden');
-    setupPlayers();
-}
-
-function setupPlayers() {
-    const playerList = document.getElementById('playerList');
-    playerList.innerHTML = '';
-    for (let i = 1; i <= playerCount; i++) {
-        const li = document.createElement('li');
-        li.textContent = `Spieler ${i}`;
-        playerList.appendChild(li);
-        players.push({ name: `Spieler ${i}`, role: null });
-    }
-}
-
-function assignRoles() {
-    // Zufällige Rollenverteilung (Dummy-Funktion für Platzhalter)
-    players.forEach(player => {
-        player.role = "Dorfbewohner"; // Platzhalter-Rolle
-    });
-    alert("Rollen wurden zugewiesen.");
-    document.getElementById('nextPhase').classList.remove('hidden');
-}
-
-function nextPhase() {
-    alert("Nächste Phase startet!");
-    // Hier kommen die Logik für Nacht- und Tagphasen sowie Events
-}
 // Initiale Variablen und Event Listener für die Steuerung
 document.getElementById('startGame').addEventListener('click', startGame);
 document.getElementById('assignRoles').addEventListener('click', assignRoles);
@@ -55,24 +12,26 @@ let eventProbability = 0.2; // 20% Wahrscheinlichkeit
 
 function startGame() {
     playerCount = parseInt(document.getElementById('playerCount').value);
-    if (playerCount < 8 || playerCount > 15) {
-        alert("Bitte gib eine Spieleranzahl zwischen 8 und 15 ein.");
+    if (isNaN(playerCount) || playerCount < 8 || playerCount > 15) {
+        alert("Bitte gib eine gültige Spieleranzahl zwischen 8 und 15 ein.");
         return;
     }
-    document.getElementById('setup').classList.add('hidden');
-    document.getElementById('gameArea').classList.remove('hidden');
-    setupPlayers();
+    document.getElementById('setup').classList.add('hidden');  // Versteckt den Setup-Bereich
+    document.getElementById('gameArea').classList.remove('hidden');  // Zeigt das Spielbereich
+    setupPlayers();  // Spieler einrichten
 }
 
 function setupPlayers() {
     const playerList = document.getElementById('playerList');
-    playerList.innerHTML = '';
+    playerList.innerHTML = '';  // Setzt die Spielerliste zurück
+    players = [];  // Leert das Spieler-Array
     for (let i = 1; i <= playerCount; i++) {
         const li = document.createElement('li');
         li.textContent = `Spieler ${i}`;
         playerList.appendChild(li);
         players.push({ name: `Spieler ${i}`, role: null, alive: true });
     }
+    document.getElementById('assignRoles').classList.remove('hidden');  // Zeigt die Rollen-Button
 }
 
 function assignRoles() {
@@ -81,8 +40,9 @@ function assignRoles() {
         player.role = roles[Math.floor(Math.random() * roles.length)];
     });
     alert("Rollen wurden zufällig zugewiesen.");
-    document.getElementById('nextPhase').classList.remove('hidden');
     updatePlayerList();
+    document.getElementById('assignRoles').classList.add('hidden');
+    document.getElementById('nextPhase').classList.remove('hidden');
 }
 
 function updatePlayerList() {
@@ -108,8 +68,12 @@ function nextPhase() {
 function nightPhase() {
     alert("Nachtphase beginnt!");
     // Nachtaktionen wie Angriff der Werwölfe
-    let targetIndex = Math.floor(Math.random() * players.length);
-    players[targetIndex].alive = false; // Einfaches Beispiel für Werwolf-Angriff
+    let targetIndex;
+    do {
+        targetIndex = Math.floor(Math.random() * players.length);
+    } while (!players[targetIndex].alive);  // Wählt nur lebendige Spieler
+
+    players[targetIndex].alive = false; // Beispiel: Werwölfe eliminieren Spieler
     updatePlayerList();
     checkForRandomEvent();
 }
@@ -117,14 +81,17 @@ function nightPhase() {
 function dayPhase() {
     alert("Tagphase beginnt! Diskussion startet.");
     startDiscussionTimer();
-    // Abstimmung simuliert - ein zufälliger Spieler wird eliminiert
-    let voteTargetIndex = Math.floor(Math.random() * players.length);
-    players[voteTargetIndex].alive = false;
+    let voteTargetIndex;
+    do {
+        voteTargetIndex = Math.floor(Math.random() * players.length);
+    } while (!players[voteTargetIndex].alive);  // Wählt nur lebendige Spieler
+
+    players[voteTargetIndex].alive = false;  // Beispiel: Abstimmung eliminiert einen Spieler
     updatePlayerList();
 }
 
-function startDiscussionTimer() {
-    let timer = 60; // Diskussionszeit in Sekunden
+function startDiscussionTimer(duration = 60) {  // Dauer in Sekunden
+    let timer = duration;
     const interval = setInterval(() => {
         if (timer > 0) {
             console.log(`Diskussionszeit: ${timer} Sekunden`);
@@ -148,9 +115,9 @@ function triggerRandomEvent() {
         alert("Unwetter! Die Diskussionszeit wird in der nächsten Tagphase verkürzt.");
         startDiscussionTimer(30); // Verkürzte Diskussionszeit
     } else {
-        alert("Epidemie! Ein oder mehrere Spieler können sich nicht an der Diskussion beteiligen.");
+        alert("Epidemie! Einige Spieler können sich nicht an der Diskussion beteiligen.");
         players.forEach(player => {
-            if (Math.random() < 0.3) player.alive = false;
+            if (Math.random() < 0.3) player.alive = false; // Beispielhafte Erkrankung
         });
         updatePlayerList();
     }
