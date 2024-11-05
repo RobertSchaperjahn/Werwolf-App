@@ -122,16 +122,27 @@ function swapRole(index) {
     updatePlayerListWithRoleSwap(); // Liste nach Rollentausch aktualisieren
 }
 
+let connectionPhaseDone = false; // Flag, um festzuhalten, ob die Verbindung erstellt wurde
+
 // Startet die Nachtphase und überprüft die Verbindungsrollen
 function startNightPhase() {
-    console.log("Nachtphase gestartet.");  // Debug-Log
-    alert("Nachtphase beginnt jetzt!");
-    checkForConnectionRoles();
+    if (!connectionPhaseDone) {
+        console.log("Nachtphase gestartet und Verbindungsrollen überprüft.");
+        alert("Nachtphase beginnt jetzt!");
+        checkForConnectionRoles();
+        connectionPhaseDone = true; // Markiere die Verbindungsphase als abgeschlossen
+
+        // Button-Text zu "Nächster Spieler" ändern
+        document.getElementById('startNightPhaseButton').textContent = "Nächster Spieler";
+    } else {
+        console.log("Zur nächsten Phase wechseln.");
+        // Hier könnte die Logik für die Nachtphase fortgesetzt werden
+    }
 }
 
 // Prüft auf Rollen, die Verbindungen herstellen können
 function checkForConnectionRoles() {
-    console.log("Überprüfung der Verbindungsrollen gestartet.");  // Debug-Log
+    console.log("Überprüfung der Verbindungsrollen gestartet.");
     const valentin = players.find(player => player.role === "Vollsuff-Valentin");
     const waltraud = players.find(player => player.role === "Wahrsager-Weberin Waltraud");
 
@@ -196,5 +207,5 @@ function updatePlayerListWithConnections() {
     });
 }
 
-// Beispiel: Nachtphase manuell starten, wenn das Spiel beginnt
+// Beispiel: Button-Event für Nachtphase hinzufügen
 document.getElementById('startNightPhaseButton').addEventListener('click', startNightPhase);
