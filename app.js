@@ -3,12 +3,12 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('assignRoles').addEventListener('click', assignRoles);
     document.getElementById('nextPhase').addEventListener('click', nextPhase);
 
-    // Einmaliger Event Listener für Spieleranzahl-Buttons
+    // Füge Event Listener zu den Spieleranzahl-Buttons hinzu
     document.querySelectorAll("#playerCountButtons button").forEach(button => {
         button.addEventListener("click", function() {
             const count = parseInt(button.getAttribute("data-count"));
             if (!isNaN(count)) {
-                setPlayerCount(count);
+                setPlayerCount(count, button);
             }
         });
     });
@@ -79,39 +79,12 @@ function getAllRoles() {
     return Object.values(roles).flat();
 }
 
-// Beispielhafte CSS-Regeln zur Einbindung für das Styling und die `.hidden`-Klasse
-// Dies kannst du in einem `<style>`-Block im `<head>`-Bereich der `index.html` testen, falls keine separate CSS-Datei vorhanden ist:
-
-/*
-<style>
-    .hidden {
-        display: none;
-    }
-    #setup, #gameArea {
-        font-family: Arial, sans-serif;
-    }
-    button {
-        padding: 10px;
-        margin: 5px;
-        cursor: pointer;
-    }
-</style>
-*/
-
-// Funktionsdefinitionen und weitere Logik bleiben gleich...
-
-// Setzt die Spieleranzahl und stellt sicher, dass der Alert nur einmal ausgelöst wird
-function setPlayerCount(count) {
+// Setzt die Spieleranzahl und markiert den aktiven Button
+function setPlayerCount(count, button) {
     playerCount = count;
-    alert(`Spieleranzahl auf ${playerCount} festgelegt.`);
+    document.querySelectorAll("#playerCountButtons button").forEach(btn => btn.classList.remove("active"));
+    button.classList.add("active");
 }
-
-// Füge Event Listener zu den Spieleranzahl-Buttons hinzu
-document.querySelectorAll("#playerCountButtons button").forEach(button => {
-    button.addEventListener("click", function() {
-        setPlayerCount(parseInt(button.innerText));
-    });
-});
 
 // Start des Spiels und Wahl zwischen manueller und automatischer Rollenvergabe
 function startGame() {
@@ -189,11 +162,9 @@ function assignRolesAutomatically() {
 
 function assignRoles() {
     players.forEach((player, index) => {
-        // Hole den Namen und die Rolle aus den Eingabefeldern
         const nameInput = document.getElementById(`playerName${index + 1}`);
         const roleSelect = document.getElementById(`playerRole${index + 1}`);
         
-        // Weise den eingegebenen Namen und die gewählte Rolle zu
         player.name = nameInput.value || `Spieler ${index + 1}`;
         player.role = roleSelect.value;
     });
