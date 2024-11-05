@@ -100,21 +100,23 @@ function assignRolesAutomatically() {
     const totalVillagers = distribution.villagers;
     const totalWerewolves = distribution.werewolves;
 
-    // Bereitstellung der genauen Anzahl an Werwolf- und Dorfbewohnerrollen basierend auf Spieleranzahl
+    // Erstellen der Werwolf-Rollen basierend auf der Spieleranzahl
     const werewolves = Array(totalWerewolves).fill("Werwolf");
+
+    // Erstellen der Dorfbewohner-Rollen basierend auf der Spieleranzahl
     const villagers = roles.slice(0, totalVillagers);
 
-    // Prüfen, ob die Rollenanzahl (Werwölfe + Dorfbewohner) der Spieleranzahl entspricht
+    // Verifizieren, dass die Gesamtanzahl der Rollen der Spieleranzahl entspricht
     if ((werewolves.length + villagers.length) !== playerCount) {
         console.error(`Fehler: Die Summe der Dorfbewohner (${villagers.length}) und Werwölfe (${werewolves.length}) stimmt nicht mit der Spieleranzahl (${playerCount}) überein.`);
         return;
     }
 
-    // Kombinierte Rollenliste aus Werwölfen und Dorfbewohnern erstellen
+    // Kombinierte Rollenliste aus Werwölfen und Dorfbewohnern erstellen und mischen
     const allRoles = [...werewolves, ...villagers];
     shuffleArray(allRoles);
 
-    // Spieler-Array basierend auf der Spieleranzahl auffüllen
+    // Spieler-Array mit den gemischten Rollen füllen
     players = [];
     for (let i = 0; i < playerCount; i++) {
         players.push({ name: `Spieler ${i + 1}`, role: allRoles[i], alive: true });
