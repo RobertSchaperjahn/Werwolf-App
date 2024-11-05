@@ -9,11 +9,21 @@ let roles = {
     werewolves: []
 };
 
-// Funktion zur Festlegung der Spieleranzahl über die Buttons
+// Setzt die Spieleranzahl basierend auf dem geklickten Button
 function setPlayerCount(count) {
     playerCount = count;
     alert(`Spieleranzahl auf ${playerCount} festgelegt.`);
 }
+
+// Füge Event Listener zu den Spieleranzahl-Buttons hinzu
+document.querySelectorAll("#playerCountButtons button").forEach(button => {
+    button.addEventListener("click", function() {
+        setPlayerCount(parseInt(button.innerText));
+    });
+});
+
+// Füge Event Listener für den Start des Spiels hinzu
+document.getElementById('startGame').addEventListener('click', startGame);
 
 // Verteilungstabellen für Dorfbewohner und Werwölfe
 const roleDistribution = {
