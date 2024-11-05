@@ -40,6 +40,7 @@ function setPlayerCount(count, button) {
     playerCount = count;
     document.querySelectorAll("#playerCountButtons button").forEach(btn => btn.classList.remove("active"));
     button.classList.add("active");
+    console.log(`Spieleranzahl auf ${playerCount} festgelegt.`);
 }
 
 function startManualGame() {
@@ -91,6 +92,7 @@ function setupPlayers() {
         players.push({ name: `Spieler ${i}`, role: null, alive: true });
     }
     document.getElementById('assignRoles').classList.remove('hidden');
+    console.log("Manuelles Setup abgeschlossen:", players);
 }
 
 function assignRolesAutomatically() {
@@ -114,6 +116,7 @@ function assignRolesAutomatically() {
         players.push({ name: `Spieler ${i + 1}`, role: allRoles[i], alive: true });
     }
 
+    console.log("Automatische Rollenverteilung abgeschlossen:", players);
     setupPlayerNames(); // Ermöglicht Namensänderungen nach der automatischen Verteilung
 }
 
@@ -137,6 +140,7 @@ function setupPlayerNames() {
         playerList.appendChild(li);
     });
 
+    console.log("Spielernamen-Setup abgeschlossen:", players);
     document.getElementById('nextPhase').classList.remove('hidden');
 }
 
