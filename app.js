@@ -100,23 +100,21 @@ function assignRolesAutomatically() {
     const totalVillagers = distribution.villagers;
     const totalWerewolves = distribution.werewolves;
 
-    // Erstellen der Werwolf-Rollen basierend auf der Spieleranzahl
-    const werewolves = Array(totalWerewolves).fill("Werwolf");
-
-    // Erstellen der Dorfbewohner-Rollen basierend auf der Spieleranzahl
-    const villagers = roles.slice(0, totalVillagers);
-
-    // Verifizieren, dass die Gesamtanzahl der Rollen der Spieleranzahl entspricht
-    if ((werewolves.length + villagers.length) !== playerCount) {
-        console.error(`Fehler: Die Summe der Dorfbewohner (${villagers.length}) und Werwölfe (${werewolves.length}) stimmt nicht mit der Spieleranzahl (${playerCount}) überein.`);
+    // Stellen sicher, dass die Rollenanzahl genau zur Spieleranzahl passt
+    if (totalVillagers + totalWerewolves !== playerCount) {
+        console.error(`Fehler: Die Summe der Dorfbewohner (${totalVillagers}) und Werwölfe (${totalWerewolves}) stimmt nicht mit der Spieleranzahl (${playerCount}) überein.`);
         return;
     }
 
-    // Kombinierte Rollenliste aus Werwölfen und Dorfbewohnern erstellen und mischen
+    // Erstellen der Werwolf- und Dorfbewohner-Rollen
+    const werewolves = Array(totalWerewolves).fill("Werwolf");
+    const villagers = roles.slice(0, totalVillagers);
+
+    // Kombinieren und Mischen der Rollen
     const allRoles = [...werewolves, ...villagers];
     shuffleArray(allRoles);
 
-    // Spieler-Array mit den gemischten Rollen füllen
+    // Spielerarray mit Namen und Rollen befüllen
     players = [];
     for (let i = 0; i < playerCount; i++) {
         players.push({ name: `Spieler ${i + 1}`, role: allRoles[i], alive: true });
@@ -124,6 +122,36 @@ function assignRolesAutomatically() {
 
     console.log("Automatische Rollenverteilung abgeschlossen:", players);
     setupPlayerNames(); // Spieler zur Namensbearbeitung bereitstellen
+}
+
+function setupPlayerNames() {
+    const playerList = document.getElementById('playerList');
+    playerList.innerHTML = '';
+
+    players.forEach((player, index) => {
+        const li = document.createElement('li');
+
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.placeholder = `Name Spieler ${index + 1}`;
+        nameInput.value = player.name;
+        nameInput.addEventListener('input', (event) => {
+            player.name = event.target.value;
+        });
+
+        li.appendChild(nameInput);
+        li.append(` - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`);
+        playerList.appendChild(li);
+    });
+
+    document.getElementById('nextPhase').classList.remove('hidden');
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
 }
 
 
