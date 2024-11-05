@@ -152,24 +152,32 @@ function assignRolesAutomatically() {
     const totalVillagers = distribution.villagers;
     const totalWerewolves = distribution.werewolves;
 
-    // Erstellen der Werwolf-Rollen
+    // Werwolf-Rollen erstellen
     const werewolves = Array(totalWerewolves).fill("Werwolf");
 
-    // Auswahl der spezifischen Dorfbewohner-Rollen, basierend auf der Anzahl der benötigten Dorfbewohner
-    let villagers = getAllRoles()
-        .filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud")
-        .slice(0, totalVillagers);
+    // Alle Dorfbewohner-Rollen zusammenfassen
+    let villagers = [
+        ...roles.dorfbewohner_neutral,
+        ...roles.dorfbewohner_besondere_faehigkeiten,
+        ...roles.eigene_ziele,
+        ...roles.manipulation_verwirrung,
+        ...roles.unberechenbar_gefaehrlich,
+        ...roles.beziehungsdynamik
+    ];
 
-    // Sicherstellen, dass die Anzahl der Rollen genau der Spieleranzahl entspricht
+    // Dorfbewohner-Rollen auf die benötigte Anzahl beschränken
+    villagers = villagers.slice(0, totalVillagers);
+
+    // Sicherstellen, dass die Anzahl der Rollen exakt der Anzahl der Spieler entspricht
     if (werewolves.length + villagers.length !== playerCount) {
-        console.error("Die Anzahl der verfügbaren Rollen stimmt nicht mit der Anzahl der Spieler überein.");
+        console.error("Die Anzahl der spezifischen Rollen stimmt nicht mit der Spieleranzahl überein.");
         return;
     }
 
     // Spielerliste zurücksetzen
     players = [];
 
-    // Kombinieren und Mischen der Rollen
+    // Rollen kombinieren und mischen
     const allRoles = [...werewolves, ...villagers];
     shuffleArray(allRoles);
 
@@ -179,7 +187,7 @@ function assignRolesAutomatically() {
         players.push({ name: `Spieler ${i + 1}`, role: assignedRole, alive: true });
     }
 
-    // Namen der Spieler anpassen lassen
+    // Funktion zur Eingabe von Spielernamen aufrufen
     setupPlayerNames();
 }
 
@@ -190,6 +198,7 @@ function shuffleArray(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
 
 
 function assignRoles() {
