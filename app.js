@@ -27,19 +27,43 @@ function setupPlayers() {
     players = [];  // Leert das Spieler-Array
     for (let i = 1; i <= playerCount; i++) {
         const li = document.createElement('li');
-        li.textContent = `Spieler ${i}`;
+        
+        // Eingabefeld für den Spielernamen
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.placeholder = `Name Spieler ${i}`;
+        nameInput.id = `playerName${i}`;
+        
+        // Dropdown zur Rollenauswahl
+        const roleSelect = document.createElement('select');
+        roleSelect.id = `playerRole${i}`;
+        roles.forEach(role => {
+            const option = document.createElement('option');
+            option.value = role;
+            option.textContent = role;
+            roleSelect.appendChild(option);
+        });
+        
+        li.appendChild(nameInput);
+        li.appendChild(roleSelect);
         playerList.appendChild(li);
+        
         players.push({ name: `Spieler ${i}`, role: null, alive: true });
     }
     document.getElementById('assignRoles').classList.remove('hidden');  // Zeigt die Rollen-Button
 }
 
 function assignRoles() {
-    players.forEach(player => {
-        // Zuweisung zufälliger Rollen aus der Rollenliste
-        player.role = roles[Math.floor(Math.random() * roles.length)];
+    players.forEach((player, index) => {
+        // Hole den Namen und die Rolle aus den Eingabefeldern
+        const nameInput = document.getElementById(`playerName${index + 1}`);
+        const roleSelect = document.getElementById(`playerRole${index + 1}`);
+        
+        // Weise den eingegebenen Namen und die gewählte Rolle zu
+        player.name = nameInput.value || `Spieler ${index + 1}`;
+        player.role = roleSelect.value;
     });
-    alert("Rollen wurden zufällig zugewiesen.");
+    alert("Rollen wurden manuell zugewiesen.");
     updatePlayerList();
     document.getElementById('assignRoles').classList.add('hidden');
     document.getElementById('nextPhase').classList.remove('hidden');
@@ -67,7 +91,6 @@ function nextPhase() {
 
 function nightPhase() {
     alert("Nachtphase beginnt!");
-    // Nachtaktionen wie Angriff der Werwölfe
     let targetIndex;
     do {
         targetIndex = Math.floor(Math.random() * players.length);
