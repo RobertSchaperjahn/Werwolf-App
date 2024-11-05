@@ -115,33 +115,29 @@ function assignRolesAutomatically() {
     const totalVillagers = distribution.villagers;
     const totalWerewolves = distribution.werewolves;
 
-    // Get all roles and prepare villagers and werewolves
+    // Liste für Dorfbewohner und Werwölfe
     let availableRoles = getAllRoles().filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud");
-    
-    // Separate villagers and werewolf roles
-    const villagers = availableRoles.filter(role => !role.toLowerCase().includes("werwolf")).slice(0, totalVillagers);
-    const werewolves = Array(totalWerewolves).fill("Werwolf"); // `Werwolf` can be a generic role
-    
-    // Reset players array
-    players = [];
+    let villagers = availableRoles.slice(0, totalVillagers); // Die benötigte Anzahl an Dorfbewohnern auswählen
+    let werewolves = Array(totalWerewolves).fill("Werwolf"); // Füge eine bestimmte Anzahl von Werwölfen hinzu
 
-    // Assign werewolves to players
+    players = []; // Zurücksetzen der Spielerliste
+
+    // Weisen Sie zuerst die Werwölfe zu
     for (let i = 0; i < totalWerewolves; i++) {
-        const playerName = `Spieler ${i + 1}`;
-        players.push({ name: playerName, role: werewolves[i], alive: true });
+        players.push({ name: `Spieler ${i + 1}`, role: "Werwolf", alive: true });
     }
 
-    // Assign villagers to remaining players
+    // Weisen Sie dann die Dorfbewohner zu
     for (let i = totalWerewolves; i < playerCount; i++) {
-        const playerName = `Spieler ${i + 1}`;
         const randomVillagerIndex = Math.floor(Math.random() * villagers.length);
         const assignedRole = villagers.splice(randomVillagerIndex, 1)[0];
-        players.push({ name: playerName, role: assignedRole, alive: true });
+        players.push({ name: `Spieler ${i + 1}`, role: assignedRole, alive: true });
     }
 
     updatePlayerList();
     document.getElementById('nextPhase').classList.remove('hidden');
 }
+
 
 // Aktualisierung der Spielerliste
 function updatePlayerList() {
