@@ -1,9 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
-    const playerCountButtons = document.querySelectorAll("#playerCountButtons button");
-    const manualStartButton = document.getElementById('manualStart');
-    const autoStartButton = document.getElementById('autoStart');
-    
-    playerCountButtons.forEach(button => {
+    // Event Listener für die Start-Buttons
+    document.getElementById('manualStart').addEventListener('click', startManualGame);
+    document.getElementById('autoStart').addEventListener('click', startAutoGame);
+    document.getElementById('assignRoles').addEventListener('click', assignRoles);
+    document.getElementById('nextPhase').addEventListener('click', nextPhase);
+
+    // Event Listener für die Spieleranzahl-Buttons
+    document.querySelectorAll("#playerCountButtons button").forEach(button => {
         button.addEventListener("click", function() {
             const count = parseInt(button.getAttribute("data-count"));
             if (!isNaN(count)) {
@@ -11,9 +14,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
-
-    manualStartButton.addEventListener('click', startManualGame);
-    autoStartButton.addEventListener('click', startAutoGame);
 });
 
 let playerCount = 0;
@@ -41,12 +41,12 @@ const roles = {
     beziehungsdynamik: ["Der Twink", "Der geile Priester"]
 };
 
-// Flache Rollenliste
+// Funktion, um alle Rollen zu erhalten
 function getAllRoles() {
     return Object.values(roles).flat();
 }
 
-// Setzt die Spieleranzahl und markiert den aktiven Button
+// Spieleranzahl festlegen und Button aktivieren
 function setPlayerCount(count, button) {
     playerCount = count;
     document.querySelectorAll("#playerCountButtons button").forEach(btn => btn.classList.remove("active"));
@@ -75,7 +75,7 @@ function startAutoGame() {
     document.getElementById('gameArea').classList.remove('hidden');
 }
 
-// Setzt Spieler für manuelle Eingabe der Namen und Rollen
+// Manuelle Rollenvergabe vorbereiten
 function setupPlayers() {
     const playerList = document.getElementById('playerList');
     playerList.innerHTML = '';
@@ -107,7 +107,7 @@ function setupPlayers() {
     document.getElementById('assignRoles').classList.remove('hidden');
 }
 
-// Automatische Rollenvergabe basierend auf Verteilungstabelle
+// Automatische Rollenvergabe
 function assignRolesAutomatically() {
     const distribution = roleDistribution[playerCount];
     const totalVillagers = distribution.villagers;
@@ -115,12 +115,10 @@ function assignRolesAutomatically() {
 
     let availableRoles = getAllRoles().filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud");
 
-    players = [];  // Setzt die Spielerliste zurück
+    players = [];  // Spielerliste zurücksetzen
 
     for (let i = 1; i <= playerCount; i++) {
-        const isWerewolf = i <= totalWerewolves;
         const assignedRole = availableRoles.splice(Math.floor(Math.random() * availableRoles.length), 1)[0];
-
         const playerName = `Spieler ${i}`;
         players.push({ name: playerName, role: assignedRole, alive: true });
     }
@@ -129,19 +127,7 @@ function assignRolesAutomatically() {
     document.getElementById('nextPhase').classList.remove('hidden');
 }
 
-function assignRoles() {
-    players.forEach((player, index) => {
-        const nameInput = document.getElementById(`playerName${index + 1}`);
-        const roleSelect = document.getElementById(`playerRole${index + 1}`);
-        
-        player.name = nameInput.value || `Spieler ${index + 1}`;
-        player.role = roleSelect.value;
-    });
-    updatePlayerList();
-    document.getElementById('assignRoles').classList.add('hidden');
-    document.getElementById('nextPhase').classList.remove('hidden');
-}
-
+// Aktualisierung der Spielerliste
 function updatePlayerList() {
     const playerList = document.getElementById('playerList');
     playerList.innerHTML = '';
