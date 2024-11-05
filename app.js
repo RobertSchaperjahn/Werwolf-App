@@ -123,15 +123,16 @@ function assignRolesAutomatically() {
     const allRoles = [...werewolves, ...villagers];
     shuffleArray(allRoles);
 
-    // Vorbereitende Zuweisung der Rollen ohne Namen
+    // Rollen den Spielern zuweisen
     for (let i = 0; i < playerCount; i++) {
         const assignedRole = allRoles[i];
-        players.push({ name: `Spieler ${i + 1}`, role: assignedRole || "Dorfbewohner", alive: true });
+        players.push({ name: `Spieler ${i + 1}`, role: assignedRole, alive: true });
     }
 
-    // Rufe die Funktion auf, um Namen anzupassen
+    // Namen der Spieler anpassen lassen
     setupPlayerNames();
 }
+
 
 // Funktion zum Anpassen der Spielernamen nach der Rollenzuweisung
 function setupPlayerNames() {
