@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-    console.log("Script geladen und bereit."); // Testausgabe
     document.getElementById('manualStart').addEventListener('click', startManualGame);
     document.getElementById('autoStart').addEventListener('click', startAutoGame);
     document.getElementById('assignRoles').addEventListener('click', assignRoles);
@@ -38,10 +37,8 @@ const roles = {
     eigene_ziele: ["Wut Wiebke", "Suizid Susie", "Doppelmoral-Dörthe", "Konversionstherapie Konny", "Gloryhole Günni", "Blutmagierin Beatrix"],
     manipulation_verwirrung: ["Klatsch-Käthe", "Vollsuff-Valentin", "Wahrsager-Weberin Waltraud"],
     unberechenbar_gefaehrlich: ["Keta-Zieherin Claudia", "Iltussy", "Trip-Sitterin Tanja", "Giftmischerin Gertrud", "Travestiekünstler Tristan"],
-    beziehungsdynamik: ["Der Twink", "Der geile Priester"],
-    werwoelfe: ["Werwolf"] // Werwolf-Rolle hinzufügen
+    beziehungsdynamik: ["Der Twink", "Der geile Priester"]
 };
-
 
 // Funktion, um alle Rollen zu erhalten
 function getAllRoles() {
@@ -57,7 +54,6 @@ function setPlayerCount(count, button) {
 
 // Start des Spiels mit manueller Rollenvergabe
 function startManualGame() {
-    console.log("Manuelles Spiel gestartet"); // Testausgabe
     if (!playerCount) {
         alert("Bitte wähle die Anzahl der Spieler.");
         return;
@@ -69,7 +65,6 @@ function startManualGame() {
 
 // Start des Spiels mit automatischer Rollenvergabe
 function startAutoGame() {
-    console.log("Automatisches Spiel gestartet"); // Testausgabe
     if (!playerCount) {
         alert("Bitte wähle die Anzahl der Spieler.");
         return;
@@ -111,7 +106,7 @@ function setupPlayers() {
     document.getElementById('assignRoles').classList.remove('hidden');
 }
 
-// Automatische Rollenvergabe
+// Automatische Rollenvergabe mit Namenseingabe
 function assignRolesAutomatically() {
     const distribution = roleDistribution[playerCount];
     const totalVillagers = distribution.villagers;
@@ -160,7 +155,6 @@ function setupPlayerNames() {
         playerList.appendChild(li);
     });
 
-    // Zeigt die Schaltfläche für die nächste Phase an, nachdem die Namen angepasst wurden
     document.getElementById('nextPhase').classList.remove('hidden');
 }
 
@@ -170,17 +164,6 @@ function shuffleArray(array) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
-}
-
-// Aktualisierung der Spielerliste
-function updatePlayerList() {
-    const playerList = document.getElementById('playerList');
-    playerList.innerHTML = '';
-    players.forEach(player => {
-        const li = document.createElement('li');
-        li.textContent = `${player.name} - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`;
-        playerList.appendChild(li);
-    });
 }
 
 function assignRoles() {
@@ -194,4 +177,14 @@ function assignRoles() {
     updatePlayerList();
     document.getElementById('assignRoles').classList.add('hidden');
     document.getElementById('nextPhase').classList.remove('hidden');
+}
+
+function updatePlayerList() {
+    const playerList = document.getElementById('playerList');
+    playerList.innerHTML = '';
+    players.forEach(player => {
+        const li = document.createElement('li');
+        li.textContent = `${player.name} - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`;
+        playerList.appendChild(li);
+    });
 }
