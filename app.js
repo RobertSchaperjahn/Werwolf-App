@@ -1,7 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById('manualStart').addEventListener('click', startManualGame);
-    document.getElementById('autoStart').addEventListener('click', startAutoGame);
-
     document.querySelectorAll("#playerCountButtons button").forEach(button => {
         button.addEventListener("click", function() {
             const count = parseInt(button.getAttribute("data-count"));
@@ -10,24 +7,16 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+
+    document.getElementById('manualStart').addEventListener('click', startManualGame);
+    document.getElementById('assignRoles').addEventListener('click', assignRolesManually);
 });
 
 let playerCount = 0;
 let players = [];
 
-const roleDistribution = {
-    8: { villagers: 4, werewolves: 2 },
-    9: { villagers: 6, werewolves: 2 },
-    10: { villagers: 6, werewolves: 2 },
-    11: { villagers: 8, werewolves: 2 },
-    12: { villagers: 7, werewolves: 3 },
-    13: { villagers: 9, werewolves: 3 },
-    14: { villagers: 8, werewolves: 4 },
-    15: { villagers: 10, werewolves: 4 }
-};
-
 const roles = [
-    "Dielenschleiferin", "Heimscheißerin", "Prokrastinations Paula", "Schutzschild-Sigrid",
+    "Werwolf", "Dielenschleiferin", "Heimscheißerin", "Prokrastinations Paula", "Schutzschild-Sigrid",
     "Bordell Bärbel", "Mansplaining Martin", "Kräuterhexe Hilde", "Nekromant Norbert", 
     "Boy-Butter Bäuerin", "Öko Sabine", "Bestatterin Brunhilde", "Nicht-binäre Türsteherperson Toni", 
     "Wachmann Wenzel", "Wut Wiebke", "Suizid Susie", "Doppelmoral-Dörthe", "Konversionstherapie Konny", 
@@ -49,16 +38,6 @@ function startManualGame() {
         return;
     }
     setupPlayers();
-    document.getElementById('setup').classList.add('hidden');
-    document.getElementById('gameArea').classList.remove('hidden');
-}
-
-function startAutoGame() {
-    if (!playerCount) {
-        alert("Bitte wähle die Anzahl der Spieler.");
-        return;
-    }
-    assignRolesAutomatically();
     document.getElementById('setup').classList.add('hidden');
     document.getElementById('gameArea').classList.remove('hidden');
 }
@@ -95,132 +74,18 @@ function setupPlayers() {
     console.log("Manuelles Setup abgeschlossen:", players);
 }
 
-function assignRolesAutomatically() {
-    // Rollenverteilung für die aktuelle Spieleranzahl abrufen
-    const distribution = roleDistribution[playerCount];
-    if (!distribution) {
-        console.error(`Keine Rollenverteilung für ${playerCount} Spieler gefunden.`);
-        return;
-    }
-
-    const totalVillagers = distribution.villagers;
-    const totalWerewolves = distribution.werewolves;
-
-    // Erstellen der exakten Rollenliste für das Spiel basierend auf der Spieleranzahl
-    const rolesForGame = [
-        ...Array(totalWerewolves).fill("Werwolf"),
-        ...roles.slice(0, totalVillagers)
-    ];
-
-    // Sicherheitsprüfung zur Rollenanzahl
-    if (rolesForGame.length !== playerCount) {
-        console.error(`Fehler: Die generierte Rollenanzahl (${rolesForGame.length}) stimmt nicht mit der Spieleranzahl (${playerCount}) überein.`);
-        return;
-    }
-
-    // Rollen mischen
-    shuffleArray(rolesForGame);
-
-    // Spielerarray erstellen und Rollen zuweisen
-    players = rolesForGame.map((role, index) => ({
-        name: `Spieler ${index + 1}`,
-        role,
-        alive: true
-    }));
-
-    console.log("Automatische Rollenverteilung abgeschlossen:", players);
-    setupPlayerNames();
-}
-
-function setupPlayerNames() {
-    const playerList = document.getElementById('playerList');
-    playerList.innerHTML = '';
-
+function assignRolesManually() {
     players.forEach((player, index) => {
-        const li = document.createElement('li');
+        const nameInput = document.getElementById(`playerName${index + 1}`);
+        const roleSelect = document.getElementById(`playerRole${index + 1}`);
 
-        const nameInput = document.createElement('input');
-        nameInput.type = 'text';
-        nameInput.placeholder = `Name Spieler ${index + 1}`;
-        nameInput.value = player.name;
-        nameInput.addEventListener('input', (event) => {
-            player.name = event.target.value;
-        });
-
-        li.appendChild(nameInput);
-        li.append(` - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`);
-        playerList.appendChild(li);
+        player.name = nameInput.value || `Spieler ${index + 1}`;
+        player.role = roleSelect.value;
     });
-
+    alert("Rollen wurden manuell zugewiesen.");
+    updatePlayerList();
+    document.getElementById('assignRoles').classList.add('hidden');
     document.getElementById('nextPhase').classList.remove('hidden');
-}
-
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-
-
-function setupPlayerNames() {
-    const playerList = document.getElementById('playerList');
-    playerList.innerHTML = '';
-
-    players.forEach((player, index) => {
-        const li = document.createElement('li');
-
-        const nameInput = document.createElement('input');
-        nameInput.type = 'text';
-        nameInput.placeholder = `Name Spieler ${index + 1}`;
-        nameInput.value = player.name;
-        nameInput.addEventListener('input', (event) => {
-            player.name = event.target.value;
-        });
-
-        li.appendChild(nameInput);
-        li.append(` - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`);
-        playerList.appendChild(li);
-    });
-
-    document.getElementById('nextPhase').classList.remove('hidden');
-}
-
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-
-function setupPlayerNames() {
-    const playerList = document.getElementById('playerList');
-    playerList.innerHTML = '';
-
-    players.forEach((player, index) => {
-        const li = document.createElement('li');
-
-        const nameInput = document.createElement('input');
-        nameInput.type = 'text';
-        nameInput.placeholder = `Name Spieler ${index + 1}`;
-        nameInput.value = player.name;
-        nameInput.addEventListener('input', (event) => {
-            player.name = event.target.value;
-        });
-
-        li.appendChild(nameInput);
-        li.append(` - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`);
-        playerList.appendChild(li);
-    });
-
-    document.getElementById('nextPhase').classList.remove('hidden');
-}
-
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
 }
 
 function updatePlayerList() {
