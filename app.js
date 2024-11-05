@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function() {
 let playerCount = 0;
 let players = [];
 
-// Rollenzuweisung nach Anzahl Spieler
 const roleDistribution = {
     8: { villagers: 4, werewolves: 2 },
     9: { villagers: 6, werewolves: 2 },
@@ -27,7 +26,6 @@ const roleDistribution = {
     15: { villagers: 10, werewolves: 4 }
 };
 
-// Alle Dorfbewohnerrollen in einer flachen Liste
 const roles = [
     "Dielenschleiferin", "Heimscheißerin", "Prokrastinations Paula", "Schutzschild-Sigrid",
     "Bordell Bärbel", "Mansplaining Martin", "Kräuterhexe Hilde", "Nekromant Norbert", 
@@ -101,9 +99,13 @@ function assignRolesAutomatically() {
     const totalWerewolves = distribution.werewolves;
 
     const werewolves = Array(totalWerewolves).fill("Werwolf");
-    let villagers = roles.slice(0, totalVillagers);
+    const villagers = roles.slice(0, totalVillagers);
 
-    // Sicherstellen, dass die Anzahl der Rollen der Spieleranzahl entspricht
+    if (werewolves.length + villagers.length !== playerCount) {
+        console.error("Die Anzahl der spezifischen Rollen stimmt nicht mit der Spieleranzahl überein.");
+        return;
+    }
+
     players = [];
     const allRoles = [...werewolves, ...villagers];
     shuffleArray(allRoles);
@@ -122,7 +124,6 @@ function setupPlayerNames() {
     players.forEach((player, index) => {
         const li = document.createElement('li');
 
-        // Eingabefeld für den Namen des Spielers
         const nameInput = document.createElement('input');
         nameInput.type = 'text';
         nameInput.placeholder = `Name Spieler ${index + 1}`;
@@ -146,3 +147,12 @@ function shuffleArray(array) {
     }
 }
 
+function updatePlayerList() {
+    const playerList = document.getElementById('playerList');
+    playerList.innerHTML = '';
+    players.forEach(player => {
+        const li = document.createElement('li');
+        li.textContent = `${player.name} - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`;
+        playerList.appendChild(li);
+    });
+}
