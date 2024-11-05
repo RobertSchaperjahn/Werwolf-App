@@ -126,6 +126,7 @@ function assignRolesAutomatically() {
     setupPlayerNames(); // Spieler zur Namensbearbeitung bereitstellen
 }
 
+
 function setupPlayerNames() {
     const playerList = document.getElementById('playerList');
     playerList.innerHTML = '';
