@@ -117,6 +117,11 @@ function assignRolesAutomatically() {
         .filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud")
         .slice(0, totalVillagers);
 
+    // Falls nicht genügend Rollen für alle Spieler vorhanden sind, werden zusätzliche Dorfbewohner-Rollen hinzugefügt
+    while (werewolves.length + villagers.length < playerCount) {
+        villagers.push("Dorfbewohner mit Spezialfähigkeit");
+    }
+
     // Spielerliste zurücksetzen
     players = [];
 
@@ -141,6 +146,7 @@ function shuffleArray(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
 
 
 // Funktion zum Anpassen der Spielernamen nach der Rollenzuweisung
