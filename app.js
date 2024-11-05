@@ -117,27 +117,35 @@ function assignRolesAutomatically() {
     const totalVillagers = distribution.villagers;
     const totalWerewolves = distribution.werewolves;
 
-    // Hole die Dorfbewohner-Rollen und die Werwolf-Rolle
-    let villagers = getAllRoles().filter(role => role !== "Werwolf").slice(0, totalVillagers);
-    let werewolves = Array(totalWerewolves).fill("Werwolf");
+    // Werwolf- und Dorfbewohner-Rollen festlegen
+    const werewolves = Array(totalWerewolves).fill("Werwolf");
+    const villagers = getAllRoles().filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud").slice(0, totalVillagers);
 
-    players = []; // Spielerliste zurücksetzen
+    // Spielerliste zurücksetzen
+    players = [];
 
-    // Werwölfe zuerst hinzufügen
-    for (let i = 0; i < totalWerewolves; i++) {
-        players.push({ name: `Spieler ${i + 1}`, role: "Werwolf", alive: true });
-    }
+    // Kombinieren und Mischen der Rollen
+    const allRoles = [...werewolves, ...villagers];
+    shuffleArray(allRoles);
 
-    // Dorfbewohner zuweisen
-    for (let i = totalWerewolves; i < playerCount; i++) {
-        const randomVillagerIndex = Math.floor(Math.random() * villagers.length);
-        const assignedRole = villagers.splice(randomVillagerIndex, 1)[0];
-        players.push({ name: `Spieler ${i + 1}`, role: assignedRole, alive: true });
+    // Weisen Sie die Rollen zufällig zu
+    for (let i = 0; i < playerCount; i++) {
+        const assignedRole = allRoles[i];
+        players.push({ name: `Spieler ${i + 1}`, role: assignedRole || "Dorfbewohner", alive: true });
     }
 
     updatePlayerList();
     document.getElementById('nextPhase').classList.remove('hidden');
 }
+
+// Hilfsfunktion zum Mischen eines Arrays
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 
 
 
