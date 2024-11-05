@@ -1,6 +1,16 @@
-document.getElementById('startGame').addEventListener('click', startGame);
-document.getElementById('assignRoles').addEventListener('click', assignRoles);
-document.getElementById('nextPhase').addEventListener('click', nextPhase);
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('startGame').addEventListener('click', startGame);
+    document.getElementById('assignRoles').addEventListener('click', assignRoles);
+    document.getElementById('nextPhase').addEventListener('click', nextPhase);
+
+    // Füge Event Listener zu den Spieleranzahl-Buttons hinzu
+    document.querySelectorAll("#playerCountButtons button").forEach(button => {
+        button.addEventListener("click", function() {
+            const count = parseInt(button.getAttribute("data-count"));
+            setPlayerCount(count);
+        });
+    });
+});
 
 let playerCount;
 let players = [];
