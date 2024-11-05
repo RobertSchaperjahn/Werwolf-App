@@ -1,3 +1,4 @@
+// Initiale Variablen und Event Listener für die Steuerung
 document.getElementById('startGame').addEventListener('click', startGame);
 document.getElementById('assignRoles').addEventListener('click', assignRoles);
 document.getElementById('nextPhase').addEventListener('click', nextPhase);
@@ -20,93 +21,6 @@ const roleDistribution = {
     14: { villagers: 8, werewolves: 4 },
     15: { villagers: 10, werewolves: 4 }
 };
-
-// Start des Spiels und Wahl zwischen manueller und automatischer Rollenvergabe
-function startGame() {
-    playerCount = parseInt(document.getElementById('playerCount').value);
-    if (isNaN(playerCount) || playerCount < 8 || playerCount > 15) {
-        alert("Bitte gib eine gültige Spieleranzahl zwischen 8 und 15 ein.");
-        return;
-    }
-
-    const isManualAssignment = confirm("Möchtest du die Rollen manuell zuweisen? OK für Ja, Abbrechen für Nein (automatisch)");
-
-    if (isManualAssignment) {
-        setupPlayers();
-    } else {
-        assignRolesAutomatically();
-    }
-
-    document.getElementById('setup').classList.add('hidden');
-    document.getElementById('gameArea').classList.remove('hidden');
-}
-
-// Setzt Spieler für manuelle Eingabe der Namen und Rollen
-function setupPlayers() {
-    const playerList = document.getElementById('playerList');
-    playerList.innerHTML = '';
-    players = [];
-
-    for (let i = 1; i <= playerCount; i++) {
-        const li = document.createElement('li');
-
-        const nameInput = document.createElement('input');
-        nameInput.type = 'text';
-        nameInput.placeholder = `Name Spieler ${i}`;
-        nameInput.id = `playerName${i}`;
-
-        const roleSelect = document.createElement('select');
-        roleSelect.id = `playerRole${i}`;
-        getAllRoles().forEach(role => {
-            const option = document.createElement('option');
-            option.value = role;
-            option.textContent = role;
-            roleSelect.appendChild(option);
-        });
-
-        li.appendChild(nameInput);
-        li.appendChild(roleSelect);
-        playerList.appendChild(li);
-
-        players.push({ name: `Spieler ${i}`, role: null, alive: true });
-    }
-    document.getElementById('assignRoles').classList.remove('hidden');
-}
-
-// Automatische Rollenvergabe basierend auf Verteilungstabelle
-function assignRolesAutomatically() {
-    const distribution = roleDistribution[playerCount];
-    const totalVillagers = distribution.villagers;
-    const totalWerewolves = distribution.werewolves;
-
-    // Auswahl der Dorfbewohner- und Werwolf-Rollen
-    let availableRoles = getAllRoles().filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud");
-
-    for (let i = 1; i <= playerCount; i++) {
-        const isWerewolf = i <= totalWerewolves;
-        const roleType = isWerewolf ? "werewolves" : "villagers";
-
-        // Ziehe zufällig eine Rolle aus den verfügbaren Rollen
-        const randomRoleIndex = Math.floor(Math.random() * availableRoles.length);
-        const assignedRole = availableRoles.splice(randomRoleIndex, 1)[0];
-
-        players.push({ name: `Spieler ${i}`, role: assignedRole, alive: true });
-        roles[roleType].push(assignedRole);
-    }
-
-    updatePlayerList();
-    document.getElementById('nextPhase').classList.remove('hidden');
-}
-
-function updatePlayerList() {
-    const playerList = document.getElementById('playerList');
-    playerList.innerHTML = '';
-    players.forEach(player => {
-        const li = document.createElement('li');
-        li.textContent = `${player.name} - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`;
-        playerList.appendChild(li);
-    });
-}
 
 // Vollständige Rollenliste nach Kategorien
 const roles = {
@@ -174,31 +88,39 @@ function nextPhase() {
     }
 }
 
+// Start des Spiels und Wahl zwischen manueller und automatischer Rollenvergabe
 function startGame() {
     playerCount = parseInt(document.getElementById('playerCount').value);
     if (isNaN(playerCount) || playerCount < 8 || playerCount > 15) {
         alert("Bitte gib eine gültige Spieleranzahl zwischen 8 und 15 ein.");
         return;
     }
-    document.getElementById('setup').classList.add('hidden');  // Versteckt den Setup-Bereich
-    document.getElementById('gameArea').classList.remove('hidden');  // Zeigt das Spielbereich
-    setupPlayers();  // Spieler einrichten
+
+    const isManualAssignment = confirm("Möchtest du die Rollen manuell zuweisen? OK für Ja, Abbrechen für Nein (automatisch)");
+
+    if (isManualAssignment) {
+        setupPlayers();
+    } else {
+        assignRolesAutomatically();
+    }
+
+    document.getElementById('setup').classList.add('hidden');
+    document.getElementById('gameArea').classList.remove('hidden');
 }
 
 function setupPlayers() {
     const playerList = document.getElementById('playerList');
-    playerList.innerHTML = '';  // Setzt die Spielerliste zurück
-    players = [];  // Leert das Spieler-Array
+    playerList.innerHTML = '';
+    players = [];
+
     for (let i = 1; i <= playerCount; i++) {
         const li = document.createElement('li');
-        
-        // Eingabefeld für den Spielernamen
+
         const nameInput = document.createElement('input');
         nameInput.type = 'text';
         nameInput.placeholder = `Name Spieler ${i}`;
         nameInput.id = `playerName${i}`;
-        
-        // Dropdown zur Rollenauswahl mit vollständiger Rollenliste
+
         const roleSelect = document.createElement('select');
         roleSelect.id = `playerRole${i}`;
         getAllRoles().forEach(role => {
@@ -207,14 +129,39 @@ function setupPlayers() {
             option.textContent = role;
             roleSelect.appendChild(option);
         });
-        
+
         li.appendChild(nameInput);
         li.appendChild(roleSelect);
         playerList.appendChild(li);
-        
+
         players.push({ name: `Spieler ${i}`, role: null, alive: true });
     }
-    document.getElementById('assignRoles').classList.remove('hidden');  // Zeigt die Rollen-Button
+    document.getElementById('assignRoles').classList.remove('hidden');
+}
+
+// Automatische Rollenvergabe basierend auf Verteilungstabelle
+function assignRolesAutomatically() {
+    const distribution = roleDistribution[playerCount];
+    const totalVillagers = distribution.villagers;
+    const totalWerewolves = distribution.werewolves;
+
+    // Auswahl der Dorfbewohner- und Werwolf-Rollen
+    let availableRoles = getAllRoles().filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud");
+
+    for (let i = 1; i <= playerCount; i++) {
+        const isWerewolf = i <= totalWerewolves;
+        const roleType = isWerewolf ? "werewolves" : "villagers";
+
+        // Ziehe zufällig eine Rolle aus den verfügbaren Rollen
+        const randomRoleIndex = Math.floor(Math.random() * availableRoles.length);
+        const assignedRole = availableRoles.splice(randomRoleIndex, 1)[0];
+
+        players.push({ name: `Spieler ${i}`, role: assignedRole, alive: true });
+        roles[roleType].push(assignedRole);
+    }
+
+    updatePlayerList();
+    document.getElementById('nextPhase').classList.remove('hidden');
 }
 
 function assignRoles() {
