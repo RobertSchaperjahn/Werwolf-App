@@ -112,26 +112,37 @@ function assignRolesAutomatically() {
     const totalVillagers = distribution.villagers;
     const totalWerewolves = distribution.werewolves;
 
-    // Werwolf- und Dorfbewohner-Rollen festlegen
+    // Werwolf- und spezifische Dorfbewohner-Rollen festlegen
     const werewolves = Array(totalWerewolves).fill("Werwolf");
-    const villagers = getAllRoles().filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud").slice(0, totalVillagers);
+    const villagers = getAllRoles()
+        .filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud")
+        .slice(0, totalVillagers);
 
     // Spielerliste zurücksetzen
     players = [];
 
-    // Kombinieren und Mischen der Rollen
+    // Kombinieren und Mischen der Rollen, um zufällige Verteilung sicherzustellen
     const allRoles = [...werewolves, ...villagers];
     shuffleArray(allRoles);
 
     // Rollen den Spielern zuweisen
     for (let i = 0; i < playerCount; i++) {
-        const assignedRole = allRoles[i];
+        const assignedRole = allRoles[i]; // keine generische Rolle mehr
         players.push({ name: `Spieler ${i + 1}`, role: assignedRole, alive: true });
     }
 
     // Namen der Spieler anpassen lassen
     setupPlayerNames();
 }
+
+// Hilfsfunktion zum Mischen eines Arrays
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 
 
 // Funktion zum Anpassen der Spielernamen nach der Rollenzuweisung
