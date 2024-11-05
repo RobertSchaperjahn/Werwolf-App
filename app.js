@@ -86,6 +86,9 @@ function assignRolesManually() {
     updatePlayerList();
     document.getElementById('assignRoles').classList.add('hidden');
     document.getElementById('nextPhase').classList.remove('hidden');
+
+    // Startet die erste Nachtphase automatisch nach der Rollenzuweisung
+    nextPhase();
 }
 
 function updatePlayerList() {
@@ -108,9 +111,9 @@ const nightEvents = [
 
 // Beispiel: Die einäugige Dealerin als Event
 function einaeugigeDealerinEvent() {
-    alert("Die einäugige Dealerin bietet bestimmten Spielern die Möglichkeit, eine neue Rolle zu erhalten.");
-    
-    players.forEach((player, index) => {
+    alert("Die einäugige Dealerin ist jetzt aktiv! Spieler (außer Werwölfe) können auf Wunsch eine neue Rolle erhalten.");
+
+    players.forEach((player) => {
         if (player.role !== "Werwolf") {
             const wantsNewRole = confirm(`Soll ${player.name} eine neue Rolle erhalten?`);
             if (wantsNewRole) {
@@ -122,7 +125,6 @@ function einaeugigeDealerinEvent() {
     });
     nextPhase();
 }
-
 // Funktion, um zum nächsten Ereignis überzugehen
 function nextPhase() {
     if (currentPhase === "Nacht") {
