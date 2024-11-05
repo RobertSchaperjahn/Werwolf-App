@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function() {
 let playerCount = 0;
 let players = [];
 let currentPhase = "Nacht";
-let phaseStep = 0;
 
 const roles = [
     "Werwolf", "Dielenschleiferin", "Heimscheißerin", "Prokrastinations Paula", "Schutzschild-Sigrid",
@@ -25,11 +24,6 @@ const roles = [
     "Gloryhole Günni", "Blutmagierin Beatrix", "Klatsch-Käthe", "Vollsuff-Valentin", 
     "Wahrsager-Weberin Waltraud", "Keta-Zieherin Claudia", "Iltussy", "Trip-Sitterin Tanja", 
     "Giftmischerin Gertrud", "Travestiekünstler Tristan", "Der Twink", "Der geile Priester"
-];
-
-const nightEvents = [
-    einaeugigeDealerinEvent,
-    // Weitere Ereignisse können hier hinzugefügt werden
 ];
 
 function setPlayerCount(count, button) {
@@ -90,72 +84,45 @@ function assignRolesManually() {
         player.role = roleSelect.value;
     });
     alert("Rollen wurden manuell zugewiesen.");
-    updatePlayerList();
+    updatePlayerListWithRoleSwap();
     document.getElementById('assignRoles').classList.add('hidden');
-
-    // Startet die erste Nachtphase automatisch nach der Rollenzuweisung
-    nextPhase();
 }
 
-function updatePlayerList() {
+function updatePlayerListWithRoleSwap() {
     const playerList = document.getElementById('playerList');
     playerList.innerHTML = '';
-    players.forEach(player => {
+
+    players.forEach((player, index) => {
         const li = document.createElement('li');
         li.textContent = `${player.name} - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`;
+
+        // Button für Rollentausch hinzufügen (nur für Nicht-Werwölfe)
+        if (player.role !== "Werwolf") {
+            const swapButton = document.createElement('button');
+            swapButton.textContent = "Rolle tauschen";
+            swapButton.addEventListener('click', () => swapRole(index));
+            li.appendChild(swapButton);
+        }
+
         playerList.appendChild(li);
     });
+
+    // Button zur nächsten Phase
+    const nextPhaseButton = document.createElement('button');
+    nextPhaseButton.textContent = "Nächste Phase";
+    nextPhaseButton.addEventListener('click', nextPhase);
+    playerList.appendChild(nextPhaseButton);
 }
 
-// Funktion für das erste Ereignis: einäugige Dealerin
-function einaeugigeDealerinEvent() {
-    alert("Die einäugige Dealerin ist jetzt aktiv! Spieler (außer Werwölfe) können auf Wunsch eine neue Rolle erhalten.");
-
-    for (let i = 0; i < players.length; i++) {
-        const player = players[i];
-        if (player.role !== "Werwolf") {
-            const wantsNewRole = confirm(`Soll ${player.name} eine neue Rolle erhalten?`);
-            if (wantsNewRole) {
-                const newRoleIndex = Math.floor(Math.random() * roles.length);
-                player.role = roles[newRoleIndex];
-                alert(`${player.name} hat jetzt die Rolle: ${player.role}`);
-            }
-        }
-    }
-
-    // Zur nächsten Phase übergehen, nachdem alle Spieler überprüft wurden
-    nextPhase();
+// Rollentausch-Funktion
+function swapRole(index) {
+    const newRoleIndex = Math.floor(Math.random() * roles.length);
+    players[index].role = roles[newRoleIndex];
+    alert(`${players[index].name} hat jetzt die Rolle: ${players[index].role}`);
+    updatePlayerListWithRoleSwap(); // Liste nach Rollentausch aktualisieren
 }
-// Ereignissteuerung: führt durch die Nacht- und Tagphasen
+
 function nextPhase() {
-    if (currentPhase === "Nacht") {
-        if (phaseStep < nightEvents.length) {
-            nightEvents[phaseStep]();
-            phaseStep++;
-        } else {
-            currentPhase = "Tag";
-            phaseStep = 0;
-            alert("Es ist Tag. Die Diskussion beginnt.");
-            startDiscussionTimer();
-        }
-    } else {
-        currentPhase = "Nacht";
-        phaseStep = 0;
-        alert("Die Nacht beginnt. Die Ereignisse werden ausgeführt.");
-        nextPhase();
-    }
-}
-
-// Timer für die Tagphase-Diskussion
-function startDiscussionTimer(duration = 60) {
-    let timer = duration;
-    const interval = setInterval(() => {
-        if (timer > 0) {
-            console.log(`Diskussionszeit: ${timer} Sekunden`);
-            timer--;
-        } else {
-            clearInterval(interval);
-            alert("Diskussionszeit ist abgelaufen. Stimmen Sie ab, wer gelyncht werden soll.");
-        }
-    }, 1000);
+    alert("Die nächste Phase beginnt!");
+    // Hier können wir zur nächsten Phase übergehen und den nächsten Satz von Ereignissen starten
 }
