@@ -1,4 +1,3 @@
-// Initiale Variablen und Event Listener für die Steuerung
 document.getElementById('startGame').addEventListener('click', startGame);
 document.getElementById('assignRoles').addEventListener('click', assignRoles);
 document.getElementById('nextPhase').addEventListener('click', nextPhase);
@@ -9,6 +8,12 @@ let roles = {
     villagers: [],
     werewolves: []
 };
+
+// Funktion zur Festlegung der Spieleranzahl über die Buttons
+function setPlayerCount(count) {
+    playerCount = count;
+    alert(`Spieleranzahl auf ${playerCount} festgelegt.`);
+}
 
 // Verteilungstabellen für Dorfbewohner und Werwölfe
 const roleDistribution = {
@@ -90,9 +95,8 @@ function nextPhase() {
 
 // Start des Spiels und Wahl zwischen manueller und automatischer Rollenvergabe
 function startGame() {
-    playerCount = parseInt(document.getElementById('playerCount').value);
-    if (isNaN(playerCount) || playerCount < 8 || playerCount > 15) {
-        alert("Bitte gib eine gültige Spieleranzahl zwischen 8 und 15 ein.");
+    if (!playerCount) {
+        alert("Bitte wähle die Anzahl der Spieler.");
         return;
     }
 
@@ -108,6 +112,7 @@ function startGame() {
     document.getElementById('gameArea').classList.remove('hidden');
 }
 
+// Setzt Spieler für manuelle Eingabe der Namen und Rollen
 function setupPlayers() {
     const playerList = document.getElementById('playerList');
     playerList.innerHTML = '';
@@ -145,14 +150,12 @@ function assignRolesAutomatically() {
     const totalVillagers = distribution.villagers;
     const totalWerewolves = distribution.werewolves;
 
-    // Auswahl der Dorfbewohner- und Werwolf-Rollen
     let availableRoles = getAllRoles().filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud");
 
     for (let i = 1; i <= playerCount; i++) {
         const isWerewolf = i <= totalWerewolves;
         const roleType = isWerewolf ? "werewolves" : "villagers";
 
-        // Ziehe zufällig eine Rolle aus den verfügbaren Rollen
         const randomRoleIndex = Math.floor(Math.random() * availableRoles.length);
         const assignedRole = availableRoles.splice(randomRoleIndex, 1)[0];
 
