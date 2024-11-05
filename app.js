@@ -38,8 +38,10 @@ const roles = {
     eigene_ziele: ["Wut Wiebke", "Suizid Susie", "Doppelmoral-Dörthe", "Konversionstherapie Konny", "Gloryhole Günni", "Blutmagierin Beatrix"],
     manipulation_verwirrung: ["Klatsch-Käthe", "Vollsuff-Valentin", "Wahrsager-Weberin Waltraud"],
     unberechenbar_gefaehrlich: ["Keta-Zieherin Claudia", "Iltussy", "Trip-Sitterin Tanja", "Giftmischerin Gertrud", "Travestiekünstler Tristan"],
-    beziehungsdynamik: ["Der Twink", "Der geile Priester"]
+    beziehungsdynamik: ["Der Twink", "Der geile Priester"],
+    werwoelfe: ["Werwolf"] // Werwolf-Rolle hinzufügen
 };
+
 
 // Funktion, um alle Rollen zu erhalten
 function getAllRoles() {
@@ -115,19 +117,18 @@ function assignRolesAutomatically() {
     const totalVillagers = distribution.villagers;
     const totalWerewolves = distribution.werewolves;
 
-    // Liste für Dorfbewohner und Werwölfe
-    let availableRoles = getAllRoles().filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud");
-    let villagers = availableRoles.slice(0, totalVillagers); // Die benötigte Anzahl an Dorfbewohnern auswählen
-    let werewolves = Array(totalWerewolves).fill("Werwolf"); // Füge eine bestimmte Anzahl von Werwölfen hinzu
+    // Hole die Dorfbewohner-Rollen und die Werwolf-Rolle
+    let villagers = getAllRoles().filter(role => role !== "Werwolf").slice(0, totalVillagers);
+    let werewolves = Array(totalWerewolves).fill("Werwolf");
 
-    players = []; // Zurücksetzen der Spielerliste
+    players = []; // Spielerliste zurücksetzen
 
-    // Weisen Sie zuerst die Werwölfe zu
+    // Werwölfe zuerst hinzufügen
     for (let i = 0; i < totalWerewolves; i++) {
         players.push({ name: `Spieler ${i + 1}`, role: "Werwolf", alive: true });
     }
 
-    // Weisen Sie dann die Dorfbewohner zu
+    // Dorfbewohner zuweisen
     for (let i = totalWerewolves; i < playerCount; i++) {
         const randomVillagerIndex = Math.floor(Math.random() * villagers.length);
         const assignedRole = villagers.splice(randomVillagerIndex, 1)[0];
@@ -137,6 +138,7 @@ function assignRolesAutomatically() {
     updatePlayerList();
     document.getElementById('nextPhase').classList.remove('hidden');
 }
+
 
 
 // Aktualisierung der Spielerliste
