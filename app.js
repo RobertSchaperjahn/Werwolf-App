@@ -4,10 +4,19 @@ document.getElementById('nextPhase').addEventListener('click', nextPhase);
 
 let playerCount;
 let players = [];
-let roles = {
-    villagers: [],
-    werewolves: []
+
+// Verteilungstabellen für Dorfbewohner und Werwölfe
+const roleDistribution = {
+    8: { villagers: 4, werewolves: 2 },
+    9: { villagers: 6, werewolves: 2 },
+    10: { villagers: 6, werewolves: 2 },
+    11: { villagers: 8, werewolves: 2 },
+    12: { villagers: 7, werewolves: 3 },
+    13: { villagers: 9, werewolves: 3 },
+    14: { villagers: 8, werewolves: 4 },
+    15: { villagers: 10, werewolves: 4 }
 };
+
 
 // Setzt die Spieleranzahl basierend auf dem geklickten Button
 function setPlayerCount(count) {
@@ -24,18 +33,6 @@ document.querySelectorAll("#playerCountButtons button").forEach(button => {
 
 // Füge Event Listener für den Start des Spiels hinzu
 document.getElementById('startGame').addEventListener('click', startGame);
-
-// Verteilungstabellen für Dorfbewohner und Werwölfe
-const roleDistribution = {
-    8: { villagers: 4, werewolves: 2 },
-    9: { villagers: 6, werewolves: 2 },
-    10: { villagers: 6, werewolves: 2 },
-    11: { villagers: 8, werewolves: 2 },
-    12: { villagers: 7, werewolves: 3 },
-    13: { villagers: 9, werewolves: 3 },
-    14: { villagers: 8, werewolves: 4 },
-    15: { villagers: 10, werewolves: 4 }
-};
 
 // Vollständige Rollenliste nach Kategorien
 const roles = {
