@@ -106,7 +106,6 @@ function setupPlayers() {
     document.getElementById('assignRoles').classList.remove('hidden');
 }
 
-// Automatische Rollenvergabe mit Namenseingabe
 function assignRolesAutomatically() {
     const distribution = roleDistribution[playerCount];
     const totalVillagers = distribution.villagers;
@@ -114,20 +113,26 @@ function assignRolesAutomatically() {
 
     // Werwolf- und spezifische Dorfbewohner-Rollen festlegen
     const werewolves = Array(totalWerewolves).fill("Werwolf");
-    const villagers = getAllRoles()
+    let villagers = getAllRoles()
         .filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud")
         .slice(0, totalVillagers);
+
+    // Überprüfen, ob die Anzahl der Rollen mit der Anzahl der Spieler übereinstimmt
+    if (werewolves.length + villagers.length < playerCount) {
+        console.error("Nicht genug spezifische Rollen vorhanden, um alle Spieler abzudecken.");
+        return;
+    }
 
     // Spielerliste zurücksetzen
     players = [];
 
-    // Kombinieren und Mischen der Rollen, um zufällige Verteilung sicherzustellen
+    // Kombinieren und Mischen der Rollen
     const allRoles = [...werewolves, ...villagers];
     shuffleArray(allRoles);
 
     // Rollen den Spielern zuweisen
     for (let i = 0; i < playerCount; i++) {
-        const assignedRole = allRoles[i]; // keine generische Rolle mehr
+        const assignedRole = allRoles[i];
         players.push({ name: `Spieler ${i + 1}`, role: assignedRole, alive: true });
     }
 
@@ -142,6 +147,7 @@ function shuffleArray(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
+
 
 
 
