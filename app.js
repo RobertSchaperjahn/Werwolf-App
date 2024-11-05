@@ -5,7 +5,57 @@ document.getElementById('nextPhase').addEventListener('click', nextPhase);
 
 let playerCount;
 let players = [];
-let roles = ["Dorfbewohner", "Werwolf", "Geiler Priester", "Blutmagierin Beatrix"];
+
+// Vollständige Rollenliste nach Kategorien
+const roles = {
+    dorfbewohner_neutral: [
+        "Dielenschleiferin",
+        "Heimscheißerin",
+        "Prokrastinations Paula",
+        "Schutzschild-Sigrid"
+    ],
+    dorfbewohner_besondere_faehigkeiten: [
+        "Bordell Bärbel",
+        "Mansplaining Martin",
+        "Kräuterhexe Hilde",
+        "Nekromant Norbert",
+        "Boy-Butter Bäuerin",
+        "Öko Sabine",
+        "Bestatterin Brunhilde",
+        "Nicht-binäre Türsteherperson Toni",
+        "Wachmann Wenzel"
+    ],
+    eigene_ziele: [
+        "Wut Wiebke",
+        "Suizid Susie",
+        "Doppelmoral-Dörthe",
+        "Konversionstherapie Konny",
+        "Gloryhole Günni",
+        "Blutmagierin Beatrix"
+    ],
+    manipulation_verwirrung: [
+        "Klatsch-Käthe",
+        "Vollsuff-Valentin",
+        "Wahrsager-Weberin Waltraud"
+    ],
+    unberechenbar_gefaehrlich: [
+        "Keta-Zieherin Claudia",
+        "Iltussy",
+        "Trip-Sitterin Tanja",
+        "Giftmischerin Gertrud",
+        "Travestiekünstler Tristan"
+    ],
+    beziehungsdynamik: [
+        "Der Twink",
+        "Der geile Priester"
+    ]
+};
+
+// Hilfsfunktion, um alle Rollen als flaches Array zu erhalten
+function getAllRoles() {
+    return Object.values(roles).flat();
+}
+
 let currentPhase = "Nacht";
 let eventsEnabled = true; // Einstellung für zufällige Events
 let eventProbability = 0.2; // 20% Wahrscheinlichkeit
@@ -34,10 +84,10 @@ function setupPlayers() {
         nameInput.placeholder = `Name Spieler ${i}`;
         nameInput.id = `playerName${i}`;
         
-        // Dropdown zur Rollenauswahl
+        // Dropdown zur Rollenauswahl mit vollständiger Rollenliste
         const roleSelect = document.createElement('select');
         roleSelect.id = `playerRole${i}`;
-        roles.forEach(role => {
+        getAllRoles().forEach(role => {
             const option = document.createElement('option');
             option.value = role;
             option.textContent = role;
@@ -91,6 +141,7 @@ function nextPhase() {
 
 function nightPhase() {
     alert("Nachtphase beginnt!");
+    // Beispielaktion in der Nachtphase – kann später durch Rollenfähigkeiten erweitert werden
     let targetIndex;
     do {
         targetIndex = Math.floor(Math.random() * players.length);
@@ -104,6 +155,7 @@ function nightPhase() {
 function dayPhase() {
     alert("Tagphase beginnt! Diskussion startet.");
     startDiscussionTimer();
+    // Beispielaktion in der Tagphase – Abstimmung, um einen Spieler zu eliminieren
     let voteTargetIndex;
     do {
         voteTargetIndex = Math.floor(Math.random() * players.length);
