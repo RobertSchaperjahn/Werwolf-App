@@ -97,3 +97,62 @@ function updatePlayerList() {
         playerList.appendChild(li);
     });
 }
+let currentPhase = "Nacht";
+let phaseStep = 0;
+
+// Liste der Ereignisse für die Nachtphase
+const nightEvents = [
+    einaeugigeDealerinEvent,
+    // Hier können weitere Ereignisse hinzugefügt werden, z.B. werewolfAttackEvent
+];
+
+// Beispiel: Die einäugige Dealerin als Event
+function einaeugigeDealerinEvent() {
+    alert("Die einäugige Dealerin bietet bestimmten Spielern die Möglichkeit, eine neue Rolle zu erhalten.");
+    
+    players.forEach((player, index) => {
+        if (player.role !== "Werwolf") {
+            const wantsNewRole = confirm(`Soll ${player.name} eine neue Rolle erhalten?`);
+            if (wantsNewRole) {
+                const newRoleIndex = Math.floor(Math.random() * roles.length);
+                player.role = roles[newRoleIndex];
+                alert(`${player.name} hat jetzt die Rolle: ${player.role}`);
+            }
+        }
+    });
+    nextPhase();
+}
+
+// Funktion, um zum nächsten Ereignis überzugehen
+function nextPhase() {
+    if (currentPhase === "Nacht") {
+        if (phaseStep < nightEvents.length) {
+            nightEvents[phaseStep]();
+            phaseStep++;
+        } else {
+            currentPhase = "Tag";
+            phaseStep = 0;
+            alert("Es ist Tag. Die Diskussion beginnt.");
+            startDiscussionTimer();
+        }
+    } else {
+        currentPhase = "Nacht";
+        phaseStep = 0;
+        alert("Die Nacht beginnt. Die Ereignisse werden ausgeführt.");
+        nextPhase();
+    }
+}
+
+// Funktion für die Tagphase-Diskussion mit Timer
+function startDiscussionTimer(duration = 60) {  // Dauer in Sekunden
+    let timer = duration;
+    const interval = setInterval(() => {
+        if (timer > 0) {
+            console.log(`Diskussionszeit: ${timer} Sekunden`);
+            timer--;
+        } else {
+            clearInterval(interval);
+            alert("Diskussionszeit ist abgelaufen. Stimmen Sie ab, wer gelyncht werden soll.");
+        }
+    }, 1000);
+}
