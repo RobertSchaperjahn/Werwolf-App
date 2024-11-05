@@ -1,11 +1,9 @@
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById('manualStart').addEventListener('click', startManualGame);
-    document.getElementById('autoStart').addEventListener('click', startAutoGame);
-    document.getElementById('assignRoles').addEventListener('click', assignRoles);
-    document.getElementById('nextPhase').addEventListener('click', nextPhase);
-
-    // Füge Event Listener zu den Spieleranzahl-Buttons hinzu
-    document.querySelectorAll("#playerCountButtons button").forEach(button => {
+    const playerCountButtons = document.querySelectorAll("#playerCountButtons button");
+    const manualStartButton = document.getElementById('manualStart');
+    const autoStartButton = document.getElementById('autoStart');
+    
+    playerCountButtons.forEach(button => {
         button.addEventListener("click", function() {
             const count = parseInt(button.getAttribute("data-count"));
             if (!isNaN(count)) {
@@ -13,9 +11,12 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+
+    manualStartButton.addEventListener('click', startManualGame);
+    autoStartButton.addEventListener('click', startAutoGame);
 });
 
-let playerCount;
+let playerCount = 0;
 let players = [];
 
 // Verteilungstabellen für Dorfbewohner und Werwölfe
@@ -30,52 +31,17 @@ const roleDistribution = {
     15: { villagers: 10, werewolves: 4 }
 };
 
-// Vollständige Rollenliste nach Kategorien
+// Rollenliste
 const roles = {
-    dorfbewohner_neutral: [
-        "Dielenschleiferin",
-        "Heimscheißerin",
-        "Prokrastinations Paula",
-        "Schutzschild-Sigrid"
-    ],
-    dorfbewohner_besondere_faehigkeiten: [
-        "Bordell Bärbel",
-        "Mansplaining Martin",
-        "Kräuterhexe Hilde",
-        "Nekromant Norbert",
-        "Boy-Butter Bäuerin",
-        "Öko Sabine",
-        "Bestatterin Brunhilde",
-        "Nicht-binäre Türsteherperson Toni",
-        "Wachmann Wenzel"
-    ],
-    eigene_ziele: [
-        "Wut Wiebke",
-        "Suizid Susie",
-        "Doppelmoral-Dörthe",
-        "Konversionstherapie Konny",
-        "Gloryhole Günni",
-        "Blutmagierin Beatrix"
-    ],
-    manipulation_verwirrung: [
-        "Klatsch-Käthe",
-        "Vollsuff-Valentin",
-        "Wahrsager-Weberin Waltraud"
-    ],
-    unberechenbar_gefaehrlich: [
-        "Keta-Zieherin Claudia",
-        "Iltussy",
-        "Trip-Sitterin Tanja",
-        "Giftmischerin Gertrud",
-        "Travestiekünstler Tristan"
-    ],
-    beziehungsdynamik: [
-        "Der Twink",
-        "Der geile Priester"
-    ]
+    dorfbewohner_neutral: ["Dielenschleiferin", "Heimscheißerin", "Prokrastinations Paula", "Schutzschild-Sigrid"],
+    dorfbewohner_besondere_faehigkeiten: ["Bordell Bärbel", "Mansplaining Martin", "Kräuterhexe Hilde", "Nekromant Norbert", "Boy-Butter Bäuerin", "Öko Sabine", "Bestatterin Brunhilde", "Nicht-binäre Türsteherperson Toni", "Wachmann Wenzel"],
+    eigene_ziele: ["Wut Wiebke", "Suizid Susie", "Doppelmoral-Dörthe", "Konversionstherapie Konny", "Gloryhole Günni", "Blutmagierin Beatrix"],
+    manipulation_verwirrung: ["Klatsch-Käthe", "Vollsuff-Valentin", "Wahrsager-Weberin Waltraud"],
+    unberechenbar_gefaehrlich: ["Keta-Zieherin Claudia", "Iltussy", "Trip-Sitterin Tanja", "Giftmischerin Gertrud", "Travestiekünstler Tristan"],
+    beziehungsdynamik: ["Der Twink", "Der geile Priester"]
 };
 
-// Hilfsfunktion, um alle Rollen als flaches Array zu erhalten
+// Flache Rollenliste
 function getAllRoles() {
     return Object.values(roles).flat();
 }
@@ -153,10 +119,7 @@ function assignRolesAutomatically() {
 
     for (let i = 1; i <= playerCount; i++) {
         const isWerewolf = i <= totalWerewolves;
-        
-        // Wählt zufällig eine Rolle aus den verfügbaren Rollen
-        const randomRoleIndex = Math.floor(Math.random() * availableRoles.length);
-        const assignedRole = availableRoles.splice(randomRoleIndex, 1)[0];
+        const assignedRole = availableRoles.splice(Math.floor(Math.random() * availableRoles.length), 1)[0];
 
         const playerName = `Spieler ${i}`;
         players.push({ name: playerName, role: assignedRole, alive: true });
@@ -185,4 +148,6 @@ function updatePlayerList() {
     players.forEach(player => {
         const li = document.createElement('li');
         li.textContent = `${player.name} - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`;
-        playerList
+        playerList.appendChild(li);
+    });
+}
