@@ -3,44 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Werwölfe im Düsterwald Deluxe</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Werwolf App</title>
 </head>
 <body>
-    <div class="container">
-        <!-- Header und Logo -->
-        <header>
-            <img src="images/logo.png" alt="Spiel-Logo" class="logo">
-            <h1>Werwölfe im Düsterwald Deluxe</h1>
-            <p>Willkommen! Klicke auf „Neues Spiel starten“, um zu beginnen.</p>
-        </header>
-
-        <!-- Spielsteuerung -->
-        <main>
-<div id="setup">
-    <p>Wähle die Anzahl der Spieler:</p>
-    <div id="playerCountButtons">
-        <button onclick="setPlayerCount(8)">8</button>
-        <button onclick="setPlayerCount(9)">9</button>
-        <button onclick="setPlayerCount(10)">10</button>
-        <button onclick="setPlayerCount(11)">11</button>
-        <button onclick="setPlayerCount(12)">12</button>
-        <button onclick="setPlayerCount(13)">13</button>
-        <button onclick="setPlayerCount(14)">14</button>
-        <button onclick="setPlayerCount(15)">15</button>
+    <div id="setup">
+        <h2>Wähle die Anzahl der Spieler:</h2>
+        <div id="playerCountButtons">
+            <button onclick="setPlayerCount(8)">8</button>
+            <button onclick="setPlayerCount(9)">9</button>
+            <button onclick="setPlayerCount(10)">10</button>
+            <button onclick="setPlayerCount(11)">11</button>
+            <button onclick="setPlayerCount(12)">12</button>
+            <button onclick="setPlayerCount(13)">13</button>
+            <button onclick="setPlayerCount(14)">14</button>
+            <button onclick="setPlayerCount(15)">15</button>
+        </div>
+        <button id="startGame">Neues Spiel starten</button>
     </div>
-    <button id="startGame">Neues Spiel starten</button>
-</div>
 
-
-            <!-- Bereich für Spielerliste und Rollenvergabe -->
-            <div id="gameArea" class="hidden">
-                <ul id="playerList"></ul>
-                <button id="assignRoles">Rollen zuweisen</button>
-                <button id="nextPhase" class="hidden">Nächste Phase</button>
-            </div>
-        </main>
+    <div id="gameArea" class="hidden">
+        <ul id="playerList"></ul>
+        <button id="assignRoles" class="hidden">Rollen zuweisen</button>
+        <button id="nextPhase" class="hidden">Nächste Phase</button>
     </div>
+
     <script src="app.js"></script>
 </body>
 </html>
