@@ -57,8 +57,20 @@ function getAllRoles() {
 }
 
 let currentPhase = "Nacht";
-let eventsEnabled = true; // Einstellung für zufällige Events
-let eventProbability = 0.2; // 20% Wahrscheinlichkeit
+let phaseCount = 0; // Zählt die Anzahl der durchlaufenen Phasen
+let eventsEnabled = true; 
+let eventProbability = 0.2; // 20% Wahrscheinlichkeit ab der vierten Nachtphase
+
+function nextPhase() {
+    if (currentPhase === "Nacht") {
+        nightPhase();
+        currentPhase = "Tag";
+        phaseCount++;  // Erhöhe den Zähler für jede Nachtphase
+    } else {
+        dayPhase();
+        currentPhase = "Nacht";
+    }
+}
 
 function startGame() {
     playerCount = parseInt(document.getElementById('playerCount').value);
@@ -141,7 +153,6 @@ function nextPhase() {
 
 function nightPhase() {
     alert("Nachtphase beginnt!");
-    // Beispielaktion in der Nachtphase – kann später durch Rollenfähigkeiten erweitert werden
     let targetIndex;
     do {
         targetIndex = Math.floor(Math.random() * players.length);
@@ -149,7 +160,11 @@ function nightPhase() {
 
     players[targetIndex].alive = false; // Beispiel: Werwölfe eliminieren Spieler
     updatePlayerList();
-    checkForRandomEvent();
+
+    // Überprüfe, ob mindestens 3 Nachtphasen vergangen sind, bevor Events möglich sind
+    if (phaseCount >= 4) {
+        checkForRandomEvent();
+    }
 }
 
 function dayPhase() {
