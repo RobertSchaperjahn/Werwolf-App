@@ -100,16 +100,11 @@ function assignRolesAutomatically() {
     const totalVillagers = distribution.villagers;
     const totalWerewolves = distribution.werewolves;
 
-    // Prüfen, ob genügend Rollen vorhanden sind
-    if (roles.length < totalVillagers) {
-        console.error("Nicht genügend Rollen für die Dorfbewohner verfügbar.");
-        return;
-    }
-
+    // Erstellen der Rollenarrays für Werwölfe und Dorfbewohner
     const werewolves = Array(totalWerewolves).fill("Werwolf");
     const villagers = roles.slice(0, totalVillagers);
 
-    // Sicherstellen, dass die Anzahl der spezifischen Rollen korrekt ist
+    // Wenn die Rollenanzahl nicht exakt zur Spieleranzahl passt, geben wir eine spezifische Meldung aus
     if (werewolves.length + villagers.length !== playerCount) {
         console.error(`Fehler: Die Summe der Dorfbewohner (${villagers.length}) und Werwölfe (${werewolves.length}) stimmt nicht mit der Spieleranzahl (${playerCount}) überein.`);
         return;
@@ -119,12 +114,13 @@ function assignRolesAutomatically() {
     const allRoles = [...werewolves, ...villagers];
     shuffleArray(allRoles);
 
+    // Spielerrollen verteilen
     for (let i = 0; i < playerCount; i++) {
         players.push({ name: `Spieler ${i + 1}`, role: allRoles[i], alive: true });
     }
 
     console.log("Automatische Rollenverteilung abgeschlossen:", players);
-    setupPlayerNames();
+    setupPlayerNames(); // Zeigt die Spieler zur Namensbearbeitung an
 }
 
 function setupPlayerNames() {
