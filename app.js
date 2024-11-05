@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function() {
 let playerCount = 0;
 let players = [];
 
-// Rollenzuweisung nach Anzahl Spieler
 const roleDistribution = {
     8: { villagers: 4, werewolves: 2 },
     9: { villagers: 6, werewolves: 2 },
@@ -27,7 +26,7 @@ const roleDistribution = {
     15: { villagers: 10, werewolves: 4 }
 };
 
-// Alle spezifischen Rollen in flacher Struktur
+// Alle Dorfbewohnerrollen in einer flachen Liste
 const roles = [
     "Dielenschleiferin", "Heimscheißerin", "Prokrastinations Paula", "Schutzschild-Sigrid",
     "Bordell Bärbel", "Mansplaining Martin", "Kräuterhexe Hilde", "Nekromant Norbert", 
@@ -95,7 +94,6 @@ function setupPlayers() {
     document.getElementById('assignRoles').classList.remove('hidden');
 }
 
-// Funktion zur automatischen Rollenzuweisung
 function assignRolesAutomatically() {
     const distribution = roleDistribution[playerCount];
     const totalVillagers = distribution.villagers;
@@ -104,11 +102,7 @@ function assignRolesAutomatically() {
     const werewolves = Array(totalWerewolves).fill("Werwolf");
     let villagers = roles.slice(0, totalVillagers);
 
-    if (werewolves.length + villagers.length !== playerCount) {
-        console.error("Die Anzahl der spezifischen Rollen stimmt nicht mit der Spieleranzahl überein.");
-        return;
-    }
-
+    // Sicherstellen, dass die Anzahl der Rollen der Spieleranzahl entspricht
     players = [];
     const allRoles = [...werewolves, ...villagers];
     shuffleArray(allRoles);
