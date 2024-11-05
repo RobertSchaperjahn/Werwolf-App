@@ -96,46 +96,76 @@ function setupPlayers() {
 }
 
 function assignRolesAutomatically() {
-    // Rollenverteilung für die aktuelle Spieleranzahl abrufen
+    // Spieleranzahl prüfen und Rollenverteilung abrufen
     const distribution = roleDistribution[playerCount];
     if (!distribution) {
         console.error(`Keine Rollenverteilung für ${playerCount} Spieler gefunden.`);
         return;
     }
 
-    // Anzahl der Dorfbewohner und Werwölfe basierend auf der Rollenverteilung festlegen
     const totalVillagers = distribution.villagers;
     const totalWerewolves = distribution.werewolves;
 
-    // Prüfen, ob die Rollenanzahl der Spieleranzahl entspricht
+    // Neue Prüfung, ob die Summe der Rollen mit der Spieleranzahl übereinstimmt
     if (totalVillagers + totalWerewolves !== playerCount) {
-        console.error(`Fehler: Die Summe der Dorfbewohner (${totalVillagers}) und Werwölfe (${totalWerewolves}) stimmt nicht mit der Spieleranzahl (${playerCount}) überein.`);
+        console.error(`Fehler: Rollenanzahl (${totalVillagers + totalWerewolves}) stimmt nicht mit Spieleranzahl (${playerCount}) überein.`);
         return;
     }
 
-    // Erstellen der Werwolf- und Dorfbewohnerrollen
+    // Erstellen der Rollen: Werwölfe und Dorfbewohner
     const werewolves = Array(totalWerewolves).fill("Werwolf");
     const villagers = roles.slice(0, totalVillagers);
 
-    // Überprüfen, ob die `villagers`-Liste genug Rollen enthält
+    // Sicherstellen, dass genug Dorfbewohnerrollen zur Auswahl stehen
     if (villagers.length < totalVillagers) {
-        console.error("Fehler: Nicht genügend Rollen in der Dorfbewohner-Liste verfügbar.");
+        console.error("Fehler: Nicht genügend Dorfbewohner-Rollen verfügbar.");
         return;
     }
 
-    // Kombinieren und Mischen der Rollen
+    // Rollen kombinieren und mischen
     const allRoles = [...werewolves, ...villagers];
     shuffleArray(allRoles);
 
-    // Spielerarray mit den gemischten Rollen füllen
+    // Spieler-Array initialisieren und Rollen zuweisen
     players = [];
     for (let i = 0; i < playerCount; i++) {
         players.push({ name: `Spieler ${i + 1}`, role: allRoles[i], alive: true });
     }
 
-    console.log("Automatische Rollenverteilung abgeschlossen:", players);
+    console.log("Rollen erfolgreich zugewiesen:", players);
     setupPlayerNames();
 }
+
+function setupPlayerNames() {
+    const playerList = document.getElementById('playerList');
+    playerList.innerHTML = '';
+
+    players.forEach((player, index) => {
+        const li = document.createElement('li');
+
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.placeholder = `Name Spieler ${index + 1}`;
+        nameInput.value = player.name;
+        nameInput.addEventListener('input', (event) => {
+            player.name = event.target.value;
+        });
+
+        li.appendChild(nameInput);
+        li.append(` - Rolle: ${player.role} (${player.alive ? "Lebendig" : "Ausgeschieden"})`);
+        playerList.appendChild(li);
+    });
+
+    document.getElementById('nextPhase').classList.remove('hidden');
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 
 function setupPlayerNames() {
     const playerList = document.getElementById('playerList');
