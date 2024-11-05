@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Werwolf App</title>
+    <title>Werwolf Spielleiter App</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <h1>Werwolf Spielleiter App</h1>
+
     <div id="setup">
-        <h2>Wähle die Anzahl der Spieler:</h2>
+        <h2>Spieleranzahl auswählen:</h2>
         <div id="playerCountButtons">
             <button data-count="8">8</button>
             <button data-count="9">9</button>
@@ -19,12 +21,11 @@
             <button data-count="14">14</button>
             <button data-count="15">15</button>
         </div>
-        <button id="manualStart">Spiel mit manueller Zuweisung starten</button>
-        <button id="autoStart">Spiel mit automatischer Zuweisung starten</button>
+        <button id="manualStart">Manuelle Rollenzuweisung starten</button>
     </div>
 
     <div id="gameArea" class="hidden">
-        <h2>Spielerliste:</h2>
+        <h2>Spielerliste</h2>
         <ul id="playerList"></ul>
         <button id="assignRoles" class="hidden">Rollen zuweisen</button>
         <button id="nextPhase" class="hidden">Nächste Phase</button>
