@@ -115,13 +115,27 @@ function assignRolesAutomatically() {
     const totalVillagers = distribution.villagers;
     const totalWerewolves = distribution.werewolves;
 
+    // Get all roles and prepare villagers and werewolves
     let availableRoles = getAllRoles().filter(role => role !== "Vollsuff-Valentin" && role !== "Wahrsager-Weberin Waltraud");
+    
+    // Separate villagers and werewolf roles
+    const villagers = availableRoles.filter(role => !role.toLowerCase().includes("werwolf")).slice(0, totalVillagers);
+    const werewolves = Array(totalWerewolves).fill("Werwolf"); // `Werwolf` can be a generic role
+    
+    // Reset players array
+    players = [];
 
-    players = [];  // Spielerliste zurücksetzen
+    // Assign werewolves to players
+    for (let i = 0; i < totalWerewolves; i++) {
+        const playerName = `Spieler ${i + 1}`;
+        players.push({ name: playerName, role: werewolves[i], alive: true });
+    }
 
-    for (let i = 1; i <= playerCount; i++) {
-        const assignedRole = availableRoles.splice(Math.floor(Math.random() * availableRoles.length), 1)[0];
-        const playerName = `Spieler ${i}`;
+    // Assign villagers to remaining players
+    for (let i = totalWerewolves; i < playerCount; i++) {
+        const playerName = `Spieler ${i + 1}`;
+        const randomVillagerIndex = Math.floor(Math.random() * villagers.length);
+        const assignedRole = villagers.splice(randomVillagerIndex, 1)[0];
         players.push({ name: playerName, role: assignedRole, alive: true });
     }
 
