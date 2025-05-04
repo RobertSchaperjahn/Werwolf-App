@@ -2437,14 +2437,3 @@
 
 </body>
 </html>
-```
-
-**Änderungen:**
-
-1.  **`saveNamesAndGoToRoles()` Funktion:** Eine neue Funktion wurde eingeführt. Sie wird aufgerufen, wenn der Button "Weiter zur Rollenverteilung" geklickt wird. Diese Funktion liest die Namen aus den Input-Feldern (`player-name-i`) aus, speichert sie in `gameState.players[i].name` und ruft *danach* `setupRoleAssignment()` auf.
-2.  **Event Listener für `btnGoToRoleAssignment`:** Der Event Listener für diesen Button ruft jetzt `saveNamesAndGoToRoles()` auf statt direkt `setupRoleAssignment()`.
-3.  **`setupRoleAssignment()` Anpassung:** Diese Funktion liest die Namen jetzt direkt aus dem `gameState.players`-Array, das zuvor von `saveNamesAndGoToRoles()` aktualisiert wurde. Es wird auch geprüft, ob die Spieleranzahl im `gameState` mit der erwarteten Anzahl übereinstimmt, um Fehler abzufangen.
-4.  **DOM Element Initialisierung:** Die Zuweisung der DOM-Elemente zu JavaScript-Variablen wurde in eine eigene Funktion `initializeDOMElements()` ausgelagert und wird nun sicher innerhalb von `DOMContentLoaded` aufgerufen, bevor die Event Listener hinzugefügt werden. Dies stellt sicher, dass alle Elemente verfügbar sind, wenn die Skripte darauf zugreifen.
-5.  **Diverse Checks:** Zusätzliche Prüfungen wurden eingebaut, um sicherzustellen, dass auf Elemente und Daten zugegriffen wird, die auch existieren, um Laufzeitfehler zu vermeiden.
-
-Bitte probiere diese Version aus. Der Screen "Rollen verteilen" sollte jetzt korrekt die zuvor eingegebenen Spielernamen anzeigen und für jeden Spieler ein Dropdown zur Rollenauswahl bereitstellen. Der Button "Spiel starten" sollte dann die Validierung und den Start der nächsten Phase auslös
