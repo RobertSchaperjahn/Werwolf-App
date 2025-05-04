@@ -19,7 +19,7 @@
             border-radius: 8px;
             background-color: #2a2a2a; /* Etwas hellerer Hintergrund für Screens */
             margin-top: 1rem;
-            min-height: 400px;
+            min-height: 450px; /* Etwas höher für mehr Inhalt */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -30,35 +30,49 @@
         button, input[type="text"], select {
             padding: 0.75rem 1.5rem;
             border-radius: 6px;
-            border: none;
+            border: 1px solid #555; /* Leichter Rand für bessere Sichtbarkeit */
             margin: 0.5rem 0.5rem 0.5rem 0;
             cursor: pointer;
             font-size: 1rem;
             transition: background-color 0.3s ease;
+            background-color: #4a5568; /* Standard Grau für Inputs/Selects */
+            color: #e0e0e0;
         }
         button {
             background-color: #5a67d8; /* Indigo */
             color: white;
+            border: none;
         }
-        button:hover {
+        button:hover:not(:disabled) {
             background-color: #434190;
+        }
+        button:disabled {
+            background-color: #3a3a3a;
+            color: #777;
+            cursor: not-allowed;
         }
         button.secondary {
             background-color: #4a5568; /* Grau */
         }
-        button.secondary:hover {
+        button.secondary:hover:not(:disabled) {
             background-color: #2d3748;
         }
         button.danger {
             background-color: #e53e3e; /* Rot */
         }
-        button.danger:hover {
+        button.danger:hover:not(:disabled) {
             background-color: #c53030;
         }
         input[type="text"], select {
-            background-color: #4a5568;
-            color: #e0e0e0;
-            border: 1px solid #718096;
+            background-color: #3a3a3a; /* Dunkleres Grau für Inputs/Selects */
+        }
+        select {
+             appearance: none; /* Standard-Pfeil entfernen */
+             background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23BBB%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.6-3.6%205.4-7.9%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E');
+             background-repeat: no-repeat;
+             background-position: right 0.7rem top 50%;
+             background-size: 0.65rem auto;
+             padding-right: 2.5rem; /* Platz für den Pfeil */
         }
         h1, h2, h3 {
             color: #ffffff;
@@ -67,6 +81,7 @@
         ul {
             list-style: none;
             padding: 0;
+            margin: 0; /* Standard-Margin entfernen */
         }
         li {
             background-color: #3a3a3a;
@@ -76,8 +91,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap; /* Erlaubt Umbruch bei kleinen Bildschirmen */
         }
-        .player-actions button {
+        .player-info {
+            flex-grow: 1;
+            margin-right: 1rem; /* Abstand zu den Buttons */
+        }
+        .player-actions {
+            flex-shrink: 0; /* Verhindert, dass Buttons schrumpfen */
+        }
+        .player-actions button, .player-actions select {
             padding: 0.3rem 0.6rem;
             font-size: 0.8rem;
             margin-left: 0.5rem;
@@ -85,13 +108,15 @@
         .role-info {
             font-size: 0.9em;
             color: #a0aec0;
+            display: block; /* Sorgt für Zeilenumbruch unter dem Namen */
         }
         .status-alive { color: #68d391; } /* Grün */
-        .status-dead { color: #fc8181; text-decoration: line-through; } /* Rot */
-        .selected { border: 2px solid #63b3ed; } /* Blau für Auswahl */
-        .protected { color: #63b3ed; } /* Blau für geschützt */
-        .poisoned { color: #f6ad55; } /* Orange für vergiftet */
-        .icon { display: inline-block; margin-left: 5px; }
+        .status-dead { color: #fc8181; text-decoration: line-through; opacity: 0.6; } /* Rot und durchgestrichen */
+        .selected {
+            outline: 2px solid #63b3ed; /* Blauer Rand für Auswahl */
+            outline-offset: 2px;
+        }
+        .icon { display: inline-block; margin-left: 5px; font-size: 0.9em; }
         .icon-heart { color: #e53e3e; } /* Rot */
         .icon-shield { color: #63b3ed; } /* Blau */
         .icon-skull { color: #a0aec0; } /* Grau */
@@ -100,7 +125,21 @@
         .icon-question { color: #f6e05e; } /* Gelb */
         .icon-moon { color: #f6e05e; } /* Gelb */
         .icon-sun { color: #f6ad55; } /* Orange */
+        .icon-poison { color: #48bb78; } /* Grün für Gift */
+        .icon-cross { color: #e53e3e; } /* Rot für Blockade/Tod */
+        .icon-hand { color: #ed8936; } /* Orange für Fisterin */
+        .icon-wand { color: #d53f8c; } /* Pink für Magie */
+        .icon-mask { color: #a0aec0; } /* Grau für Travestie */
+        .icon-tools { color: #a0aec0; } /* Grau für Dielenschleiferin */
+        .icon-megaphone { color: #f6e05e; } /* Gelb für Käthe */
+        .icon-zombie { color: #9f7aea; } /* Lila für Nekromant */
+        .icon-first-aid { color: #68d391; } /* Grün für Brunhilde */
+        .icon-magnifying-glass { color: #4fd1c5; } /* Türkis für Suche */
+        .icon-warning { color: #f56565; } /* Rot für Warnung/Fehler */
+
         .hidden { display: none; }
+        .error-message { color: #f56565; font-size: 0.9em; margin-top: 5px; }
+        .player-list-container { max-height: 300px; overflow-y: auto; margin-bottom: 1rem; } /* Scrollbarer Bereich */
     </style>
 </head>
 <body class="p-4 md:p-8">
@@ -123,27 +162,41 @@
         <div>
             <h2 class="text-2xl mb-4">Spieler benennen</h2>
             <p class="mb-4">Bitte gib die Namen der Spieler ein:</p>
-            <div id="player-name-inputs" class="space-y-2">
+            <div id="player-name-inputs" class="space-y-2 player-list-container">
                 </div>
         </div>
         <div>
-            <button id="btn-assign-roles">Rollen zuweisen & Spiel starten</button>
+            <button id="btn-go-to-role-assignment">Weiter zur Rollenverteilung</button>
+        </div>
+    </div>
+
+    <div id="screen-setup-roles" class="screen">
+        <div>
+            <h2 class="text-2xl mb-4">Rollen verteilen</h2>
+            <p class="mb-4">Bitte weise jedem Spieler seine gezogene Rolle zu:</p>
+            <div id="player-role-assignment" class="space-y-2 player-list-container">
+                </div>
+            <p id="role-assignment-error" class="error-message hidden"></p>
+        </div>
+        <div>
+             <p class="text-sm text-gray-400 mb-2">Stelle sicher, dass die Anzahl der Werwölfe stimmt und keine inkompatiblen Rollen gewählt wurden.</p>
+            <button id="btn-start-game">Spiel starten</button>
         </div>
     </div>
 
     <div id="screen-night" class="screen">
         <div>
             <h2 class="text-2xl mb-4"><span class="icon icon-moon">🌙</span> Nacht <span id="night-counter">1</span></h2>
-            <h3 id="night-role-action" class="text-xl mb-4"></h3>
+            <h3 id="night-role-action" class="text-xl mb-4">Warte auf nächste Aktion...</h3>
             <p id="night-instruction" class="mb-4"></p>
-            <ul id="night-player-list" class="mb-4 max-h-60 overflow-y-auto">
-                </ul>
-            <div id="night-special-ui" class="mb-4">
+            <div id="night-special-ui" class="mb-4 space-y-2">
                 </div>
+            <p class="mb-2 font-semibold">Spielerliste:</p>
+            <ul id="night-player-list" class="player-list-container">
+                </ul>
         </div>
         <div>
-            <p id="selection-info" class="text-sm text-gray-400 mb-2"></p>
-            <button id="btn-next-action" class="w-full">Aktion bestätigen / Nächster Schritt</button>
+            <p id="selection-info" class="text-sm text-gray-400 mb-2 h-4"></p> <button id="btn-next-action" class="w-full">Aktion bestätigen / Nächster Schritt</button>
         </div>
     </div>
 
@@ -151,10 +204,14 @@
         <div>
             <h2 class="text-2xl mb-4"><span class="icon icon-sun">☀️</span> Tag <span id="day-counter">1</span> - Was ist passiert?</h2>
             <p class="mb-4">Die Nacht war unruhig. Folgendes ist geschehen:</p>
-            <ul id="day-events-list" class="mb-4">
+            <ul id="day-events-list" class="mb-4 player-list-container">
                 </ul>
-            <p class="mb-4">Folgende Spieler sind noch im Spiel:</p>
-            <ul id="day-player-list-status" class="mb-4 max-h-60 overflow-y-auto">
+             <div id="day-event-announcement" class="mb-4 p-3 bg-yellow-900 border border-yellow-700 rounded hidden">
+                <h3 class="font-semibold text-yellow-300">Sonderereignis!</h3>
+                <p id="day-event-details"></p>
+            </div>
+            <p class="mb-2 font-semibold">Aktueller Spielerstatus:</p>
+            <ul id="day-player-list-status" class="player-list-container">
                 </ul>
         </div>
         <div>
@@ -166,13 +223,18 @@
          <div>
             <h2 class="text-2xl mb-4"><span class="icon icon-sun">☀️</span> Tag <span id="day-counter-vote">1</span> - Diskussion & Lynchung</h2>
             <p class="mb-2">Das Dorf diskutiert und stimmt ab, wer gelyncht werden soll.</p>
-            <p class="text-sm text-gray-400 mb-4">(Der Spielleiter moderiert die Diskussion und sammelt die Stimmen.)</p>
+            <p id="day-vote-timer" class="mb-2 font-semibold text-yellow-400"></p>
+            <p id="day-vote-restrictions" class="mb-4 text-orange-400"></p>
             <p class="mb-2 font-semibold">Wählt den Spieler aus, der gelyncht werden soll:</p>
-            <ul id="day-vote-list" class="mb-4 max-h-60 overflow-y-auto">
+            <ul id="day-vote-list" class="player-list-container">
                 </ul>
          </div>
          <div>
-            <p id="lynch-selection-info" class="text-sm text-gray-400 mb-2"></p>
+            <p id="lynch-selection-info" class="text-sm text-gray-400 mb-2 h-4"></p>
+            <div id="beatrix-intervention" class="hidden mb-2">
+                 <button id="btn-beatrix-intervene" class="secondary">Blutmagierin Beatrix eingreifen lassen?</button>
+                 <span id="beatrix-result" class="ml-2"></span>
+            </div>
             <button id="btn-confirm-lynch" class="w-full" disabled>Lynchmord bestätigen</button>
          </div>
     </div>
@@ -180,12 +242,12 @@
      <div id="screen-lynch-result" class="screen">
         <div>
             <h2 class="text-2xl mb-4"><span class="icon icon-skull">💀</span> Lynch-Ergebnis</h2>
-            <p id="lynch-result-text" class="mb-4"></p>
-            <p id="lynch-role-reveal" class="mb-4 font-semibold"></p>
-            <div id="lynch-consequences" class="mb-4 text-red-400">
+            <p id="lynch-result-text" class="mb-4 text-xl"></p>
+            <p id="lynch-role-reveal" class="mb-4 font-semibold text-lg"></p>
+            <div id="lynch-consequences" class="mb-4 text-red-400 space-y-1">
                 </div>
-             <p class="mb-4">Verbleibende Spieler:</p>
-            <ul id="lynch-player-list-status" class="mb-4 max-h-60 overflow-y-auto">
+             <p class="mb-2 font-semibold">Verbleibende Spieler:</p>
+            <ul id="lynch-player-list-status" class="player-list-container">
                 </ul>
         </div>
         <div>
@@ -206,39 +268,110 @@
         </div>
     </div>
 
+    <div id="screen-setup-events" class="screen">
+        <div>
+            <h2 class="text-2xl mb-4">Sonderereignisse</h2>
+            <p class="mb-4">Sollen die zufälligen Tagesereignisse "Unwetter" und "Pandemie" im Spiel vorkommen können?</p>
+            <p class="text-sm text-gray-400 mb-4">(Sie können frühestens ab Tag 3 mit 20% Wahrscheinlichkeit auftreten.)</p>
+        </div>
+        <div>
+            <button id="btn-events-yes">Ja, Ereignisse aktivieren</button>
+            <button id="btn-events-no" class="secondary">Nein, ohne Ereignisse spielen</button>
+        </div>
+    </div>
+
+
     <script>
         // --- Globale Variablen und Spielzustand ---
         let gameState = {
-            players: [], // { name: 'Spieler 1', role: 'Werwolf', status: 'alive', protected: false, poisoned: false, ... }
+            players: [], // { id, name, role, roleKey, roleDetails, status: 'alive'/'dead', isProtected, isPoisoned, poisonTimer, linkedTo: [], clientForDielenschleiferin, misc: {} }
             playerCount: 0,
             currentScreen: 'screen-setup-players',
             night: 0,
             day: 0,
-            currentRoleIndex: -1,
-            nightActions: [], // Speichert Aktionen der Nacht, z.B. { actor: 'Werwolf 1', action: 'kill', target: 'Spieler 3' }
-            lynchTarget: null,
-            rolesInGame: [],
-            gameLog: [], // Optional: Protokoll der Ereignisse
-            usedAbilities: {}, // Speichert, welche einmaligen Fähigkeiten genutzt wurden, z.B. {'Sigrid': true}
-            specialConditions: {}, // z.B. { traerchen: [id1, id2, id3], verwobene: [id4, id5], twinkDeactivated: false }
+            currentRoleIndex: -1, // Index in der `rolesActingTonight` Liste
+            rolesActingTonight: [], // Die Rollen, die in der aktuellen Nacht tatsächlich agieren
+            nightActions: [], // Gespeicherte Aktionen der Nacht
+            lynchTarget: null, // Name des Spielers
+            gameLog: [],
+            usedAbilities: {}, // Zählt Nutzung einmaliger Fähigkeiten, z.B. { 'player-3_heal': 1, 'player-5_protect': 1 }
+            specialConditions: {
+                linkedPlayers: [], // Array von Spieler-IDs
+                twinkDeactivated: false,
+                bauerFoundBaerbel: false,
+                eventsEnabled: false,
+                lastEventDay: 0, // Um Abstand zwischen Events zu sichern
+                activeEvent: null, // { name: 'Pandemie', affectedPlayers: [id1, id2...] }
+            },
+            config: {
+                werwolfCount: { 8: 2, 9: 2, 10: 3, 11: 3, 12: 3, 13: 4, 14: 4, 15: 4 },
+                eventProbability: 0.20, // 20% Chance für ein Event pro Tag (ab Tag 3)
+                minEventDay: 3,
+                minDaysBetweenEvents: 2,
+                discussionTime: 7 * 60, // 7 Minuten in Sekunden
+                unwetterTime: 2 * 60, // 2 Minuten in Sekunden
+            }
         };
 
-        // --- Rollendefinitionen (vereinfacht für v1) ---
+        // --- Rollendefinitionen (komplett, basierend auf CSV/Doc) ---
+        // Schlüssel sind eindeutig und werden intern verwendet
         const ROLES = {
+            // Dorfbewohner Neutral
             DORFBEWOHNER: { name: 'Dorfbewohner/in', team: 'dorf', nightAction: false },
-            WERWOLF: { name: 'Werwolf', team: 'werwolf', nightAction: true, actionType: 'kill' },
-            SEHER: { name: 'Seher/in', team: 'dorf', nightAction: true, actionType: 'see' }, // Vereinfachung von Toni/Martin
-            HEXE: { name: 'Hexe', team: 'dorf', nightAction: true, actionType: 'heal_poison', uses: { heal: 1, poison: 1 } }, // Vereinfachung von Hilde/Tanja/Gertrud
-            AMOR: { name: 'Amor', team: 'dorf', nightAction: true, actionType: 'link', frequency: 'firstNightOnly', uses: 1 }, // Vereinfachung von Valentin/Waltraud
-            SCHUTZENGEL: { name: 'Schutzengel', team: 'dorf', nightAction: true, actionType: 'protect', uses: -1 }, // Vereinfachung von Bärbel/Sigrid
-            DIELENSCHLEIFERIN: { name: 'Dielenschleiferin', team: 'dorf', nightAction: true, actionType: 'choose_client' }
+            DIELENSCHLEIFERIN: { name: 'Dielenschleiferin', team: 'dorf', nightAction: true, actionType: 'choose_client', order: 90 },
+            HEIMSCHEISSERIN: { name: 'Heimscheißerin', team: 'dorf', nightAction: true, actionType: 'observe_passive', order: 11 }, // Passiv während WW
+            PROKRASTINATIONS_PAULA: { name: 'Prokrastinations Paula', team: 'dorf', nightAction: false, special: 'getsNewRoleOnNight2' },
+            SCHUTZSCHILD_SIGRID: { name: 'Schutzschild-Sigrid', team: 'dorf', nightAction: true, actionType: 'protect_neighbor', uses: 1, order: 41 },
+
+            // Dorfbewohner mit Fähigkeiten
+            BORDELL_BAERBEL: { name: 'Bordell Bärbel', team: 'dorf', nightAction: true, actionType: 'protect_guest', order: 40 },
+            MANSPLAINING_MARTIN: { name: 'Mansplaining Martin', team: 'dorf', nightAction: true, actionType: 'reveal_role', order: 70, special: 'sabine_interaction' },
+            KRAEUTERHEXE_HILDE: { name: 'Kräuterhexe Hilde', team: 'dorf', nightAction: true, actionType: 'use_potion', uses: { protect: 1, block_ww: 1, chaos: 1 }, order: 35 },
+            NEKROMANT_NORBERT: { name: 'Nekromant Norbert', team: 'dorf', nightAction: true, actionType: 'ask_dead', uses: 1, order: 75, condition: 'player_is_dead' },
+            BOY_BUTTER_BAEUERIN: { name: 'Boy-Butter Bäuerin', team: 'dorf', nightAction: true, actionType: 'find_baerbel', order: 65, condition: 'baerbel_not_found' },
+            Oeko_Sabine: { name: 'Öko Sabine', team: 'dorf', nightAction: true, actionType: 'sabine_actions', order: 15, special: 'sabine_interaction' }, // Kombiniert Info & Schutz
+            BESTATTERIN_BRUNHILDE: { name: 'Bestatterin Brunhilde', team: 'dorf', nightAction: true, actionType: 'revive', uses: 1, order: 80, condition: 'player_is_dead' },
+            TUERSTEHER_TONI: { name: 'Nicht-binäre Türsteherperson Toni', team: 'dorf', nightAction: true, actionType: 'check_wolf', order: 50 },
+            WACHMANN_WENZEL: { name: 'Wachmann Wenzel', team: 'dorf', nightAction: true, actionType: 'guard_village', uses: 1, order: 85 },
+            FISTERIN_FRIDA: { name: 'Fisterin Frida', team: 'dorf', nightAction: true, actionType: 'find_wiebke', order: 60, special: 'dies_on_wolf_touch' },
+
+            // Eigenes Ziel
+            WUT_WIEBKE: { name: 'Wut Wiebke', team: 'eigen', nightAction: true, actionType: 'vote_with_wolves', order: 12, winCondition: 'last_alive' },
+            SUIZID_SUSIE: { name: 'Suizid Susie', team: 'eigen', nightAction: false, winCondition: 'lynched_day_1' },
+            DOPPELMORAL_DOERTHE: { name: 'Doppelmoral-Dörthe', team: 'dorf', nightAction: true, actionType: 'observe_wolves', order: 11, winCondition: 'dorf_wins' }, // Gewinnt mit Dorf, obwohl sie aufwacht
+            KONVERSIONSTHERAPIE_KONNY: { name: 'Konversionstherapie Konny', team: 'dorf', nightAction: true, actionType: 'find_twink', order: 51 },
+            GLORYHOLE_GUENNI: { name: 'Gloryhole Günni', team: 'dorf', nightAction: false, dayAction: true, special: 'knows_twink_konny' }, // Nachtaktion nur für Schutz-Check
+            BLUTMAGIERIN_BEATRIX: { name: 'Blutmagierin Beatrix', team: 'dorf', nightAction: false, dayAction: true, actionType: 'intervene_lynch', uses: 1 },
+
+            // Sonderrollen
+            KLATSCH_KAETHE: { name: 'Klatsch-Käthe', team: 'zusatz', nightAction: true, actionType: 'spread_rumor', uses: 3, order: 72 }, // Team hängt vom Basis-Spieler ab
+            VOLLSUFF_VALENTIN: { name: 'Vollsuff-Valentin', team: 'dorf', nightAction: true, actionType: 'link_three', frequency: 'firstNightOnly', uses: 1, order: 1 },
+            WAHRSAGER_WEBERIN_WALTRAUD: { name: 'Wahrsager-Weberin Waltraud', team: 'dorf', nightAction: true, actionType: 'link_two', uses: 1, order: 2 },
+
+            // Gefährliche / Unberechenbare
+            KETA_ZIEHERIN_CLAUDIA: { name: 'Keta-Zieherin Claudia', team: 'dorf', nightAction: true, actionType: 'observe_all_but_wolves', frequency: 'oddNightsOnly', order: 20, special: 'dies_on_reveal' }, // Nacht 1, 3, 5...
+            ILTUSSY: { name: 'Iltussy', team: 'dorf', nightAction: true, actionType: 'infect_roll', frequency: 'evenNightsOnly', order: 25 }, // Nacht 2, 4, 6...
+            TRIP_SITTERIN_TANJA: { name: 'Trip-Sitterin Tanja', team: 'dorf', nightAction: true, actionType: 'retten_oder_ausschalten', uses: { retten: 1, ausschalten: 1 }, order: 30 },
+            GIFT MISCHERIN_GERTRUD: { name: 'Giftmischerin Gertrud', team: 'dorf', nightAction: true, actionType: 'poison', uses: 1, order: 31 },
+            TRAVESTIEKUENSTLER_TRISTAN: { name: 'Travestiekünstler Tristan', team: 'dorf', nightAction: false, dayAction: true, actionType: 'switch_team', uses: 1, special: 'can_become_wolf' }, // Team kann wechseln
+
+            // Besondere Dynamik
+            DER_TWINK: { name: 'Der Twink', team: 'dorf', nightAction: true, actionType: 'visit_and_learn', order: 50, special: 'hunted_by_priest' },
+            DER_GEILE_PRIESTER: { name: 'Der geile Priester', team: 'dorf', nightAction: true, actionType: 'hunt_twink', order: 55 },
+
+            // Werwolf
+            WERWOLF: { name: 'Werwolf', team: 'werwolf', nightAction: true, actionType: 'kill', order: 10 },
         };
 
         // --- DOM Elemente ---
-        const screens = document.querySelectorAll('.screen');
+        // (Bereits oben deklariert, hier nur zur Übersicht)
+        const allScreens = document.querySelectorAll('.screen');
         const playerCountButtonsContainer = document.getElementById('player-count-buttons');
         const playerNameInputsContainer = document.getElementById('player-name-inputs');
-        const btnAssignRoles = document.getElementById('btn-assign-roles');
+        const btnGoToRoleAssignment = document.getElementById('btn-go-to-role-assignment');
+        const playerRoleAssignmentContainer = document.getElementById('player-role-assignment');
+        const roleAssignmentError = document.getElementById('role-assignment-error');
+        const btnStartGame = document.getElementById('btn-start-game');
         const nightCounter = document.getElementById('night-counter');
         const nightRoleAction = document.getElementById('night-role-action');
         const nightInstruction = document.getElementById('night-instruction');
@@ -248,11 +381,18 @@
         const btnNextAction = document.getElementById('btn-next-action');
         const dayCounter = document.getElementById('day-counter');
         const dayEventsList = document.getElementById('day-events-list');
+        const dayEventAnnouncement = document.getElementById('day-event-announcement');
+        const dayEventDetails = document.getElementById('day-event-details');
         const dayPlayerListStatus = document.getElementById('day-player-list-status');
         const btnStartDiscussion = document.getElementById('btn-start-discussion');
         const dayCounterVote = document.getElementById('day-counter-vote');
         const dayVoteList = document.getElementById('day-vote-list');
+        const dayVoteTimer = document.getElementById('day-vote-timer');
+        const dayVoteRestrictions = document.getElementById('day-vote-restrictions');
         const lynchSelectionInfo = document.getElementById('lynch-selection-info');
+        const beatrixInterventionDiv = document.getElementById('beatrix-intervention');
+        const btnBeatrixIntervene = document.getElementById('btn-beatrix-intervene');
+        const beatrixResultSpan = document.getElementById('beatrix-result');
         const btnConfirmLynch = document.getElementById('btn-confirm-lynch');
         const lynchResultText = document.getElementById('lynch-result-text');
         const lynchRoleReveal = document.getElementById('lynch-role-reveal');
@@ -262,31 +402,66 @@
         const gameOverMessage = document.getElementById('game-over-message');
         const winnersList = document.getElementById('winners-list');
         const btnNewGame = document.getElementById('btn-new-game');
+        const btnEventsYes = document.getElementById('btn-events-yes');
+        const btnEventsNo = document.getElementById('btn-events-no');
+
+        let discussionTimerInterval = null; // Für den Timer
 
         // --- Hilfsfunktionen ---
         function showScreen(screenId) {
-            screens.forEach(screen => {
+            allScreens.forEach(screen => {
                 screen.classList.remove('active');
             });
             const screenToShow = document.getElementById(screenId);
             if (screenToShow) {
                 screenToShow.classList.add('active');
                 gameState.currentScreen = screenId;
+                console.log("Showing screen:", screenId);
             } else {
                 console.error("Screen not found:", screenId);
+                // Fallback auf Startbildschirm
+                showScreen('screen-setup-players');
             }
         }
 
-        function getPlayerData(playerName) {
-            return gameState.players.find(p => p.name === playerName);
+        function getPlayerData(playerId) {
+            return gameState.players.find(p => p.id === playerId);
+        }
+        function getPlayerByName(playerName) {
+             return gameState.players.find(p => p.name === playerName);
         }
 
         function getLivingPlayers(team = null) {
-            return gameState.players.filter(p => p.status === 'alive' && (team === null || p.roleDetails.team === team));
+            return gameState.players.filter(p => p.status === 'alive' && (team === null || p.roleDetails.team === team || (team === 'dorf' && p.roleDetails.winCondition === 'dorf_wins')));
         }
 
-        function getRoleDefinition(roleName) {
+        function getDeadPlayers() {
+            return gameState.players.filter(p => p.status === 'dead');
+        }
+
+        function getRoleDefinitionByKey(roleKey) {
+            return ROLES[roleKey];
+        }
+
+        function getRoleDefinitionByName(roleName) {
             return Object.values(ROLES).find(r => r.name === roleName);
+        }
+
+        function logGameEvent(message) {
+            console.log(message);
+            gameState.gameLog.push({ time: new Date().toLocaleTimeString(), message: message });
+        }
+
+        function showTemporaryMessage(elementId, message, duration = 3000) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = message;
+                element.classList.remove('hidden');
+                setTimeout(() => {
+                    element.textContent = '';
+                    element.classList.add('hidden');
+                }, duration);
+            }
         }
 
         // --- Spiel-Setup ---
@@ -303,7 +478,7 @@
 
         function selectPlayerCount(count) {
             gameState.playerCount = count;
-            console.log("Player count set to:", count);
+            logGameEvent(`Spieleranzahl auf ${count} gesetzt.`);
             setupNameInputs();
             showScreen('screen-setup-names');
         }
@@ -312,10 +487,11 @@
             playerNameInputsContainer.innerHTML = '';
             for (let i = 0; i < gameState.playerCount; i++) {
                 const div = document.createElement('div');
-                div.classList.add('flex', 'items-center', 'space-x-2');
+                div.classList.add('flex', 'items-center', 'space-x-2', 'mb-2');
                 const label = document.createElement('label');
                 label.textContent = `Spieler ${i + 1}:`;
-                label.classList.add('w-20');
+                label.htmlFor = `player-name-${i}`;
+                label.classList.add('w-20', 'flex-shrink-0');
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.id = `player-name-${i}`;
@@ -327,566 +503,1590 @@
             }
         }
 
-        function assignRolesAndStartGame() {
-            gameState.players = [];
+        function setupRoleAssignment() {
+            playerRoleAssignmentContainer.innerHTML = '';
+            roleAssignmentError.classList.add('hidden');
+            roleAssignmentError.textContent = '';
+
+            // Rollen für Dropdown vorbereiten
+            const availableRoles = Object.keys(ROLES).map(key => ({ key: key, name: ROLES[key].name }));
+            availableRoles.sort((a, b) => a.name.localeCompare(b.name)); // Alphabetisch sortieren
+
             for (let i = 0; i < gameState.playerCount; i++) {
-                const input = document.getElementById(`player-name-${i}`);
-                gameState.players.push({
-                    id: `player-${i}`,
-                    name: input.value.trim() || `Spieler ${i + 1}`,
-                    role: null,
-                    roleDetails: null,
-                    status: 'alive',
-                    isProtected: false, // Schutz für diese Nacht
-                    isPoisoned: false, // Vergiftet für nächsten Tag
-                    poisonTimer: 0, // Tage bis zum Tod durch Gift
-                    linkedTo: [], // Für Amor/Verwobene
-                    clientForDielenschleiferin: false, // Ist Kunde der Dielenschleiferin für den Tag
-                    misc: {} // Für andere Rollen-spezifische Daten
-                });
-            }
+                const playerName = document.getElementById(`player-name-${i}`).value.trim() || `Spieler ${i + 1}`;
+                const playerId = `player-${i}`;
 
-            // Vereinfachte Rollenverteilung (Beispiel)
-            let rolesToAssign = [];
-            let wwCount = 0;
-            if (gameState.playerCount <= 9) wwCount = 2;
-            else if (gameState.playerCount <= 12) wwCount = 3;
-            else wwCount = 4;
-
-            for (let i = 0; i < wwCount; i++) rolesToAssign.push(ROLES.WERWOLF);
-            rolesToAssign.push(ROLES.SEHER);
-            rolesToAssign.push(ROLES.HEXE);
-            rolesToAssign.push(ROLES.SCHUTZENGEL);
-            if (gameState.playerCount >= 10) rolesToAssign.push(ROLES.AMOR); // Amor nur bei größeren Runden
-            if (gameState.playerCount >= 11) rolesToAssign.push(ROLES.DIELENSCHLEIFERIN);
-
-            while (rolesToAssign.length < gameState.playerCount) {
-                rolesToAssign.push(ROLES.DORFBEWOHNER);
-            }
-
-            // Mischen und Zuweisen
-            rolesToAssign.sort(() => Math.random() - 0.5);
-            gameState.players.forEach((player, index) => {
-                player.roleDetails = rolesToAssign[index];
-                player.role = player.roleDetails.name;
-                // Initialisiere benutzte Fähigkeiten
-                if (player.roleDetails.uses && player.roleDetails.uses !== -1) {
-                    gameState.usedAbilities[player.id] = {};
-                    for (const key in player.roleDetails.uses) {
-                        gameState.usedAbilities[player.id][key] = 0; // Zähler für jede Fähigkeit
-                    }
-                } else if (player.roleDetails.uses === 1){
-                     gameState.usedAbilities[player.id] = 0; // Einfacher Zähler für einmalige Nutzung
+                // Spielerobjekt erstellen (vorläufig)
+                if (!gameState.players.find(p => p.id === playerId)) {
+                     gameState.players.push({
+                        id: playerId,
+                        name: playerName,
+                        role: null,
+                        roleKey: null,
+                        roleDetails: null,
+                        status: 'alive',
+                        isProtected: false,
+                        isPoisoned: false,
+                        poisonTimer: 0,
+                        linkedTo: [],
+                        clientForDielenschleiferin: false,
+                        misc: {}
+                    });
+                } else {
+                    // Namen aktualisieren, falls geändert
+                    const player = gameState.players.find(p => p.id === playerId);
+                    player.name = playerName;
                 }
-            });
 
-            console.log("Assigned Roles:", gameState.players);
+
+                const div = document.createElement('div');
+                div.classList.add('flex', 'items-center', 'space-x-2', 'mb-2');
+                const nameLabel = document.createElement('span');
+                nameLabel.textContent = `${playerName}:`;
+                nameLabel.classList.add('w-32', 'flex-shrink-0', 'truncate'); // Mehr Platz für Namen
+
+                const select = document.createElement('select');
+                select.id = `player-role-${i}`;
+                select.classList.add('flex-grow');
+
+                // Standard-Option
+                const defaultOption = document.createElement('option');
+                defaultOption.value = "";
+                defaultOption.textContent = "Rolle auswählen...";
+                select.appendChild(defaultOption);
+
+                // Rollen hinzufügen
+                availableRoles.forEach(role => {
+                    const option = document.createElement('option');
+                    option.value = role.key;
+                    option.textContent = role.name;
+                    select.appendChild(option);
+                });
+
+                div.appendChild(nameLabel);
+                div.appendChild(select);
+                playerRoleAssignmentContainer.appendChild(div);
+            }
+            showScreen('screen-setup-roles');
+        }
+
+        function validateAndStartGame() {
+            const assignedRoles = [];
+            let isValid = true;
+            let errorMessage = "";
+            roleAssignmentError.classList.add('hidden');
+
+            // 1. Rollen auslesen und Spielern zuweisen
+            for (let i = 0; i < gameState.playerCount; i++) {
+                const select = document.getElementById(`player-role-${i}`);
+                const roleKey = select.value;
+                const player = gameState.players[i];
+
+                if (!roleKey) {
+                    isValid = false;
+                    errorMessage = "Bitte allen Spielern eine Rolle zuweisen.";
+                    break;
+                }
+                player.roleKey = roleKey;
+                player.roleDetails = ROLES[roleKey];
+                player.role = player.roleDetails.name;
+                assignedRoles.push(roleKey);
+
+                // Fähigkeiten initialisieren
+                 if (player.roleDetails.uses) {
+                    gameState.usedAbilities[player.id] = {};
+                    if (typeof player.roleDetails.uses === 'number' && player.roleDetails.uses !== -1) {
+                         gameState.usedAbilities[player.id] = 0; // Einfacher Zähler
+                    } else if (typeof player.roleDetails.uses === 'object') {
+                         for (const key in player.roleDetails.uses) {
+                             gameState.usedAbilities[player.id][key] = 0; // Zähler pro Fähigkeitstyp
+                         }
+                    }
+                 } else {
+                     // Falls uses nicht definiert ist, aber die Rolle z.B. einmalig ist
+                     if(player.roleDetails.frequency === 'firstNightOnly' || player.roleDetails.uses === 1) {
+                         gameState.usedAbilities[player.id] = 0;
+                     }
+                 }
+
+                 // Sonderinitialisierungen
+                 if (player.roleKey === 'GLORYHOLE_GUENNI') {
+                    const twink = gameState.players.find(p => p.roleKey === 'DER_TWINK');
+                    const konny = gameState.players.find(p => p.roleKey === 'KONVERSIONSTHERAPIE_KONNY');
+                    player.misc.knowsTwinkId = twink ? twink.id : null;
+                    player.misc.knowsKonnyId = konny ? konny.id : null;
+                 }
+                 if (player.roleKey === 'DOPPELMORAL_DOERTHE') {
+                     player.misc.knowsWerwolves = true; // Markierung, dass sie die WW kennt
+                 }
+
+            }
+
+            if (!isValid) {
+                roleAssignmentError.textContent = errorMessage;
+                roleAssignmentError.classList.remove('hidden');
+                return;
+            }
+
+            // 2. Werwolfanzahl prüfen
+            const expectedWWCount = gameState.config.werwolfCount[gameState.playerCount];
+            const actualWWCount = assignedRoles.filter(key => ROLES[key].team === 'werwolf').length;
+            if (actualWWCount !== expectedWWCount) {
+                isValid = false;
+                errorMessage = `Falsche Anzahl Werwölfe! Für ${gameState.playerCount} Spieler werden ${expectedWWCount} Werwölfe benötigt, aber ${actualWWCount} wurden zugewiesen.`;
+            }
+
+            // 3. Inkompatible Rollen prüfen
+            const hasValentin = assignedRoles.includes('VOLLSUFF_VALENTIN');
+            const hasWaltraud = assignedRoles.includes('WAHRSAGER_WEBERIN_WALTRAUD');
+            if (hasValentin && hasWaltraud) {
+                isValid = false;
+                errorMessage = "Vollsuff-Valentin und Wahrsager-Weberin Waltraud dürfen nicht im selben Spiel sein.";
+            }
+            const hasWiebke = assignedRoles.includes('WUT_WIEBKE');
+            const hasDoerthe = assignedRoles.includes('DOPPELMORAL_DOERTHE');
+            if (hasWiebke && hasDoerthe) {
+                isValid = false;
+                errorMessage = "Wut Wiebke und Doppelmoral-Dörthe dürfen nicht im selben Spiel sein.";
+            }
+            // Weitere Inkompatibilitäten prüfen (falls vorhanden)
+
+            if (!isValid) {
+                roleAssignmentError.textContent = errorMessage;
+                roleAssignmentError.classList.remove('hidden');
+                return;
+            }
+
+            logGameEvent("Rollen zugewiesen und Spiel gestartet.");
+            console.log("Final Player Setup:", gameState.players);
+            showScreen('screen-setup-events'); // Gehe zur Event-Auswahl
+        }
+
+        function setupEvents(enabled) {
+            gameState.specialConditions.eventsEnabled = enabled;
+            logGameEvent(`Sonderereignisse ${enabled ? 'aktiviert' : 'deaktiviert'}.`);
             startNightPhase();
         }
 
-        // --- Nachtphase ---
+
+        // --- Nachtphase Logik ---
         function startNightPhase() {
             gameState.night++;
-            gameState.day = gameState.night; // Tag-Nummer entspricht der vorherigen Nacht
+            gameState.day = gameState.night;
             gameState.currentRoleIndex = -1;
             gameState.nightActions = [];
             gameState.lynchTarget = null;
             selectionInfo.textContent = '';
-            nightSpecialUI.innerHTML = ''; // Reset special UI
+            nightSpecialUI.innerHTML = '';
 
             // Reset nächtliche Status
             gameState.players.forEach(p => {
                 p.isProtected = false;
-                // Gift wirkt über Tage, nicht resetten
-                p.clientForDielenschleiferin = false;
+                // Gift-Timer läuft weiter
+                p.clientForDielenschleiferin = false; // Wird jede Nacht neu gesetzt
+                // Reset temporäre Nacht-Infos
+                delete p.misc.sabineRolledSix;
+                delete p.misc.priesterProtectedThisNight;
+                delete p.misc.bauerProtectedThisNight;
             });
 
-            // Rollen für die Nachtphase filtern und sortieren (vereinfachte Reihenfolge)
-            gameState.rolesInGame = gameState.players
+            // Rollen für die Nachtphase filtern und sortieren
+            gameState.rolesActingTonight = gameState.players
                 .filter(p => p.status === 'alive' && p.roleDetails.nightAction)
-                .sort((a, b) => {
-                    // Grobe Sortierung, muss verfeinert werden basierend auf der CSV-Logik
-                    const order = [ROLES.AMOR.name, ROLES.WERWOLF.name, ROLES.HEXE.name, ROLES.SCHUTZENGEL.name, ROLES.SEHER.name, ROLES.DIELENSCHLEIFERIN.name];
-                    return order.indexOf(a.role) - order.indexOf(b.role);
-                });
+                .filter(p => checkRoleCondition(p)) // Prüfen, ob die Rolle aktiv ist (Frequenz, Nutzungslimit etc.)
+                .sort((a, b) => (a.roleDetails.order || 999) - (b.roleDetails.order || 999)); // Sortieren nach Reihenfolge
 
-            // Entferne Rollen, die nur in Nacht 1 agieren, wenn nicht Nacht 1
-            if (gameState.night > 1) {
-                gameState.rolesInGame = gameState.rolesInGame.filter(p => p.roleDetails.frequency !== 'firstNightOnly');
-            }
-
-             // Entferne Rollen, deren einmalige Fähigkeit genutzt wurde
-            gameState.rolesInGame = gameState.rolesInGame.filter(p => {
-                if (!gameState.usedAbilities[p.id]) return true; // Nicht nutzungsbeschränkt oder noch nicht initialisiert
-                if (typeof gameState.usedAbilities[p.id] === 'number') { // Einfacher Zähler
-                    return gameState.usedAbilities[p.id] < p.roleDetails.uses;
-                } else if (typeof gameState.usedAbilities[p.id] === 'object') { // Zähler pro Fähigkeitstyp
-                    // Prüfen, ob *alle* Fähigkeiten aufgebraucht sind
-                    return Object.keys(p.roleDetails.uses).some(key => gameState.usedAbilities[p.id][key] < p.roleDetails.uses[key]);
-                }
-                return true; // Falls uses = -1 (unendlich)
-            });
-
-
-            console.log("Roles acting tonight:", gameState.rolesInGame.map(p => p.role));
+            logGameEvent(`Nacht ${gameState.night} beginnt. Aktive Rollen: ${gameState.rolesActingTonight.map(p => p.role).join(', ')}`);
             nightCounter.textContent = gameState.night;
             showScreen('screen-night');
             nextNightAction();
         }
 
+        function checkRoleCondition(player) {
+            const role = player.roleDetails;
+            const roleKey = player.roleKey;
+
+            // Frequenz prüfen
+            if (role.frequency === 'firstNightOnly' && gameState.night !== 1) return false;
+            if (role.frequency === 'oddNightsOnly' && gameState.night % 2 === 0) return false;
+            if (role.frequency === 'evenNightsOnly' && gameState.night % 2 !== 0) return false;
+
+            // Nutzungslimit prüfen
+            if (role.uses) {
+                if (typeof role.uses === 'number' && role.uses !== -1) {
+                    if ((gameState.usedAbilities[player.id] || 0) >= role.uses) return false;
+                } else if (typeof role.uses === 'object') {
+                    // Bei multiplen Fähigkeiten (Hexe, Tanja): Prüfen, ob *mindestens eine* Fähigkeit noch nutzbar ist
+                    const currentUses = gameState.usedAbilities[player.id] || {};
+                    const canUseAny = Object.keys(role.uses).some(key => (currentUses[key] || 0) < role.uses[key]);
+                    if (!canUseAny) return false;
+                }
+            }
+
+            // Spezielle Bedingungen prüfen
+            if (role.condition === 'player_is_dead' && getDeadPlayers().length === 0) return false;
+            if (role.condition === 'baerbel_not_found' && gameState.specialConditions.bauerFoundBaerbel) return false;
+            if (roleKey === 'DER_TWINK' && gameState.specialConditions.twinkDeactivated) return false; // Konny hat ihn gefunden
+
+            return true; // Rolle ist aktiv
+        }
+
+
         function nextNightAction() {
             gameState.currentRoleIndex++;
-            nightSpecialUI.innerHTML = ''; // Clear special UI
-            selectionInfo.textContent = ''; // Clear selection info
+            nightSpecialUI.innerHTML = '';
+            selectionInfo.textContent = '';
+            btnNextAction.disabled = false; // Standardmäßig aktivieren
+            btnNextAction.textContent = 'Aktion bestätigen / Nächster Schritt';
 
-            if (gameState.currentRoleIndex >= gameState.rolesInGame.length) {
-                // Ende der Nachtphase
+
+            // Überspringe Werwölfe, wenn der erste Werwolf schon dran war (Gruppenaktion)
+            if (gameState.currentRoleIndex < gameState.rolesActingTonight.length) {
+                const currentPlayer = gameState.rolesActingTonight[gameState.currentRoleIndex];
+                if (currentPlayer.roleKey === 'WERWOLF' && gameState.nightActions.some(a => a.role === 'Werwolf' && a.action === 'kill')) {
+                    console.log(`Überspringe weiteren Werwolf: ${currentPlayer.name}`);
+                    nextNightAction();
+                    return;
+                 }
+                 // Überspringe Doppelmoral-Dörthe, da sie nur passiv zusieht
+                 if (currentPlayer.roleKey === 'DOPPELMORAL_DOERTHE') {
+                    console.log(`Überspringe Doppelmoral-Dörthe (passiv): ${currentPlayer.name}`);
+                    nextNightAction();
+                    return;
+                 }
+                 // Überspringe Heimscheißerin (passiv)
+                 if (currentPlayer.roleKey === 'HEIMSCHEISSERIN') {
+                    console.log(`Überspringe Heimscheißerin (passiv): ${currentPlayer.name}`);
+                    nextNightAction();
+                    return;
+                 }
+            }
+
+
+            if (gameState.currentRoleIndex >= gameState.rolesActingTonight.length) {
+                logGameEvent("Alle Nachtaktionen abgeschlossen.");
                 resolveNightActions();
                 return;
             }
 
-            const currentPlayer = gameState.rolesInGame[gameState.currentRoleIndex];
+            const currentPlayer = gameState.rolesActingTonight[gameState.currentRoleIndex];
             const role = currentPlayer.roleDetails;
+            const roleKey = currentPlayer.roleKey;
 
+            logGameEvent(`Aktion für: ${currentPlayer.name} (${currentPlayer.role})`);
             nightRoleAction.textContent = `${currentPlayer.role} (${currentPlayer.name}), deine Aktion:`;
 
             let instruction = "";
-            let targetType = 'player'; // 'player', 'none', 'special'
-            let selectablePlayers = getLivingPlayers().filter(p => p.id !== currentPlayer.id); // Standard: alle anderen lebenden Spieler
+            let targetType = 'player'; // player, multi-player (fixed number), dead_player, special, none
+            let targetCount = 1;
+            let selectablePlayers = getLivingPlayers().filter(p => p.id !== currentPlayer.id); // Standard: Alle anderen Lebenden
+            let requiresConfirmation = true; // Muss der SL explizit auf "Weiter" klicken?
 
-            // Rollenspezifische Anweisungen und Logik
+            // --- Rollenspezifische Logik ---
             switch (role.actionType) {
-                case 'kill':
-                    // Werwölfe handeln als Gruppe, nur einmal anzeigen
-                    if (gameState.nightActions.some(a => a.action === 'kill')) {
-                        nextNightAction(); // Nächsten WW überspringen
-                        return;
-                    }
+                case 'kill': // Werwolf
                     nightRoleAction.textContent = `Werwölfe, wählt euer Opfer:`;
-                    instruction = "Wählt einen Spieler aus, den ihr fressen wollt.";
-                    selectablePlayers = getLivingPlayers('dorf'); // Nur Dorfbewohner als Ziel
+                    instruction = "Zeigt auf den Spieler, den ihr fressen wollt.";
+                    // Werwölfe können keine anderen Werwölfe fressen (Annahme)
+                    selectablePlayers = getLivingPlayers().filter(p => p.roleDetails.team !== 'werwolf');
                     break;
-                case 'see':
+                case 'observe_passive': // Heimscheißerin (eigentlich keine Aktion, wird übersprungen)
+                    instruction = "Du schleichst herum...";
+                    targetType = 'none';
+                    requiresConfirmation = false; // Direkt weiter
+                    break;
+                case 'choose_client': // Dielenschleiferin
+                    instruction = "Wähle einen Spieler, bei dem du morgen die Dielen schleifst.";
+                    selectablePlayers = getLivingPlayers(); // Kann jeden wählen, auch sich selbst? (Regelklärung nötig, hier erlaubt)
+                    break;
+                 case 'protect_neighbor': // Schutzschild-Sigrid
+                    const neighbors = getNeighbors(currentPlayer.id);
+                    instruction = `Wähle einen deiner Nachbarn (${neighbors.map(n => n.name).join(' oder ')}) zum Beschützen.`;
+                    selectablePlayers = neighbors;
+                    targetType = 'player_optional'; // Kann auch überspringen
+                    break;
+                case 'protect_guest': // Bordell Bärbel
+                    instruction = "Wen lädst du heute Nacht zu dir ein?";
+                    selectablePlayers = getLivingPlayers(); // Kann jeden einladen
+                    break;
+                case 'reveal_role': // Mansplaining Martin
                     instruction = "Wähle einen Spieler, dessen Rolle du erfahren möchtest.";
-                    break;
-                case 'heal_poison':
-                    instruction = "Wähle einen Spieler für einen Trank.";
-                    targetType = 'special'; // Braucht eigene UI
-                    setupHexeUI(currentPlayer);
-                    break;
-                case 'link': // Amor
-                    instruction = "Wähle ZWEI Spieler, die sich verlieben sollen.";
-                    targetType = 'multi-player';
                     selectablePlayers = getLivingPlayers(); // Kann jeden wählen
                     break;
-                case 'protect':
-                    instruction = "Wähle einen Spieler, den du beschützen möchtest.";
+                case 'use_potion': // Kräuterhexe Hilde
+                    instruction = "Wähle einen Trank und einen Spieler.";
+                    targetType = 'special';
+                    setupHildeUI(currentPlayer);
+                    requiresConfirmation = false; // Bestätigung erfolgt über Trank/Spieler-Wahl
                     break;
-                case 'choose_client':
-                    instruction = "Wähle einen Spieler, bei dem du morgen die Dielen schleifst.";
+                case 'ask_dead': // Nekromant Norbert
+                    instruction = "Wähle einen toten Spieler als Medium und einen lebenden Spieler, über den du etwas wissen willst.";
+                    targetType = 'special';
+                    setupNorbertUI(currentPlayer);
+                    requiresConfirmation = false;
+                    break;
+                case 'find_baerbel': // Boy-Butter Bäuerin
+                    instruction = "Wähle einen Spieler und frage, ob es Bordell Bärbel ist.";
+                    selectablePlayers = getLivingPlayers();
+                    break;
+                case 'sabine_actions': // Öko Sabine
+                    if (gameState.night === 1) {
+                        instruction = "Der SL zeigt dir 3 mögliche Werwölfe (nur 1 ist korrekt).";
+                        targetType = 'none'; // Nur Info-Anzeige
+                        const potentialTargets = getSabineTargets();
+                        nightSpecialUI.innerHTML = `<p class="text-yellow-400">Mögliche Werwölfe: ${potentialTargets.map(p=>p.name).join(', ')}</p>`;
+                    } else {
+                        instruction = "Würfle, um dich zu schützen (benötigt eine 6).";
+                        targetType = 'special';
+                        setupSabineDiceUI(currentPlayer);
+                        requiresConfirmation = false;
+                    }
+                    break;
+                case 'revive': // Bestatterin Brunhilde
+                     instruction = "Wähle einen toten Spieler zur Wiederbelebung.";
+                     selectablePlayers = getDeadPlayers();
+                     targetType = 'dead_player';
+                     if (selectablePlayers.length === 0) {
+                         instruction = "Es gibt niemanden zum Wiederbeleben.";
+                         targetType = 'none';
+                         requiresConfirmation = false;
+                     }
+                     break;
+                case 'check_wolf': // Türsteher Toni
+                    instruction = "Wähle einen Spieler zum Abtasten.";
+                    selectablePlayers = getLivingPlayers();
+                    break;
+                case 'guard_village': // Wachmann Wenzel
+                    instruction = "Möchtest du diese Nacht über das Dorf wachen?";
+                    targetType = 'special';
+                    setupWenzelUI(currentPlayer);
+                    requiresConfirmation = false;
+                    break;
+                case 'find_wiebke': // Fisterin Frida
+                    instruction = "Wähle einen Spieler, um zu prüfen, ob es Wut Wiebke ist. Vorsicht vor Werwölfen!";
+                    selectablePlayers = getLivingPlayers();
+                    break;
+                case 'vote_with_wolves': // Wut Wiebke (passiv, keine eigene Aktion hier)
+                    instruction = "Du stimmst mit den Werwölfen.";
+                    targetType = 'none';
+                    requiresConfirmation = false;
+                    break;
+                case 'observe_wolves': // Doppelmoral-Dörthe (passiv)
+                    instruction = "Du beobachtest die Werwölfe.";
+                    targetType = 'none';
+                    requiresConfirmation = false;
+                    break;
+                case 'find_twink': // Konversionstherapie Konny
+                    instruction = "Wähle einen Spieler, um zu prüfen, ob es der Twink ist.";
+                    selectablePlayers = getLivingPlayers();
+                    break;
+                // Gloryhole Günni hat keine Nachtaktion außer Schutz-Check
+                case 'spread_rumor': // Klatsch-Käthe
+                    instruction = "Wähle ein Gerücht und einen Spieler, über den es verbreitet wird.";
+                    targetType = 'special';
+                    setupKaetheUI(currentPlayer);
+                    requiresConfirmation = false;
+                    break;
+                case 'link_three': // Vollsuff-Valentin
+                    instruction = "Wähle DREI Spieler, die das Trärchen bilden sollen.";
+                    selectablePlayers = getLivingPlayers();
+                    targetType = 'multi-player';
+                    targetCount = 3;
+                    break;
+                case 'link_two': // Wahrsager-Weberin Waltraud
+                    instruction = "Wähle ZWEI Spieler, die verwoben werden sollen.";
+                    selectablePlayers = getLivingPlayers();
+                    targetType = 'multi-player';
+                    targetCount = 2;
+                    break;
+                case 'observe_all_but_wolves': // Keta-Zieherin Claudia
+                    instruction = "Du beobachtest die Vorgänge der Nacht (außer die Werwolf-Aktion). Der SL informiert dich.";
+                    targetType = 'none'; // Nur Info-Anzeige
+                    // Hier könnte man die bisherigen Aktionen anzeigen (komplex)
+                    nightSpecialUI.innerHTML = `<p class="text-gray-400">(Spielleiter gibt Informationen an Claudia)</p>`;
+                    break;
+                case 'infect_roll': // Iltussy
+                    instruction = "Wähle einen Spieler, zu dem du einen Iltis schickst, und würfle.";
+                    targetType = 'special';
+                    setupIltussyUI(currentPlayer);
+                    requiresConfirmation = false;
+                    break;
+                case 'retten_oder_ausschalten': // Trip-Sitterin Tanja
+                    instruction = "Möchtest du retten oder ausschalten?";
+                    targetType = 'special';
+                    setupTanjaUI(currentPlayer);
+                    requiresConfirmation = false;
+                    break;
+                case 'poison': // Giftmischerin Gertrud
+                    instruction = "Wähle einen Spieler zum Vergiften.";
+                    selectablePlayers = getLivingPlayers();
+                    break;
+                // Travestiekünstler Tristan hat keine Nachtaktion außer als WW
+                case 'visit_and_learn': // Der Twink
+                    instruction = "Wähle einen Spieler, den du besuchen möchtest.";
+                    selectablePlayers = getLivingPlayers();
+                    break;
+                case 'hunt_twink': // Der geile Priester
+                    instruction = "Wähle einen Spieler, um zu prüfen, ob es der Twink ist.";
+                    selectablePlayers = getLivingPlayers();
                     break;
                 default:
-                    instruction = "Keine spezifische Aktion für diese Rolle in dieser Version.";
+                    instruction = "Unbekannte Aktion oder Rolle wird übersprungen.";
                     targetType = 'none';
+                    requiresConfirmation = false;
+                    logGameEvent(`Unbekannte Aktion ${role.actionType} für ${currentPlayer.role}`);
             }
 
             nightInstruction.textContent = instruction;
-            renderNightPlayerList(currentPlayer, selectablePlayers, targetType);
-        }
-
-        function setupHexeUI(player) {
-            nightSpecialUI.innerHTML = '';
-            const canHeal = gameState.usedAbilities[player.id]?.heal < player.roleDetails.uses.heal;
-            const canPoison = gameState.usedAbilities[player.id]?.poison < player.roleDetails.uses.poison;
-
-            if (!canHeal && !canPoison) {
-                 nightInstruction.textContent = "Du hast keine Tränke mehr.";
-                 renderNightPlayerList(player, [], 'none'); // Keine Aktion möglich
-                 return;
+            btnNextAction.disabled = requiresConfirmation; // Deaktivieren, wenn eine Auswahl nötig ist
+            if (targetType === 'none' || (targetType === 'dead_player' && selectablePlayers.length === 0)) {
+                 btnNextAction.textContent = 'Weiter'; // Keine Aktion möglich/nötig
+                 btnNextAction.disabled = false;
+                 renderNightPlayerList(currentPlayer, [], 'none'); // Leere Liste
+            } else {
+                 renderNightPlayerList(currentPlayer, selectablePlayers, targetType, role.actionType, targetCount);
             }
 
-            const healButton = document.createElement('button');
-            healButton.textContent = `Heiltrank (${player.roleDetails.uses.heal - (gameState.usedAbilities[player.id]?.heal || 0)} übrig)`;
-            healButton.disabled = !canHeal;
-            healButton.onclick = () => selectHexeAction('heal', player);
-            nightSpecialUI.appendChild(healButton);
+            // Direkt weiterspringen, wenn keine Bestätigung nötig ist
+            if (!requiresConfirmation) {
+                // Kurze Pause, damit der SL den Text lesen kann
+                setTimeout(() => {
+                     // Nur weitermachen, wenn wir noch bei diesem Spieler sind
+                     if (gameState.rolesActingTonight[gameState.currentRoleIndex]?.id === currentPlayer.id) {
+                          confirmNightAction(null); // Keine explizite Aktion, Logik passierte in setupUI o.ä.
+                     }
+                }, 1500); // 1.5 Sekunden Verzögerung
+            }
+        }
 
-            const poisonButton = document.createElement('button');
-            poisonButton.textContent = `Gifttrank (${player.roleDetails.uses.poison - (gameState.usedAbilities[player.id]?.poison || 0)} übrig)`;
-            poisonButton.disabled = !canPoison;
-            poisonButton.onclick = () => selectHexeAction('poison', player);
-            nightSpecialUI.appendChild(poisonButton);
+        // --- UI Setup Funktionen für spezielle Rollen ---
+
+        function setupHildeUI(player) {
+            nightSpecialUI.innerHTML = '';
+            const uses = player.roleDetails.uses;
+            const used = gameState.usedAbilities[player.id] || {};
+            const remaining = {
+                protect: uses.protect - (used.protect || 0),
+                block_ww: uses.block_ww - (used.block_ww || 0),
+                chaos: uses.chaos - (used.chaos || 0)
+            };
+
+            const canUseAny = Object.values(remaining).some(count => count > 0);
+
+            if (!canUseAny) {
+                nightInstruction.textContent = "Du hast keine Tränke mehr.";
+                renderNightPlayerList(player, [], 'none');
+                btnNextAction.textContent = 'Weiter';
+                btnNextAction.disabled = false;
+                return;
+            }
+
+            const selectLabel = document.createElement('label');
+            selectLabel.textContent = "Wähle einen Trank: ";
+            selectLabel.htmlFor = 'hilde-potion-select';
+            nightSpecialUI.appendChild(selectLabel);
+
+            const selectPotion = document.createElement('select');
+            selectPotion.id = 'hilde-potion-select';
+            selectPotion.innerHTML = `<option value="">-- Bitte wählen --</option>`;
+            if (remaining.protect > 0) selectPotion.innerHTML += `<option value="protect">Schutztrank (${remaining.protect} übrig)</option>`;
+            if (remaining.block_ww > 0) selectPotion.innerHTML += `<option value="block_ww">Heil-/Blockadetrank (${remaining.block_ww} übrig)</option>`;
+            if (remaining.chaos > 0) selectPotion.innerHTML += `<option value="chaos">Chaostrank (${remaining.chaos} übrig)</option>`;
+            nightSpecialUI.appendChild(selectPotion);
+
+            selectPotion.onchange = () => {
+                const selectedPotion = selectPotion.value;
+                if (selectedPotion) {
+                    nightInstruction.textContent = `Wähle einen Spieler für den ${ROLES.KRAEUTERHEXE_HILDE.name} (${selectedPotion}).`;
+                    // Werwölfe können nicht geschützt oder chaotisch gemacht werden? (Regelklärung)
+                    // Blockadetrank kann nur auf WW wirken (aber Hexe weiß nicht wer WW ist) -> Kann jeden treffen
+                    renderNightPlayerList(player, getLivingPlayers(), 'player', selectedPotion);
+                    selectionInfo.textContent = 'Wähle ein Ziel.';
+                    btnNextAction.disabled = true; // Muss Ziel wählen
+                } else {
+                    renderNightPlayerList(player, [], 'none');
+                    selectionInfo.textContent = '';
+                    btnNextAction.disabled = true;
+                }
+            };
 
              const skipButton = document.createElement('button');
              skipButton.textContent = "Keinen Trank verwenden";
-             skipButton.classList.add('secondary');
-             skipButton.onclick = () => confirmNightAction(null); // Nichts tun
+             skipButton.classList.add('secondary', 'ml-4');
+             skipButton.onclick = () => confirmNightAction(null);
              nightSpecialUI.appendChild(skipButton);
 
-             renderNightPlayerList(player, [], 'none'); // Spielerliste erstmal nicht interaktiv
+             renderNightPlayerList(player, [], 'none'); // Liste initial leer/inaktiv
+             btnNextAction.disabled = true; // Muss erst Trank wählen oder überspringen
         }
 
-        function selectHexeAction(actionType, player) {
-            nightSpecialUI.querySelectorAll('button').forEach(btn => btn.disabled = true); // Deaktiviere Buttons nach Wahl
-            nightInstruction.textContent = `Wähle einen Spieler für den ${actionType === 'heal' ? 'Heiltrank' : 'Gifttrank'}.`;
-            const selectablePlayers = (actionType === 'heal')
-                ? getLivingPlayers() // Kann jeden heilen
-                : getLivingPlayers().filter(p => p.id !== player.id); // Kann nicht sich selbst vergiften
-            renderNightPlayerList(player, selectablePlayers, 'player', actionType);
+        function setupNorbertUI(player) {
+            nightSpecialUI.innerHTML = '';
+            const deadPlayers = getDeadPlayers();
+            const livingPlayers = getLivingPlayers();
+
+            if (deadPlayers.length === 0 || livingPlayers.length === 0) {
+                 nightInstruction.textContent = "Es gibt nicht genügend Spieler für deine Fähigkeit.";
+                 renderNightPlayerList(player, [], 'none');
+                 btnNextAction.textContent = 'Weiter';
+                 btnNextAction.disabled = false;
+                 return;
+            }
+
+            nightSpecialUI.innerHTML = `
+                <div class="flex flex-wrap gap-4 items-center">
+                    <div>
+                        <label for="norbert-dead-select" class="block mb-1 text-sm font-medium">Wähle den Geist:</label>
+                        <select id="norbert-dead-select">
+                            <option value="">-- Toter Spieler --</option>
+                            ${deadPlayers.map(p => `<option value="${p.id}">${p.name} (${p.role})</option>`).join('')}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="norbert-living-select" class="block mb-1 text-sm font-medium">Über wen fragst du?</label>
+                        <select id="norbert-living-select">
+                            <option value="">-- Lebender Spieler --</option>
+                            ${livingPlayers.map(p => `<option value="${p.id}">${p.name}</option>`).join('')}
+                        </select>
+                    </div>
+                    <button id="norbert-confirm" class="self-end" disabled>Bestätigen</button>
+                </div>
+            `;
+
+            const deadSelect = document.getElementById('norbert-dead-select');
+            const livingSelect = document.getElementById('norbert-living-select');
+            const confirmBtn = document.getElementById('norbert-confirm');
+
+            function checkSelection() {
+                confirmBtn.disabled = !(deadSelect.value && livingSelect.value);
+            }
+
+            deadSelect.onchange = checkSelection;
+            livingSelect.onchange = checkSelection;
+
+            confirmBtn.onclick = () => {
+                const deadPlayerId = deadSelect.value;
+                const livingPlayerId = livingSelect.value;
+                const livingPlayer = getPlayerData(livingPlayerId);
+                // SL gibt nonverbal Info
+                logGameEvent(`${player.name} befragt ${getPlayerData(deadPlayerId).name} über ${livingPlayer.name}.`);
+                selectionInfo.textContent = `SL: Gib ${player.name} Info über ${livingPlayer.name} (Daumen hoch/runter).`;
+                confirmNightAction({ target: livingPlayerId, medium: deadPlayerId });
+            };
+
+            renderNightPlayerList(player, [], 'none'); // Keine Spielerliste nötig
+            btnNextAction.disabled = true; // Muss UI benutzen
         }
 
+        function setupSabineDiceUI(player) {
+             nightSpecialUI.innerHTML = `
+                <button id="sabine-roll-dice">Würfeln</button>
+                <span id="sabine-dice-result" class="ml-4 text-xl font-bold"></span>
+             `;
+             const rollButton = document.getElementById('sabine-roll-dice');
+             const resultSpan = document.getElementById('sabine-dice-result');
 
-        function renderNightPlayerList(currentPlayer, selectablePlayers, targetType, subAction = null) {
-            nightPlayerList.innerHTML = '';
-            let selectedTargets = [];
+             rollButton.onclick = () => {
+                 const roll = Math.floor(Math.random() * 6) + 1;
+                 resultSpan.textContent = `Du hast eine ${roll} gewürfelt!`;
+                 rollButton.disabled = true;
+                 let protected = false;
+                 if (roll === 6) {
+                     player.misc.sabineRolledSix = true;
+                     protected = true;
+                     resultSpan.textContent += ' Du bist diese Nacht geschützt!';
+                     resultSpan.classList.add('text-green-400');
+                 } else {
+                     resultSpan.textContent += ' Leider kein Schutz.';
+                     resultSpan.classList.add('text-red-400');
+                 }
+                 logGameEvent(`${player.name} würfelt für Schutz: ${roll} (${protected ? 'geschützt' : 'nicht geschützt'}).`);
+                 // Automatisch weiter nach kurzer Anzeige
+                 setTimeout(() => {
+                     // Nur weitermachen, wenn wir noch bei Sabine sind
+                     if (gameState.rolesActingTonight[gameState.currentRoleIndex]?.id === player.id) {
+                         confirmNightAction({ rolled: roll, protected: protected });
+                     }
+                 }, 2500); // 2.5 Sekunden warten
+             };
+             renderNightPlayerList(player, [], 'none');
+             btnNextAction.disabled = true; // Aktion läuft über Würfel-Button
+        }
 
-            getLivingPlayers().forEach(p => {
+         function setupWenzelUI(player) {
+             nightSpecialUI.innerHTML = `
+                <button id="wenzel-yes">Ja, ich wache!</button>
+                <button id="wenzel-no" class="secondary">Nein, ich schlafe lieber.</button>
+             `;
+             document.getElementById('wenzel-yes').onclick = () => {
+                 logGameEvent(`${player.name} entscheidet sich zu wachen.`);
+                 selectionInfo.textContent = "Das Dorf wird diese Nacht bewacht.";
+                 confirmNightAction({ watches: true });
+             };
+             document.getElementById('wenzel-no').onclick = () => {
+                 logGameEvent(`${player.name} entscheidet sich zu schlafen.`);
+                 selectionInfo.textContent = "Wenzel schläft.";
+                 confirmNightAction({ watches: false });
+             };
+             renderNightPlayerList(player, [], 'none');
+             btnNextAction.disabled = true;
+         }
+
+         function setupKaetheUI(player) {
+             nightSpecialUI.innerHTML = '';
+             const rumors = [
+                 "Man munkelt, dass du der Dorfgemeinschaft nicht wohlgesonnen bist.",
+                 "Es gibt ein geheimes Bündnis im Dorf, und du scheinst darin verwickelt zu sein.",
+                 "Man sagt, du hast eine düstere Vorahnung über das nächste Opfer ausgesprochen."
+             ];
+             const uses = player.roleDetails.uses;
+             const usedCount = gameState.usedAbilities[player.id] || 0;
+             const remaining = uses - usedCount;
+
+             if (remaining <= 0) {
+                 nightInstruction.textContent = "Du hast keine Gerüchte mehr zu verbreiten.";
+                 renderNightPlayerList(player, [], 'none');
+                 btnNextAction.textContent = 'Weiter';
+                 btnNextAction.disabled = false;
+                 return;
+             }
+
+             nightSpecialUI.innerHTML = `
+                 <div class="space-y-2">
+                    <div>
+                        <label for="kaethe-rumor-select" class="block mb-1 text-sm font-medium">Wähle ein Gerücht (${remaining} übrig):</label>
+                        <select id="kaethe-rumor-select">
+                            <option value="">-- Gerücht wählen --</option>
+                            ${rumors.map((r, index) => `<option value="${index}">${r}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div>
+                        <label for="kaethe-target-select" class="block mb-1 text-sm font-medium">Über wen?</label>
+                        <select id="kaethe-target-select" disabled>
+                            <option value="">-- Spieler wählen --</option>
+                            ${getLivingPlayers().map(p => `<option value="${p.id}">${p.name}</option>`).join('')}
+                        </select>
+                    </div>
+                    <button id="kaethe-confirm" class="mt-2" disabled>Gerücht streuen</button>
+                    <button id="kaethe-skip" class="secondary">Überspringen</button>
+                 </div>
+             `;
+
+             const rumorSelect = document.getElementById('kaethe-rumor-select');
+             const targetSelect = document.getElementById('kaethe-target-select');
+             const confirmBtn = document.getElementById('kaethe-confirm');
+             const skipBtn = document.getElementById('kaethe-skip');
+
+             function checkKaetheSelection() {
+                 const rumorSelected = rumorSelect.value !== "";
+                 const targetSelected = targetSelect.value !== "";
+                 targetSelect.disabled = !rumorSelected;
+                 confirmBtn.disabled = !(rumorSelected && targetSelected);
+             }
+
+             rumorSelect.onchange = checkKaetheSelection;
+             targetSelect.onchange = checkKaetheSelection;
+
+             confirmBtn.onclick = () => {
+                 const targetPlayerId = targetSelect.value;
+                 const rumorIndex = parseInt(rumorSelect.value);
+                 const rumorText = rumors[rumorIndex];
+                 logGameEvent(`${player.name} verbreitet Gerücht '${rumorIndex + 1}' über ${getPlayerData(targetPlayerId).name}.`);
+                 selectionInfo.textContent = `Gerücht über ${getPlayerData(targetPlayerId).name} wird am Tag verkündet.`;
+                 confirmNightAction({ target: targetPlayerId, rumorIndex: rumorIndex, rumorText: rumorText });
+             };
+
+             skipBtn.onclick = () => confirmNightAction(null);
+
+             renderNightPlayerList(player, [], 'none');
+             btnNextAction.disabled = true;
+         }
+
+         function setupIltussyUI(player) {
+             nightSpecialUI.innerHTML = `
+                 <div>
+                     <label for="iltussy-target-select" class="block mb-1 text-sm font-medium">Wähle ein Ziel für den Iltis:</label>
+                     <select id="iltussy-target-select">
+                         <option value="">-- Spieler wählen --</option>
+                         ${getLivingPlayers().filter(p => p.id !== player.id && p.roleDetails.team === 'dorf').map(p => `<option value="${p.id}">${p.name}</option>`).join('')}
+                     </select>
+                 </div>
+                 <div class="mt-2">
+                     <button id="iltussy-roll-dice" disabled>Würfeln</button>
+                     <span id="iltussy-dice-result" class="ml-4 text-xl font-bold"></span>
+                 </div>
+                 <button id="iltussy-skip" class="secondary mt-2">Überspringen</button>
+             `;
+
+             const targetSelect = document.getElementById('iltussy-target-select');
+             const rollButton = document.getElementById('iltussy-roll-dice');
+             const resultSpan = document.getElementById('iltussy-dice-result');
+             const skipBtn = document.getElementById('iltussy-skip');
+
+             targetSelect.onchange = () => {
+                 rollButton.disabled = targetSelect.value === "";
+             };
+
+             rollButton.onclick = () => {
+                 const targetPlayerId = targetSelect.value;
+                 const targetPlayer = getPlayerData(targetPlayerId);
+                 if (!targetPlayer) return;
+
+                 const roll = Math.floor(Math.random() * 6) + 1;
+                 resultSpan.textContent = `Du hast eine ${roll} gewürfelt!`;
+                 rollButton.disabled = true;
+                 targetSelect.disabled = true;
+                 skipBtn.disabled = true;
+
+                 let infection = false;
+                 if (roll === 6) {
+                     infection = true;
+                     resultSpan.textContent += ` ${targetPlayer.name} wird infiziert!`;
+                     resultSpan.classList.add('text-green-400');
+                 } else {
+                     resultSpan.textContent += ' Nichts passiert.';
+                     resultSpan.classList.remove('text-green-400');
+                 }
+                 logGameEvent(`${player.name} schickt Iltis zu ${targetPlayer.name}, würfelt ${roll}. ${infection ? 'Infiziert!' : 'Keine Infektion.'}`);
+
+                 setTimeout(() => {
+                     if (gameState.rolesActingTonight[gameState.currentRoleIndex]?.id === player.id) {
+                         confirmNightAction({ target: targetPlayerId, rolled: roll, infected: infection });
+                     }
+                 }, 2500);
+             };
+
+             skipBtn.onclick = () => confirmNightAction(null);
+
+             renderNightPlayerList(player, [], 'none');
+             btnNextAction.disabled = true;
+         }
+
+         function setupTanjaUI(player) {
+            nightSpecialUI.innerHTML = '';
+            const uses = player.roleDetails.uses;
+            const used = gameState.usedAbilities[player.id] || {};
+            const canRetten = (used.retten || 0) < uses.retten;
+            const canAusschalten = (used.ausschalten || 0) < uses.ausschalten;
+            const wwOpfer = gameState.nightActions.find(a => a.action === 'kill' && a.role === 'Werwolf')?.target;
+            const wwOpferName = wwOpfer ? getPlayerByName(wwOpfer)?.name : null; // Korrektur: getPlayerByName statt getPlayerData
+
+            if (!canRetten && !canAusschalten) {
+                nightInstruction.textContent = "Du hast keine Aktionen mehr verfügbar.";
+                renderNightPlayerList(player, [], 'none');
+                btnNextAction.textContent = 'Weiter';
+                btnNextAction.disabled = false;
+                return;
+            }
+
+            let buttonsHTML = '';
+            if (canRetten && wwOpferName) {
+                buttonsHTML += `<button id="tanja-retten" data-target="${wwOpferName}">Opfer (${wwOpferName}) retten (${uses.retten - (used.retten || 0)} übrig)</button>`;
+            } else if (canRetten) {
+                 buttonsHTML += `<button disabled class="secondary">Retten nicht möglich (kein WW-Opfer)</button>`;
+            }
+
+            if (canAusschalten) {
+                buttonsHTML += `<button id="tanja-ausschalten">Jemanden ausschalten (${uses.ausschalten - (used.ausschalten || 0)} übrig)</button>`;
+            }
+
+            buttonsHTML += `<button id="tanja-skip" class="secondary">Überspringen</button>`;
+            nightSpecialUI.innerHTML = `<div class="flex flex-wrap gap-2">${buttonsHTML}</div>`;
+
+            const btnRetten = document.getElementById('tanja-retten');
+            const btnAusschalten = document.getElementById('tanja-ausschalten');
+            const btnSkip = document.getElementById('tanja-skip');
+
+            if (btnRetten) {
+                btnRetten.onclick = () => {
+                    const targetName = btnRetten.dataset.target;
+                    logGameEvent(`${player.name} rettet ${targetName}.`);
+                    selectionInfo.textContent = `${targetName} wurde gerettet.`;
+                    confirmNightAction({ actionType: 'retten_oder_ausschalten', subAction: 'retten', target: targetName });
+                };
+            }
+
+            if (btnAusschalten) {
+                btnAusschalten.onclick = () => {
+                    nightInstruction.textContent = "Wähle einen Spieler zum Ausschalten.";
+                    nightSpecialUI.innerHTML = ''; // Clear buttons
+                    renderNightPlayerList(player, getLivingPlayers().filter(p => p.id !== player.id), 'player', 'ausschalten');
+                    selectionInfo.textContent = 'Wähle ein Ziel.';
+                    btnNextAction.disabled = true; // Muss Ziel wählen
+                };
+            }
+
+            btnSkip.onclick = () => confirmNightAction(null);
+
+            renderNightPlayerList(player, [], 'none'); // Liste initial leer/inaktiv
+            btnNextAction.disabled = true; // Muss Aktion wählen oder überspringen
+         }
+
+        // --- Gemeinsame Render-Funktion für Spielerlisten ---
+        function renderPlayerList(listElement, playersToRender, interactive = false, actionContext = null, targetCount = 1) {
+            listElement.innerHTML = '';
+            let currentSelection = []; // Für Mehrfachauswahl
+
+            playersToRender.forEach(p => {
                 const li = document.createElement('li');
-                li.textContent = p.name;
-                li.dataset.playerName = p.name;
-                li.classList.add(p.status === 'alive' ? 'status-alive' : 'status-dead');
+                li.dataset.playerId = p.id; // Verwende ID statt Name für Eindeutigkeit
 
-                if (selectablePlayers.includes(p) && targetType !== 'none') {
+                const infoDiv = document.createElement('div');
+                infoDiv.classList.add('player-info');
+
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = p.name;
+                nameSpan.classList.add(p.status === 'alive' ? 'status-alive' : 'status-dead');
+                infoDiv.appendChild(nameSpan);
+
+                const roleSpan = document.createElement('span');
+                // Rolle nur anzeigen, wenn Spieler tot ist oder für spezielle Debug-Zwecke
+                roleSpan.textContent = p.status === 'dead' ? ` (${p.role})` : '';
+                roleSpan.classList.add('role-info');
+                infoDiv.appendChild(roleSpan);
+
+                // Status-Icons hinzufügen
+                const iconsDiv = document.createElement('div');
+                iconsDiv.classList.add('flex', 'items-center', 'space-x-1', 'mt-1', 'md:mt-0'); // Icons unter oder neben dem Namen
+                if (p.isProtected) iconsDiv.innerHTML += `<span class="icon icon-shield" title="Geschützt">🛡️</span>`;
+                if (p.isPoisoned) iconsDiv.innerHTML += `<span class="icon icon-potion" title="Vergiftet (${p.poisonTimer})">☠️</span>`;
+                if (p.clientForDielenschleiferin) iconsDiv.innerHTML += `<span class="icon icon-tools" title="Dielenschleiferin-Kunde">🔨</span>`;
+                if (gameState.specialConditions.linkedPlayers?.includes(p.id)) iconsDiv.innerHTML += `<span class="icon icon-heart" title="Verliebt/Verwoben">❤️</span>`;
+                if (p.misc?.sabineRolledSix) iconsDiv.innerHTML += `<span class="icon icon-shield" title="Sabine Schutz (6)">🎲</span>`;
+                if (p.misc?.priesterProtectedThisNight) iconsDiv.innerHTML += `<span class="icon icon-shield" title="Priester Schutz">✝️</span>`;
+                if (p.misc?.bauerProtectedThisNight) iconsDiv.innerHTML += `<span class="icon icon-shield" title="Bäuerin Schutz">🧈</span>`;
+                 if (p.misc?.chaostrankActive) iconsDiv.innerHTML += `<span class="icon icon-potion" title="Chaos-Trank aktiv">🤪</span>`;
+                if (p.misc?.blockWWActive) iconsDiv.innerHTML += `<span class="icon icon-cross" title="WW Blockade aktiv">🚫</span>`;
+
+
+                infoDiv.appendChild(iconsDiv);
+                li.appendChild(infoDiv);
+
+
+                // Interaktive Elemente (Buttons)
+                if (interactive && p.status === 'alive') {
+                    const actionsDiv = document.createElement('div');
+                    actionsDiv.classList.add('player-actions');
+
                     const selectButton = document.createElement('button');
                     selectButton.textContent = 'Wählen';
-                    selectButton.classList.add('player-actions');
-                    selectButton.onclick = () => {
-                        if (targetType === 'player' || targetType === 'special') {
-                            // Einzelnes Ziel
-                            document.querySelectorAll('#night-player-list li').forEach(item => item.classList.remove('selected'));
+                    selectButton.onclick = (event) => {
+                        event.stopPropagation(); // Verhindert, dass Klick auf li weitergegeben wird
+
+                        if (actionContext === 'lynch') {
+                            document.querySelectorAll(`#${listElement.id} li`).forEach(item => item.classList.remove('selected'));
                             li.classList.add('selected');
-                            selectedTargets = [p.name];
-                            selectionInfo.textContent = `Ausgewählt: ${p.name}`;
-                            confirmNightAction({ target: p.name, subAction: subAction });
-                        } else if (targetType === 'multi-player') {
-                            // Mehrere Ziele (z.B. Amor)
+                            gameState.lynchTarget = p.name; // Speichere Namen für Bestätigung
+                            lynchSelectionInfo.textContent = `Ausgewählt für Lynchung: ${p.name}`;
+                            btnConfirmLynch.disabled = false;
+                        } else if (actionContext === 'multi-player') {
                             li.classList.toggle('selected');
+                            const selectedId = p.id;
                             if (li.classList.contains('selected')) {
-                                selectedTargets.push(p.name);
+                                if (!currentSelection.includes(selectedId)) {
+                                    currentSelection.push(selectedId);
+                                }
                             } else {
-                                selectedTargets = selectedTargets.filter(name => name !== p.name);
+                                currentSelection = currentSelection.filter(id => id !== selectedId);
                             }
-                            selectionInfo.textContent = `Ausgewählt: ${selectedTargets.join(', ')}`;
-                            // Hier könnte man den Bestätigungsbutton aktivieren, wenn genug Ziele gewählt wurden
-                            if (selectedTargets.length === 2) { // Beispiel für Amor
-                               confirmNightAction({ targets: selectedTargets, subAction: subAction });
+                            selectionInfo.textContent = `Ausgewählt (${currentSelection.length}/${targetCount}): ${currentSelection.map(id => getPlayerData(id)?.name).join(', ')}`;
+                            btnNextAction.disabled = currentSelection.length !== targetCount; // Button nur bei korrekter Anzahl aktivieren
+                            if (!btnNextAction.disabled) {
+                                btnNextAction.onclick = () => confirmNightAction({ targets: currentSelection.map(id => getPlayerData(id)?.name) }); // Namen übergeben
+                            } else {
+                                btnNextAction.onclick = null; // Klick verhindern, wenn nicht bereit
                             }
+                        } else { // Standard: Einzelziel für Nachtaktion
+                            document.querySelectorAll(`#${listElement.id} li`).forEach(item => item.classList.remove('selected'));
+                            li.classList.add('selected');
+                            selectionInfo.textContent = `Ausgewählt: ${p.name}`;
+                            // Hier direkt die Aktion bestätigen, da der Button unten oft generisch ist
+                            confirmNightAction({ target: p.name, subAction: actionContext }); // actionContext kann hier der subAction Typ sein (z.B. 'heal', 'poison')
                         }
                     };
-                    li.appendChild(selectButton);
-                } else {
-                     li.style.opacity = "0.5"; // Visuell andeuten, dass nicht wählbar
+                    actionsDiv.appendChild(selectButton);
+                    li.appendChild(actionsDiv);
                 }
-                nightPlayerList.appendChild(li);
+                 // Füge tote Spieler hinzu, aber ohne Interaktion
+                 else if (!interactive && p.status === 'dead') {
+                     li.style.opacity = "0.6";
+                 }
+                 // Mache lebende Spieler ohne Interaktion leicht ausgegraut
+                 else if (!interactive && p.status === 'alive') {
+                     // Optional: Stil für nicht-interaktive lebende Spieler
+                 }
+                 // Mache tote Spieler in interaktiven Listen deutlich inaktiv
+                 else if (interactive && p.status === 'dead') {
+                     li.style.opacity = "0.4";
+                     li.style.pointerEvents = "none"; // Verhindert Klicks
+                 }
+
+
+                listElement.appendChild(li);
             });
 
-             // "Nichts tun / Überspringen"-Option für manche Rollen hinzufügen
-             if (targetType !== 'none' && targetType !== 'multi-player' && currentPlayer.role !== ROLES.WERWOLF.name) {
-                 const liSkip = document.createElement('li');
-                 const skipButton = document.createElement('button');
-                 skipButton.textContent = 'Keine Aktion / Überspringen';
-                 skipButton.classList.add('secondary', 'w-full');
-                 skipButton.onclick = () => confirmNightAction(null); // Keine Aktion
-                 liSkip.appendChild(skipButton);
-                 nightPlayerList.appendChild(liSkip);
+             // "Nichts tun / Überspringen"-Option für *optionale* Einzelziel-Nachtaktionen
+             if (interactive && actionContext && actionContext !== 'lynch' && actionContext !== 'multi-player' && targetCount === 1) {
+                 const currentPlayerRole = gameState.rolesActingTonight[gameState.currentRoleIndex]?.roleDetails;
+                 // Nur hinzufügen, wenn die Aktion nicht zwingend ist (z.B. nicht für Werwölfe)
+                 // und wenn es keine spezielle UI gibt, die schon einen Skip-Button hat (Hexe, Tanja etc.)
+                 const optionalRoles = [ROLES.SCHUTZENGEL.name, ROLES.SEHER.name, ROLES.DIELENSCHLEIFERIN.name, ROLES.SCHUTZSCHILD_SIGRID.name, ROLES.BORDELL_BAERBEL.name, ROLES.MANSPLAINING_MARTIN.name, ROLES.NEKROMANT_NORBERT.name, ROLES.BESTATTERIN_BRUNHILDE.name, ROLES.TUERSTEHER_TONI.name, ROLES.FISTERIN_FRIDA.name, ROLES.KONVERSIONSTHERAPIE_KONNY.name, ROLES.DER_TWINK.name, ROLES.DER_GEILE_PRIESTER.name, ROLES.BOY_BUTTER_BAEUERIN.name, ROLES.GIFT MISCHERIN_GERTRUD.name]; // Beispielhaft
+                 const needsSpecialUISkip = ['use_potion', 'retten_oder_ausschalten', 'ask_dead', 'infect_roll', 'guard_village', 'spread_rumor']; // Aktionen mit eigener Skip-Logik
+
+                 if (currentPlayerRole && optionalRoles.includes(currentPlayerRole.name) && !needsSpecialUISkip.includes(currentPlayerRole.actionType)) {
+                     const liSkip = document.createElement('li');
+                     liSkip.style.backgroundColor = 'transparent'; // Kein Kasten drumherum
+                     const skipButton = document.createElement('button');
+                     skipButton.textContent = 'Keine Aktion / Überspringen';
+                     skipButton.classList.add('secondary', 'w-full', 'mt-2');
+                     skipButton.onclick = () => confirmNightAction(null); // Keine Aktion
+                     liSkip.appendChild(skipButton);
+                     listElement.appendChild(liSkip);
+                 }
              }
         }
 
-        function confirmNightAction(actionData) {
-            const currentPlayer = gameState.rolesInGame[gameState.currentRoleIndex];
-            if (actionData) {
-                 let action = {
-                    actor: currentPlayer.id,
-                    role: currentPlayer.role,
-                    action: currentPlayer.roleDetails.actionType,
-                    ...actionData // Fügt target, targets, subAction etc. hinzu
-                 };
-                 gameState.nightActions.push(action);
-                 console.log("Aktion gespeichert:", action);
-
-                 // Fähigkeitennutzung zählen
-                 if (gameState.usedAbilities[currentPlayer.id] !== undefined) {
-                     if (typeof gameState.usedAbilities[currentPlayer.id] === 'number') {
-                         gameState.usedAbilities[currentPlayer.id]++;
-                     } else if (action.subAction && gameState.usedAbilities[currentPlayer.id][action.subAction] !== undefined) {
-                         gameState.usedAbilities[currentPlayer.id][action.subAction]++;
-                     }
-                 }
-
-            } else {
-                console.log(`${currentPlayer.name} (${currentPlayer.role}) macht keine Aktion.`);
-            }
-            // Zum nächsten Spieler/Aktion in der Nacht
-            nextNightAction();
-        }
-
-
-        // --- Tagesphase ---
+        // --- Nacht Aktionsauswertung ---
         function resolveNightActions() {
-            console.log("Resolving night actions:", gameState.nightActions);
-            dayEventsList.innerHTML = ''; // Clear previous events
-
+            logGameEvent("Beginne Auflösung der Nachtaktionen.");
+            dayEventsList.innerHTML = '';
             let deathsThisNight = [];
             let messages = [];
+            let nightSummary = {
+                wwTarget: null,
+                protections: {}, // playerId: protectorRole
+                heals: [], // targetId
+                poisons: [], // targetId
+                blocks: [], // targetId (WW geblockt)
+                chaosTargets: [], // targetId
+                revives: [], // targetId
+                infections: [], // targetId
+                linked: [], // [id1, id2] oder [id1, id2, id3]
+                linkedType: null, // 'amor' oder 'waltraud'
+                dielenClient: null, // targetId
+                ausschaltenTarget: null, // targetId
+                wenzelWatched: false,
+                rumors: [], // {targetId, rumorText}
+                fridaDied: false,
+                twinkKilledByPriest: false,
+                twinkAbilityDeactivated: false,
+                bauerFoundBaerbel: false,
+                martinSawSabine: false,
+            };
 
-            // 1. Schutzmechanismen anwenden
-            gameState.nightActions.filter(a => a.action === 'protect').forEach(action => {
-                const targetPlayer = getPlayerData(action.target);
-                if (targetPlayer) {
-                    targetPlayer.isProtected = true;
-                    messages.push(`${targetPlayer.name} wurde von einem Schutzengel beschützt.`);
-                    console.log(`${targetPlayer.name} is protected.`);
+            // 1. Aktionen sammeln und vorbereiten
+            gameState.nightActions.forEach(action => {
+                const actor = getPlayerData(action.actor);
+                if (!actor || actor.status !== 'alive') return; // Aktion von totem Spieler ignorieren
+
+                switch (action.action) {
+                    case 'kill': // Werwolf
+                        nightSummary.wwTarget = getPlayerByName(action.target)?.id;
+                        break;
+                    case 'protect': // Schutzengel (vereinfacht)
+                        const targetP = getPlayerByName(action.target)?.id;
+                        if (targetP) nightSummary.protections[targetP] = 'Schutzengel';
+                        break;
+                    case 'heal_poison': // Hexe
+                        if (action.subAction === 'heal') {
+                            const targetH = getPlayerByName(action.target)?.id;
+                            if (targetH) nightSummary.heals.push(targetH);
+                        } else if (action.subAction === 'poison') {
+                            const targetPo = getPlayerByName(action.target)?.id;
+                            if (targetPo) nightSummary.poisons.push(targetPo);
+                        }
+                        break;
+                     case 'use_potion': // Kräuterhexe Hilde
+                         const targetPotion = getPlayerByName(action.target)?.id;
+                         if (targetPotion) {
+                             if (action.subAction === 'protect') nightSummary.protections[targetPotion] = 'Hexe (Schutztrank)';
+                             else if (action.subAction === 'block_ww') nightSummary.blocks.push(targetPotion);
+                             else if (action.subAction === 'chaos') nightSummary.chaosTargets.push(targetPotion);
+                         }
+                         break;
+                    case 'link': // Amor (vereinfacht)
+                        nightSummary.linked = action.targets.map(name => getPlayerByName(name)?.id).filter(id => id);
+                        nightSummary.linkedType = 'amor';
+                        break;
+                     case 'link_three': // Vollsuff Valentin
+                         nightSummary.linked = action.targets.map(name => getPlayerByName(name)?.id).filter(id => id);
+                         nightSummary.linkedType = 'valentin';
+                         break;
+                     case 'link_two': // Waltraud
+                         nightSummary.linked = action.targets.map(name => getPlayerByName(name)?.id).filter(id => id);
+                         nightSummary.linkedType = 'waltraud';
+                         break;
+                    case 'choose_client': // Dielenschleiferin
+                        nightSummary.dielenClient = getPlayerByName(action.target)?.id;
+                        break;
+                    case 'protect_neighbor': // Sigrid
+                         const targetSigrid = getPlayerByName(action.target)?.id;
+                         if (targetSigrid) nightSummary.protections[targetSigrid] = 'Schutzschild-Sigrid';
+                         break;
+                    case 'protect_guest': // Bärbel
+                         const targetBaerbel = getPlayerByName(action.target)?.id;
+                         if (targetBaerbel) nightSummary.protections[targetBaerbel] = 'Bordell Bärbel';
+                         // Bärbel Selbstschutz-Logik
+                         if (targetBaerbel === nightSummary.wwTarget && getPlayerData(targetBaerbel)?.roleKey === 'WERWOLF') {
+                             const baerbelPlayer = getPlayerData(action.actor);
+                             if (baerbelPlayer) baerbelPlayer.misc.baerbelSelfProtect = true; // Markieren für spätere Prüfung
+                         }
+                         break;
+                    case 'reveal_role': // Martin
+                         const targetMartin = getPlayerByName(action.target)?.id;
+                         const targetMartinPlayer = getPlayerData(targetMartin);
+                         if (targetMartinPlayer) {
+                             let roleToShow = targetMartinPlayer.role;
+                             if (targetMartinPlayer.roleKey === 'Oeko_Sabine') {
+                                 roleToShow = 'Dorfbewohner/in (Fehlinfo)'; // Beispiel für Fehlinfo
+                                 nightSummary.martinSawSabine = true;
+                             }
+                             messages.push(`SL Info für Martin: ${targetMartinPlayer.name} ist ${roleToShow}.`);
+                         }
+                         break;
+                    case 'ask_dead': // Norbert
+                         const livingTargetNorbert = getPlayerByName(action.target)?.id;
+                         const livingPlayerNorbert = getPlayerData(livingTargetNorbert);
+                         if (livingPlayerNorbert) {
+                             const isWolf = livingPlayerNorbert.roleDetails.team === 'werwolf';
+                             messages.push(`SL Info für Norbert (über ${livingPlayerNorbert.name}): Daumen ${isWolf ? 'runter' : 'hoch'}.`);
+                         }
+                         break;
+                    case 'find_baerbel': // Bäuerin
+                         const targetBauer = getPlayerByName(action.target)?.id;
+                         if (targetBauer && getPlayerData(targetBauer)?.roleKey === 'BORDELL_BAERBEL') {
+                             const bauerPlayer = getPlayerData(action.actor);
+                             if (bauerPlayer) {
+                                 bauerPlayer.misc.bauerProtectedThisNight = true;
+                                 gameState.specialConditions.bauerFoundBaerbel = true; // Dauerhaft merken
+                                 messages.push(`Die Boy-Butter Bäuerin hat Bärbel gefunden und ist diese Nacht geschützt.`);
+                             }
+                         }
+                         break;
+                    case 'sabine_actions': // Öko Sabine Schutzwurf
+                         if (action.protected) {
+                             const sabinePlayer = getPlayerData(action.actor);
+                             if (sabinePlayer) nightSummary.protections[sabinePlayer.id] = 'Öko Sabine (Würfel)';
+                         }
+                         break;
+                    case 'revive': // Brunhilde
+                         const targetRevive = getPlayerByName(action.target)?.id;
+                         if (targetRevive) nightSummary.revives.push(targetRevive);
+                         break;
+                    case 'check_wolf': // Toni
+                         const targetToni = getPlayerByName(action.target)?.id;
+                         const targetToniPlayer = getPlayerData(targetToni);
+                         if (targetToniPlayer) {
+                             const isWolf = targetToniPlayer.roleDetails.team === 'werwolf';
+                             messages.push(`SL Info für Toni (über ${targetToniPlayer.name}): Daumen ${isWolf ? 'runter' : 'hoch'}.`);
+                         }
+                         break;
+                    case 'guard_village': // Wenzel
+                         if (action.watches) nightSummary.wenzelWatched = true;
+                         break;
+                    case 'find_wiebke': // Frida
+                         const targetFrida = getPlayerByName(action.target)?.id;
+                         const targetFridaPlayer = getPlayerData(targetFrida);
+                         if (targetFridaPlayer) {
+                             if (targetFridaPlayer.roleDetails.team === 'werwolf') {
+                                 nightSummary.fridaDied = true;
+                                 messages.push(`Fisterin Frida hat einen Werwolf berührt und stirbt!`);
+                             } else {
+                                 const isWiebke = targetFridaPlayer.roleKey === 'WUT_WIEBKE';
+                                 messages.push(`SL Info für Frida (über ${targetFridaPlayer.name}): ${isWiebke ? 'Wut Wiebke gefunden!' : 'Nicht Wut Wiebke.'}`);
+                             }
+                         }
+                         break;
+                    case 'find_twink': // Konny
+                         const targetKonny = getPlayerByName(action.target)?.id;
+                         if (targetKonny && getPlayerData(targetKonny)?.roleKey === 'DER_TWINK') {
+                             gameState.specialConditions.twinkDeactivated = true;
+                             messages.push(`Konversionstherapie Konny hat den Twink gefunden! Seine Fähigkeit ist deaktiviert.`);
+                         }
+                         break;
+                    case 'spread_rumor': // Käthe
+                         const targetKaethe = getPlayerByName(action.target)?.id;
+                         if (targetKaethe) {
+                             nightSummary.rumors.push({ targetId: targetKaethe, rumorText: action.rumorText });
+                         }
+                         break;
+                    case 'infect_roll': // Iltussy
+                         if (action.infected) {
+                             const targetIltussy = getPlayerByName(action.target)?.id;
+                             if (targetIltussy) nightSummary.infections.push(targetIltussy);
+                         }
+                         break;
+                    case 'retten_oder_ausschalten': // Tanja Ausschalten
+                         if (action.subAction === 'ausschalten') {
+                             nightSummary.ausschaltenTarget = getPlayerByName(action.target)?.id;
+                         }
+                         break;
+                    case 'poison': // Gertrud
+                         const targetGertrud = getPlayerByName(action.target)?.id;
+                         if (targetGertrud) nightSummary.poisons.push(targetGertrud);
+                         break;
+                    case 'visit_and_learn': // Twink
+                         const targetTwink = getPlayerByName(action.target)?.id;
+                         const targetTwinkPlayer = getPlayerData(targetTwink);
+                         if (targetTwinkPlayer) {
+                             if (targetTwinkPlayer.roleKey === 'DER_GEILE_PRIESTER') {
+                                 nightSummary.twinkKilledByPriest = true;
+                                 messages.push(`Der Twink ist dem geilen Priester begegnet und verschwindet!`);
+                             } else {
+                                 const isWolf = targetTwinkPlayer.roleDetails.team === 'werwolf';
+                                 messages.push(`SL Info für Twink (über ${targetTwinkPlayer.name}): ${isWolf ? 'Werwolf!' : 'Kein Werwolf.'}`);
+                             }
+                         }
+                         break;
+                    case 'hunt_twink': // Priester
+                         const targetPriest = getPlayerByName(action.target)?.id;
+                         if (targetPriest && getPlayerData(targetPriest)?.roleKey === 'DER_TWINK') {
+                             // Twink-Tod wird bei Twink-Aktion behandelt, hier nur Schutz für Priester
+                             const priestPlayer = getPlayerData(action.actor);
+                             if (priestPlayer) {
+                                 priestPlayer.misc.priesterProtectedThisNight = true;
+                                 messages.push(`Der geile Priester hat den Twink gefunden und ist diese Nacht geschützt.`);
+                             }
+                         }
+                         break;
+
                 }
             });
-            gameState.nightActions.filter(a => a.actionType === 'heal_poison' && a.subAction === 'heal').forEach(action => {
-                 const targetPlayer = getPlayerData(action.target);
-                 if (targetPlayer) {
-                    targetPlayer.isProtected = true; // Heiltrank schützt auch
-                    targetPlayer.isPoisoned = false; // Heilt auch Gift
-                    targetPlayer.poisonTimer = 0;
-                    messages.push(`${targetPlayer.name} wurde durch einen Heiltrank gerettet.`);
-                    console.log(`${targetPlayer.name} was healed.`);
-                 }
-            });
-             // Schutz durch Bärbel (Beispielhaft, da Bärbel nicht direkt implementiert ist, aber Logik wäre hier)
-             gameState.nightActions.filter(a => a.role === ROLES.SCHUTZENGEL.name && a.action === 'protect').forEach(action => { // Beispiel: Schutzengel als Bärbel-Ersatz
-                const targetPlayer = getPlayerData(action.target);
-                if (targetPlayer) {
-                    targetPlayer.isProtected = true;
-                    messages.push(`${targetPlayer.name} hat die Nacht sicher bei Bärbel verbracht.`);
-                }
-             });
-             // Schutz durch Priester (Beispielhaft)
-             const priestAction = gameState.nightActions.find(a => a.role === 'Der geile Priester' && a.foundTwink); // Annahme: 'foundTwink' Flag wird gesetzt
-             if (priestAction) {
-                 const priest = getPlayerData(priestAction.actor);
-                 if (priest) priest.isProtected = true;
-             }
-             // Schutz durch Boy-Butter Bäuerin (Beispielhaft)
-             const bauerAction = gameState.nightActions.find(a => a.role === 'Die Boy-Butter Bäuerin' && a.foundBaerbel); // Annahme: 'foundBaerbel' Flag wird gesetzt
-             if (bauerAction) {
-                 const bauer = getPlayerData(bauerAction.actor);
-                 if (bauer) bauer.isProtected = true;
-             }
-             // Schutz durch Öko Sabine (Beispielhaft)
-             const sabine = gameState.players.find(p => p.role === 'Öko Sabine' && p.misc.rolledSix); // Annahme: 'rolledSix' Flag wird gesetzt
-             if (sabine) {
-                 sabine.isProtected = true;
-                 messages.push(`Öko Sabine hat sich erfolgreich mit Brennnesseltee geschützt.`);
-             }
 
+            // 2. Effekte anwenden und Todesfälle ermitteln
 
-            // 2. Werwolf-Angriffe auswerten
-            const wwAction = gameState.nightActions.find(a => a.action === 'kill' && a.role === ROLES.WERWOLF.name);
-            if (wwAction) {
-                const targetPlayer = getPlayerData(wwAction.target);
-                if (targetPlayer && !targetPlayer.isProtected) {
-                    targetPlayer.status = 'dead';
-                    deathsThisNight.push(targetPlayer);
-                    messages.push(`${targetPlayer.name} wurde von den Werwölfen getötet!`);
-                    console.log(`${targetPlayer.name} killed by werewolves.`);
-                } else if (targetPlayer && targetPlayer.isProtected) {
-                    messages.push(`Die Werwölfe haben ${targetPlayer.name} angegriffen, aber er/sie wurde beschützt!`);
-                    console.log(`${targetPlayer.name} attacked but was protected.`);
-                }
-            } else {
-                 messages.push("Die Werwölfe haben diese Nacht niemanden getötet.");
+            // Frida Tod durch WW-Berührung
+            const fridaPlayer = gameState.players.find(p => p.roleKey === 'FISTERIN_FRIDA');
+            if (nightSummary.fridaDied && fridaPlayer && fridaPlayer.status === 'alive') {
+                fridaPlayer.status = 'dead';
+                deathsThisNight.push(fridaPlayer);
             }
 
-            // 3. Andere Tötungen / Effekte (Hexe Gift, Tanja Ausschalten)
-            gameState.nightActions.filter(a => a.actionType === 'heal_poison' && a.subAction === 'poison').forEach(action => {
-                const targetPlayer = getPlayerData(action.target);
-                if (targetPlayer && targetPlayer.status === 'alive') {
-                    targetPlayer.isPoisoned = true;
-                    targetPlayer.poisonTimer = 2; // Stirbt am Morgen des übernächsten Tages
-                    messages.push(`${targetPlayer.name} wurde vergiftet und wird in zwei Tagen sterben, wenn nichts geschieht.`);
-                    console.log(`${targetPlayer.name} poisoned.`);
+            // Twink Tod durch Priester
+            const twinkPlayer = gameState.players.find(p => p.roleKey === 'DER_TWINK');
+            if (nightSummary.twinkKilledByPriest && twinkPlayer && twinkPlayer.status === 'alive') {
+                twinkPlayer.status = 'dead';
+                deathsThisNight.push(twinkPlayer);
+            }
+
+            // Werwolf-Opfer ermitteln unter Berücksichtigung von Schutz und Blockaden
+            const wwTargetPlayer = getPlayerData(nightSummary.wwTarget);
+            let wwKillSuccess = false;
+            if (wwTargetPlayer && wwTargetPlayer.status === 'alive') {
+                let isProtected = false;
+                let protectionSource = '';
+                if (nightSummary.protections[wwTargetPlayer.id]) {
+                    isProtected = true;
+                    protectionSource = nightSummary.protections[wwTargetPlayer.id];
                 }
-            });
-             // Beispiel für Tanjas Ausschalten (wenn implementiert)
-            const tanjaKillAction = gameState.nightActions.find(a => a.role === 'Trip-Sitterin Tanja' && a.action === 'ausschalten');
-            if (tanjaKillAction) {
-                const targetPlayer = getPlayerData(tanjaKillAction.target);
-                 if (targetPlayer && targetPlayer.status === 'alive' && !targetPlayer.isProtected) { // Schutz könnte auch hier wirken? Regelklärung nötig.
-                    targetPlayer.status = 'dead';
-                    if (!deathsThisNight.find(p => p.id === targetPlayer.id)) { // Nur hinzufügen, wenn nicht schon durch WW getötet
-                        deathsThisNight.push(targetPlayer);
+                if (nightSummary.heals.includes(wwTargetPlayer.id)) {
+                    isProtected = true; // Heilung schützt auch
+                    protectionSource = protectionSource ? `${protectionSource}, Hexe (Heiltrank)` : 'Hexe (Heiltrank)';
+                }
+                // Bärbels Selbstschutz
+                const baerbelPlayer = gameState.players.find(p => p.roleKey === 'BORDELL_BAERBEL');
+                if (baerbelPlayer?.id === wwTargetPlayer.id && baerbelPlayer.misc.baerbelSelfProtect) {
+                    isProtected = true;
+                    protectionSource = 'Bordell Bärbel (Selbstschutz)';
+                }
+
+                // Wenzel Schutz
+                if (nightSummary.wenzelWatched) {
+                    isProtected = true;
+                    protectionSource = 'Wachmann Wenzel';
+                }
+
+                // Hilde WW-Blockade (wirkt auf WW, nicht auf Opfer)
+                const attackingWolves = getLivingPlayers('werwolf');
+                let wolvesBlocked = false;
+                attackingWolves.forEach(wolf => {
+                    if (nightSummary.blocks.includes(wolf.id)) {
+                        wolf.misc.blockWWActive = true; // Markieren für Anzeige
+                        wolvesBlocked = true; // Mindestens ein WW wurde geblockt
+                        messages.push(`${wolf.name} (Werwolf) wurde von der Hexe blockiert und konnte nicht angreifen!`);
                     }
-                    messages.push(`${targetPlayer.name} wurde von Trip-Sitterin Tanja ausgeschaltet!`);
+                });
+                // Wenn *alle* angreifenden Wölfe blockiert sind, schlägt der Angriff fehl
+                const activeAttackers = attackingWolves.filter(wolf => !nightSummary.blocks.includes(wolf.id));
+                if (activeAttackers.length === 0 && attackingWolves.length > 0) {
+                    isProtected = true; // Effektiv geschützt, da kein WW angreifen konnte
+                    protectionSource = 'Hexe (Alle WW blockiert)';
+                }
+
+
+                if (!isProtected) {
+                    wwTargetPlayer.status = 'dead';
+                    deathsThisNight.push(wwTargetPlayer);
+                    messages.push(`${wwTargetPlayer.name} wurde von den Werwölfen getötet!`);
+                    wwKillSuccess = true;
+                } else {
+                    messages.push(`Die Werwölfe haben ${wwTargetPlayer.name} angegriffen, aber er/sie wurde durch ${protectionSource} beschützt!`);
+                }
+            } else if (!wwTargetPlayer && getLivingPlayers('werwolf').length > 0) {
+                 messages.push("Die Werwölfe haben diese Nacht niemanden getötet (oder ihr Ziel war bereits tot).");
+            }
+
+            // Tanja Ausschalten
+            const ausgeschaltetPlayer = getPlayerData(nightSummary.ausschaltenTarget);
+            if (ausgeschaltetPlayer && ausgeschaltetPlayer.status === 'alive') {
+                 // Wird Tanja durch Schutz blockiert? Unklar, Annahme: Ja
+                 let isProtected = nightSummary.protections[ausgeschaltetPlayer.id] || nightSummary.heals.includes(ausgeschaltetPlayer.id);
+                 if (!isProtected) {
+                    ausgeschaltetPlayer.status = 'dead';
+                    if (!deathsThisNight.find(p => p.id === ausgeschaltetPlayer.id)) {
+                        deathsThisNight.push(ausgeschaltetPlayer);
+                    }
+                    messages.push(`${ausgeschaltetPlayer.name} wurde von Trip-Sitterin Tanja ausgeschaltet!`);
+                 } else {
+                     messages.push(`Tanja versuchte ${ausgeschaltetPlayer.name} auszuschalten, aber er/sie war geschützt!`);
                  }
             }
 
+            // Gift setzen / Timer aktualisieren
+            nightSummary.poisons.forEach(targetId => {
+                const targetPlayer = getPlayerData(targetId);
+                // Kann man einen bereits vergifteten Spieler nochmal vergiften? Annahme: Nein.
+                if (targetPlayer && targetPlayer.status === 'alive' && !targetPlayer.isPoisoned) {
+                    targetPlayer.isPoisoned = true;
+                    targetPlayer.poisonTimer = 2; // Stirbt in 2 Tagen
+                    messages.push(`${targetPlayer.name} wurde vergiftet!`);
+                }
+            });
 
-            // 4. Gift-Timer herunterzählen und Todesfälle durch Gift prüfen
+            // Vorhandene Gift-Timer runterzählen und Tote hinzufügen
             getLivingPlayers().forEach(p => {
                 if (p.isPoisoned && p.poisonTimer > 0) {
                     p.poisonTimer--;
                     if (p.poisonTimer === 0) {
                         p.status = 'dead';
                         if (!deathsThisNight.find(dp => dp.id === p.id)) {
-                           deathsThisNight.push(p);
+                            deathsThisNight.push(p);
                         }
                         messages.push(`${p.name} ist an den Folgen des Gifts gestorben!`);
-                        console.log(`${p.name} died from poison.`);
-                        p.isPoisoned = false; // Gift hat gewirkt
+                        p.isPoisoned = false;
                     }
                 }
             });
 
-            // 5. Verliebte / Verwobene prüfen
-            const amorAction = gameState.nightActions.find(a => a.action === 'link');
-            if (amorAction && amorAction.targets && amorAction.targets.length >= 2) {
-                 gameState.specialConditions.linkedPair = amorAction.targets.map(name => getPlayerData(name)?.id).filter(id => id); // Speichere IDs
-                 messages.push(`${amorAction.targets.join(' und ')} sind nun unsterblich verliebt!`);
-                 console.log("Linked players:", gameState.specialConditions.linkedPair);
-            }
-            if (gameState.specialConditions.linkedPair) {
-                const linkedPlayers = gameState.specialConditions.linkedPair.map(id => gameState.players.find(p => p.id === id));
-                const oneDied = linkedPlayers.some(p => p && p.status === 'dead');
-                if (oneDied) {
-                    linkedPlayers.forEach(p => {
-                        if (p && p.status === 'alive') {
-                            p.status = 'dead';
-                            if (!deathsThisNight.find(dp => dp.id === p.id)) {
-                                deathsThisNight.push(p);
-                            }
-                            messages.push(`${p.name} stirbt aus Kummer über den Tod von ${linkedPlayers.find(lp => lp && lp.status === 'dead')?.name || 'dem/der Geliebten'}!`);
-                            console.log(`${p.name} died due to link.`);
-                        }
-                    });
-                    gameState.specialConditions.linkedPair = null; // Band ist gebrochen
+             // Infektionen durch Iltussy
+            nightSummary.infections.forEach(targetId => {
+                const targetPlayer = getPlayerData(targetId);
+                if (targetPlayer && targetPlayer.status === 'alive' && targetPlayer.roleDetails.team === 'dorf') {
+                    targetPlayer.roleDetails = ROLES.WERWOLF; // Rolle ändern
+                    targetPlayer.role = ROLES.WERWOLF.name;
+                    targetPlayer.roleKey = 'WERWOLF';
+                    messages.push(`${targetPlayer.name} wurde vom Iltis gebissen und ist nun ein Werwolf!`);
+                    // Alte Fähigkeiten entfernen/zurücksetzen? Wichtig!
+                    delete gameState.usedAbilities[targetPlayer.id];
+                    // Alte spezielle Bedingungen entfernen?
                 }
-            }
-
-            // 6. Dielenschleiferin-Kunde für den Tag setzen
-            const dielenAction = gameState.nightActions.find(a => a.action === 'choose_client');
-            if (dielenAction) {
-                const targetPlayer = getPlayerData(dielenAction.target);
-                if (targetPlayer) {
-                    targetPlayer.clientForDielenschleiferin = true;
-                    console.log(`${targetPlayer.name} is client for Dielenschleiferin today.`);
-                }
-            }
-
-
-            // Nachrichten anzeigen
-            messages.forEach(msg => {
-                const li = document.createElement('li');
-                li.textContent = msg;
-                dayEventsList.appendChild(li);
             });
 
-            if (deathsThisNight.length === 0 && messages.length === 1 && messages[0].includes("niemanden getötet")) { // Nur die WW-Meldung
-                dayEventsList.innerHTML = '<li>Die Nacht war ruhig, niemand ist gestorben.</li>';
-            } else if (deathsThisNight.length > 0) {
-                 const deathLi = document.createElement('li');
-                 deathLi.classList.add('font-semibold', 'text-red-400');
-                 deathLi.textContent = `Verstorben: ${deathsThisNight.map(p => `${p.name} (${p.role})`).join(', ')}`;
-                 dayEventsList.appendChild(deathLi);
+            // Verlinkungen setzen
+            if (nightSummary.linked.length >= 2) {
+                 // Prüfen auf Konny & Priester
+                 const hasKonny = nightSummary.linked.some(id => getPlayerData(id)?.roleKey === 'KONVERSIONSTHERAPIE_KONNY');
+                 const hasPriester = nightSummary.linked.some(id => getPlayerData(id)?.roleKey === 'DER_GEILE_PRIESTER');
+
+                 if (hasKonny && hasPriester) {
+                     messages.push(`Der Versuch, Konny und den Priester zu ${nightSummary.linkedType === 'amor' || nightSummary.linkedType === 'valentin' ? 'verkuppeln' : 'verweben'}, ist aufgrund ihrer gegenseitigen Abneigung fehlgeschlagen!`);
+                 } else {
+                     gameState.specialConditions.linkedPlayers = nightSummary.linked;
+                     const linkedNames = nightSummary.linked.map(id => getPlayerData(id)?.name).join(', ');
+                     messages.push(`${linkedNames} sind nun durch ${nightSummary.linkedType === 'amor' || nightSummary.linkedType === 'valentin' ? 'Liebe' : 'Schicksal'} verbunden!`);
+                     // Trärchen-Logik (Eliminierung) hier nicht implementiert, nur der Tod bei Partnerverlust.
+                 }
+            }
+
+            // Dielenschleiferin-Kunde setzen
+            const clientPlayer = getPlayerData(nightSummary.dielenClient);
+            if (clientPlayer) {
+                clientPlayer.clientForDielenschleiferin = true;
+            }
+
+            // Chaos-Trank-Effekt für den Tag markieren
+            nightSummary.chaosTargets.forEach(targetId => {
+                const targetPlayer = getPlayerData(targetId);
+                if (targetPlayer && targetPlayer.status === 'alive') {
+                    targetPlayer.misc.chaostrankActive = true;
+                    messages.push(`${targetPlayer.name} wurde mit einem Chaostrank belegt und wird sich heute seltsam verhalten.`);
+                }
+            });
+
+            // 3. Tagesereignis auslösen?
+            gameState.specialConditions.activeEvent = null; // Reset event
+            if (gameState.specialConditions.eventsEnabled && gameState.day >= gameState.config.minEventDay && (gameState.day - gameState.specialConditions.lastEventDay >= gameState.config.minDaysBetweenEvents)) {
+                if (Math.random() < gameState.config.eventProbability) {
+                    const eventType = Math.random() < 0.5 ? 'Unwetter' : 'Pandemie';
+                    gameState.specialConditions.activeEvent = { name: eventType };
+                    gameState.specialConditions.lastEventDay = gameState.day;
+                    logGameEvent(`Sonderereignis ausgelöst: ${eventType}`);
+                    dayEventAnnouncement.classList.remove('hidden');
+                    let eventText = "";
+                    if (eventType === 'Unwetter') {
+                        eventText = "Ein heftiges Unwetter zieht auf! Die heutige Diskussion wird auf 2 Minuten verkürzt.";
+                    } else { // Pandemie
+                        const living = getLivingPlayers();
+                        const maxAffected = Math.min(4, living.length);
+                        const minAffected = Math.min(2, living.length);
+                        const numAffected = Math.floor(Math.random() * (maxAffected - minAffected + 1)) + minAffected;
+                        const affectedPlayers = living.sort(() => 0.5 - Math.random()).slice(0, numAffected);
+                        gameState.specialConditions.activeEvent.affectedPlayers = affectedPlayers.map(p => p.id);
+                        eventText = `Eine Pandemie grassiert! ${affectedPlayers.map(p=>p.name).join(', ')} sind infiziert und dürfen heute nicht diskutieren (aber abstimmen).`;
+                    }
+                    dayEventDetails.textContent = eventText;
+                    messages.push(`SONDEREIGNIS: ${eventText}`);
+                } else {
+                     dayEventAnnouncement.classList.add('hidden');
+                }
+            } else {
+                dayEventAnnouncement.classList.add('hidden');
             }
 
 
-            // Aktuellen Spielerstatus anzeigen
-            renderPlayerList(dayPlayerListStatus, getLivingPlayers(), false); // Nur Anzeige
+            // 4. Nachrichten und Status anzeigen
+            dayEventsList.innerHTML = messages.map(msg => `<li>${msg}</li>`).join('');
+            if (messages.length === 0) {
+                 dayEventsList.innerHTML = '<li>Die Nacht war ereignislos.</li>';
+            }
+
+            renderPlayerList(dayPlayerListStatus, gameState.players, false); // Alle Spieler anzeigen (lebend/tot)
 
             dayCounter.textContent = gameState.day;
             showScreen('screen-day-results');
 
-            // Nach Auflösung der Nachtaktionen auf Spielende prüfen
-            checkGameOver();
+            // 5. Spielende prüfen
+            if (checkGameOver()) return; // Spiel beenden, wenn Bedingungen erfüllt
+
+            // 6. Wiederbelebte Spieler verarbeiten (nach Todesfeststellung)
+            nightSummary.revives.forEach(targetId => {
+                 const targetPlayer = getPlayerData(targetId);
+                 if (targetPlayer && targetPlayer.status === 'dead') { // Nur tote Spieler wiederbeleben
+                     targetPlayer.status = 'alive';
+                     targetPlayer.isPoisoned = false; // Reset Status
+                     targetPlayer.poisonTimer = 0;
+                     targetPlayer.linkedTo = []; // Alte Links aufheben
+                     targetPlayer.clientForDielenschleiferin = false;
+                     // Neue Rolle zuweisen (vereinfacht: wird wieder Dorfbewohner)
+                     const oldRole = targetPlayer.role;
+                     targetPlayer.roleKey = 'DORFBEWOHNER';
+                     targetPlayer.roleDetails = ROLES.DORFBEWOHNER;
+                     targetPlayer.role = ROLES.DORFBEWOHNER.name;
+                     delete gameState.usedAbilities[targetPlayer.id]; // Fähigkeiten resetten
+                     logGameEvent(`${targetPlayer.name} (ehemals ${oldRole}) wurde von Brunhilde wiederbelebt und ist nun ein ${targetPlayer.role}.`);
+                     dayEventsList.innerHTML += `<li class="text-green-400">${targetPlayer.name} (ehemals ${oldRole}) wurde wiederbelebt!</li>`;
+                     // Spielerliste neu rendern, um Status zu aktualisieren
+                     renderPlayerList(dayPlayerListStatus, gameState.players, false);
+                 }
+            });
         }
 
         function startDiscussion() {
             dayCounterVote.textContent = gameState.day;
-            renderPlayerList(dayVoteList, getLivingPlayers(), true, 'lynch'); // Interaktiv für Lynch-Wahl
-            btnConfirmLynch.disabled = true; // Erst aktivieren, wenn jemand gewählt wurde
+            dayVoteRestrictions.textContent = ''; // Reset Einschränkungen
+
+            // Timer Logik
+            clearInterval(discussionTimerInterval); // Alten Timer löschen
+            let timeRemaining = gameState.config.discussionTime;
+            if (gameState.specialConditions.activeEvent?.name === 'Unwetter') {
+                timeRemaining = gameState.config.unwetterTime;
+            }
+            dayVoteTimer.textContent = `Diskussionszeit: ${Math.floor(timeRemaining / 60)}:${(timeRemaining % 60).toString().padStart(2, '0')}`;
+
+            discussionTimerInterval = setInterval(() => {
+                timeRemaining--;
+                dayVoteTimer.textContent = `Diskussionszeit: ${Math.floor(timeRemaining / 60)}:${(timeRemaining % 60).toString().padStart(2, '0')}`;
+                if (timeRemaining <= 0) {
+                    clearInterval(discussionTimerInterval);
+                    dayVoteTimer.textContent = "Zeit abgelaufen!";
+                    // Optional: Automatisch zur Abstimmung gehen
+                }
+            }, 1000);
+
+            // Pandemie-Einschränkungen anzeigen
+            if (gameState.specialConditions.activeEvent?.name === 'Pandemie') {
+                const affectedNames = gameState.specialConditions.activeEvent.affectedPlayers.map(id => getPlayerData(id)?.name).filter(name => name);
+                dayVoteRestrictions.textContent = `Pandemie: ${affectedNames.join(', ')} dürfen nicht diskutieren!`;
+            }
+
+            // Beatrix Button anzeigen, wenn verfügbar
+            const beatrix = gameState.players.find(p => p.status === 'alive' && p.roleKey === 'BLUTMAGIERIN_BEATRIX');
+            const beatrixUsed = (gameState.usedAbilities[beatrix?.id] || 0) >= (ROLES.BLUTMAGIERIN_BEATRIX.uses || 1);
+             if (beatrix && !beatrixUsed) {
+                 beatrixInterventionDiv.classList.remove('hidden');
+                 btnBeatrixIntervene.disabled = false;
+                 beatrixResultSpan.textContent = '';
+             } else {
+                 beatrixInterventionDiv.classList.add('hidden');
+             }
+
+
+            renderPlayerList(dayVoteList, getLivingPlayers(), true, 'lynch');
+            btnConfirmLynch.disabled = true;
             lynchSelectionInfo.textContent = 'Wähle einen Spieler für die Lynchung aus.';
             showScreen('screen-day-vote');
         }
 
+        function handleBeatrixIntervention() {
+             const beatrix = gameState.players.find(p => p.status === 'alive' && p.roleKey === 'BLUTMAGIERIN_BEATRIX');
+             if (!beatrix || (gameState.usedAbilities[beatrix.id] || 0) >= (ROLES.BLUTMAGIERIN_BEATRIX.uses || 1)) {
+                 return; // Nicht verfügbar oder schon genutzt
+             }
+
+             const roll = Math.floor(Math.random() * 6) + 1;
+             const targetPlayerName = gameState.lynchTarget;
+             let message = `Beatrix wirkt ihren Zauber! Würfel: ${roll}. `;
+             let saved = false;
+
+             if (roll >= 4) {
+                 message += `${targetPlayerName} wird durch Magie gerettet!`;
+                 saved = true;
+                 beatrixResultSpan.classList.add('text-green-400');
+                 beatrixResultSpan.classList.remove('text-red-400');
+             } else {
+                 message += `Der Zauber verpufft, ${targetPlayerName} wird trotzdem gelyncht.`;
+                 saved = false;
+                  beatrixResultSpan.classList.add('text-red-400');
+                 beatrixResultSpan.classList.remove('text-green-400');
+             }
+             beatrixResultSpan.textContent = message;
+             logGameEvent(message);
+
+             // Fähigkeit als genutzt markieren
+             gameState.usedAbilities[beatrix.id] = (gameState.usedAbilities[beatrix.id] || 0) + 1;
+             btnBeatrixIntervene.disabled = true; // Nur einmal pro Lynchvorgang
+
+             // Wenn gerettet, Lynch abbrechen
+             if (saved) {
+                 btnConfirmLynch.disabled = true; // Verhindern, dass doch geluncht wird
+                 lynchSelectionInfo.textContent = `${targetPlayerName} wurde von Beatrix gerettet!`;
+                 // Hier könnte man direkt zur nächsten Nacht springen oder eine Bestätigung einbauen
+                  setTimeout(() => {
+                     if (checkGameOver()) return; // Prüfen ob Spiel vorbei
+                     startNightPhase();
+                 }, 3000); // Nach 3 Sek zur nächsten Nacht
+             }
+        }
+
+
         function confirmLynch() {
+            clearInterval(discussionTimerInterval); // Timer stoppen
             if (!gameState.lynchTarget) return;
 
-            const targetPlayer = getPlayerData(gameState.lynchTarget);
+            const targetPlayer = getPlayerByName(gameState.lynchTarget); // Finde Spieler über Namen
             if (!targetPlayer) return;
 
+            // Prüfen ob Beatrix eingegriffen und gerettet hat (sollte Button deaktivieren, aber sicherheitshalber)
+             if (beatrixResultSpan.textContent.includes("gerettet")) {
+                 logGameEvent(`Lynchversuch auf ${targetPlayer.name} durch Beatrix verhindert.`);
+                 // Normalerweise sollte der Button dann deaktiviert sein, aber zur Sicherheit
+                 if (checkGameOver()) return;
+                 startNightPhase();
+                 return;
+             }
+
+
             targetPlayer.status = 'dead';
+            logGameEvent(`${targetPlayer.name} wird gelyncht.`);
             lynchResultText.textContent = `Das Dorf hat entschieden: ${targetPlayer.name} wird gelyncht!`;
             lynchRoleReveal.textContent = `${targetPlayer.name} war... ${targetPlayer.role}!`;
-            console.log(`${targetPlayer.name} lynched. Role: ${targetPlayer.role}`);
 
             lynchConsequences.innerHTML = ''; // Reset Konsequenzen
 
             // Dielenschleiferin-Check
             if (targetPlayer.clientForDielenschleiferin) {
-                const dielenSchleiferin = gameState.players.find(p => p.role === ROLES.DIELENSCHLEIFERIN.name && p.status === 'alive');
+                const dielenSchleiferin = gameState.players.find(p => p.roleKey === 'DIELENSCHLEIFERIN' && p.status === 'alive');
                 if (dielenSchleiferin) {
                     dielenSchleiferin.status = 'dead';
                     const consequenceLi = document.createElement('li');
                     consequenceLi.textContent = `Da ${targetPlayer.name} ihr Kunde war, stirbt auch die Dielenschleiferin (${dielenSchleiferin.name})!`;
                     lynchConsequences.appendChild(consequenceLi);
-                    console.log(`Dielenschleiferin ${dielenSchleiferin.name} died with client ${targetPlayer.name}.`);
+                    logGameEvent(`Dielenschleiferin ${dielenSchleiferin.name} stirbt mit Kunde ${targetPlayer.name}.`);
                 }
             }
 
             // Verliebte / Verwobene prüfen
-            if (gameState.specialConditions.linkedPair && gameState.specialConditions.linkedPair.includes(targetPlayer.id)) {
-                 const linkedPlayers = gameState.specialConditions.linkedPair.map(id => gameState.players.find(p => p.id === id));
+            if (gameState.specialConditions.linkedPlayers?.includes(targetPlayer.id)) {
+                 const linkedPlayers = gameState.specialConditions.linkedPlayers.map(id => getPlayerData(id));
                  linkedPlayers.forEach(p => {
                         if (p && p.status === 'alive' && p.id !== targetPlayer.id) {
                             p.status = 'dead';
                             const consequenceLi = document.createElement('li');
-                            consequenceLi.textContent = `${p.name} stirbt aus Kummer über den Tod von ${targetPlayer.name}!`;
+                            consequenceLi.textContent = `${p.name} (${p.role}) stirbt aus Kummer über den Tod von ${targetPlayer.name}!`;
                             lynchConsequences.appendChild(consequenceLi);
-                            console.log(`${p.name} died due to link after lynch.`);
+                            logGameEvent(`${p.name} stirbt wegen Verbindung zu ${targetPlayer.name}.`);
                         }
                     });
-                 gameState.specialConditions.linkedPair = null; // Band gebrochen
+                 gameState.specialConditions.linkedPlayers = []; // Band ist gebrochen
             }
 
+            // Martin/Sabine Check
+             const martinPlayer = gameState.players.find(p => p.roleKey === 'MANSPLAINING_MARTIN' && p.status === 'alive');
+             if (martinPlayer && targetPlayer.roleKey === 'Oeko_Sabine' && martinPlayer.misc.sawSabine) {
+                 martinPlayer.status = 'dead';
+                 const consequenceLi = document.createElement('li');
+                 consequenceLi.textContent = `Da Öko Sabine stirbt, stirbt Mansplaining Martin (${martinPlayer.name}) an gebrochenem Stolz mit!`;
+                 lynchConsequences.appendChild(consequenceLi);
+                 logGameEvent(`Mansplaining Martin stirbt mit Öko Sabine.`);
+             }
 
-            renderPlayerList(lynchPlayerListStatus, getLivingPlayers(), false);
+
+            renderPlayerList(lynchPlayerListStatus, gameState.players, false); // Alle Spieler aktualisiert anzeigen
             showScreen('screen-lynch-result');
 
             // Nach Lynchung auf Spielende prüfen
-            checkGameOver();
+             if (checkGameOver()) return; // Spiel beenden, wenn Bedingungen erfüllt
+
+            // Reset für den nächsten Tag/Nacht
+            gameState.lynchTarget = null;
+            beatrixResultSpan.textContent = ''; // Beatrix-Nachricht zurücksetzen
         }
 
 
-        // --- Spielende ---
+        // --- Spielende Logik ---
         function checkGameOver() {
-             // Check für Suizid Susie (nur am Ende von Tag 1)
-            if (gameState.day === 1 && gameState.lynchTarget) {
-                const lynchedPlayer = getPlayerData(gameState.lynchTarget);
-                // Annahme: Susie hat eine spezielle Rolle 'Suizid Susie'
-                if (lynchedPlayer && lynchedPlayer.role === 'Suizid Susie') {
-                     endGame('susie', [lynchedPlayer]);
-                     return true; // Spiel endet sofort
-                }
-            }
-
             const livingPlayers = getLivingPlayers();
             const livingWolves = getLivingPlayers('werwolf');
-            const livingDorf = getLivingPlayers('dorf');
-            // Hier müssten noch Einzelgänger wie Wut Wiebke geprüft werden
+            const livingDorf = getLivingPlayers('dorf'); // Beinhaltet auch Dörthe
+            const livingWiebke = gameState.players.find(p => p.roleKey === 'WUT_WIEBKE' && p.status === 'alive');
 
             let gameOver = false;
             let winner = null;
             let winners = [];
 
-            if (livingWolves.length === 0) {
+            // 1. Susie Sieg (wird schon in confirmLynch geprüft, aber sicherheitshalber)
+            if (gameState.day === 1 && gameState.lynchTarget) {
+                const lynchedPlayer = getPlayerByName(gameState.lynchTarget);
+                if (lynchedPlayer && lynchedPlayer.roleKey === 'SUIZID_SUSIE') {
+                    gameOver = true;
+                    winner = 'susie';
+                    winners = [lynchedPlayer];
+                }
+            }
+
+            // 2. Wiebke Sieg
+            if (!gameOver && livingWiebke && livingPlayers.length === 1) {
                 gameOver = true;
-                winner = 'dorf';
-                winners = livingDorf;
-            } else if (livingWolves.length >= livingDorf.length) {
+                winner = 'wiebke';
+                winners = [livingWiebke];
+            }
+
+            // 3. Werwolf Sieg
+            if (!gameOver && livingWolves.length > 0 && livingWolves.length >= livingDorf.length && !livingWiebke) {
                 gameOver = true;
                 winner = 'werwolf';
                 winners = livingWolves;
-                // Doppelmoral Dörthe gewinnt NICHT mit den Wölfen
             }
-            // Hier Logik für Wut Wiebke Sieg (wenn sie als letzte übrig ist)
+
+            // 4. Dorfsieg
+            if (!gameOver && livingWolves.length === 0 && !livingWiebke) {
+                gameOver = true;
+                winner = 'dorf';
+                winners = livingDorf; // Alle lebenden Dorfbewohner (inkl. Dörthe)
+            }
 
             if (gameOver) {
+                logGameEvent(`Spielende! Gewinner: ${winner}.`);
                 endGame(winner, winners);
                 return true;
             }
@@ -902,121 +2102,137 @@
                 case 'werwolf':
                     message = "Die Werwölfe haben die Oberhand gewonnen!";
                     break;
-                 case 'susie':
-                     message = `${winnerPlayers[0].name} hat das Spiel gewonnen, indem er/sie am ersten Tag gelyncht wurde!`;
+                case 'susie':
+                     message = `${winnerPlayers[0].name} (Suizid Susie) hat das Spiel gewonnen, indem er/sie am ersten Tag gelyncht wurde!`;
                      break;
-                // case 'wiebke': ...
+                case 'wiebke':
+                     message = `${winnerPlayers[0].name} (Wut Wiebke) hat alle anderen überlebt und gewinnt alleine!`;
+                     break;
                 default:
                     message = "Das Spiel ist vorbei!";
             }
             gameOverMessage.textContent = message;
 
             winnersList.innerHTML = '';
-            winnerPlayers.forEach(p => {
-                const li = document.createElement('li');
-                li.textContent = `${p.name} (${p.role})`;
-                winnersList.appendChild(li);
-            });
+            // Zeige alle Spieler, die zum Gewinnerteam gehören und noch leben
+             gameState.players.filter(p => p.status === 'alive' &&
+                 ( (winnerTeam === 'dorf' && (p.roleDetails.team === 'dorf' || p.roleDetails.winCondition === 'dorf_wins')) ||
+                   (winnerTeam === 'werwolf' && p.roleDetails.team === 'werwolf') ||
+                   (winnerTeam === 'susie' && p.roleKey === 'SUIZID_SUSIE') ||
+                   (winnerTeam === 'wiebke' && p.roleKey === 'WUT_WIEBKE')
+                 )
+             ).forEach(p => {
+                 const li = document.createElement('li');
+                 li.textContent = `${p.name} (${p.role})`;
+                 winnersList.appendChild(li);
+             });
+             // Wenn niemand mehr lebt, aber ein Team gewonnen hat
+             if (winnersList.innerHTML === '' && winnerPlayers.length > 0) {
+                  winnersList.innerHTML = `<li>Keine Überlebenden, aber Team ${winnerTeam} hat gewonnen.</li>`;
+             }
+
 
             showScreen('screen-game-over');
         }
 
+        // --- Hilfsfunktionen für Rollenlogik ---
+        function getNeighbors(playerId) {
+            const playerIndex = gameState.players.findIndex(p => p.id === playerId);
+            if (playerIndex === -1) return [];
 
-        // --- Hilfsfunktion zum Rendern von Spielerlisten ---
-        function renderPlayerList(listElement, playersToRender, interactive = false, actionType = null) {
-            listElement.innerHTML = '';
-            playersToRender.forEach(p => {
-                const li = document.createElement('li');
-                const nameSpan = document.createElement('span');
-                nameSpan.textContent = p.name;
-                nameSpan.classList.add(p.status === 'alive' ? 'status-alive' : 'status-dead');
-                li.appendChild(nameSpan);
+            const livingPlayers = getLivingPlayers();
+            if (livingPlayers.length < 3) return []; // Braucht mind. 2 andere Spieler
 
-                const roleSpan = document.createElement('span');
-                roleSpan.textContent = ` (${p.role})`;
-                roleSpan.classList.add('role-info');
-                li.appendChild(roleSpan);
+            // Finde die lebenden Nachbarn in der ursprünglichen Reihenfolge
+            let leftNeighbor = null;
+            let rightNeighbor = null;
+            let currentIndex = playerIndex;
 
-                // Zusätzliche Status-Icons
-                if (p.isProtected) {
-                    const icon = document.createElement('span');
-                    icon.textContent = '🛡️';
-                    icon.title = "Geschützt";
-                    icon.classList.add('icon', 'icon-shield');
-                    li.appendChild(icon);
+            // Nach links suchen
+            do {
+                currentIndex = (currentIndex - 1 + gameState.players.length) % gameState.players.length;
+                const potentialNeighbor = gameState.players[currentIndex];
+                if (potentialNeighbor.status === 'alive' && potentialNeighbor.id !== playerId) {
+                    leftNeighbor = potentialNeighbor;
+                    break;
                 }
-                 if (p.isPoisoned) {
-                    const icon = document.createElement('span');
-                    icon.textContent = '☠️';
-                    icon.title = `Vergiftet (noch ${p.poisonTimer} Tage)`;
-                    icon.classList.add('icon', 'icon-potion');
-                    li.appendChild(icon);
-                }
-                 if (p.clientForDielenschleiferin) {
-                    const icon = document.createElement('span');
-                    icon.textContent = '🔨';
-                    icon.title = `Dielenschleiferin-Kunde`;
-                    icon.classList.add('icon');
-                    li.appendChild(icon);
-                 }
-                 if (gameState.specialConditions.linkedPair?.includes(p.id)) {
-                    const icon = document.createElement('span');
-                    icon.textContent = '❤️';
-                    icon.title = `Verliebt/Verwoben`;
-                    icon.classList.add('icon', 'icon-heart');
-                    li.appendChild(icon);
-                 }
+            } while (currentIndex !== playerIndex);
 
-
-                if (interactive && p.status === 'alive') {
-                    const actionButton = document.createElement('button');
-                    actionButton.textContent = 'Wählen';
-                    actionButton.classList.add('player-actions');
-                    actionButton.onclick = () => {
-                        document.querySelectorAll(`#${listElement.id} li`).forEach(item => item.classList.remove('selected'));
-                        li.classList.add('selected');
-                        if (actionType === 'lynch') {
-                            gameState.lynchTarget = p.name;
-                            lynchSelectionInfo.textContent = `Ausgewählt für Lynchung: ${p.name}`;
-                            btnConfirmLynch.disabled = false;
-                        }
-                        // Hier könnten weitere actionTypes behandelt werden
-                    };
-                    li.appendChild(actionButton);
+            // Nach rechts suchen
+            currentIndex = playerIndex;
+            do {
+                currentIndex = (currentIndex + 1) % gameState.players.length;
+                const potentialNeighbor = gameState.players[currentIndex];
+                if (potentialNeighbor.status === 'alive' && potentialNeighbor.id !== playerId) {
+                    rightNeighbor = potentialNeighbor;
+                    break;
                 }
-                listElement.appendChild(li);
-            });
+            } while (currentIndex !== playerIndex);
+
+            const neighbors = [];
+            if (leftNeighbor) neighbors.push(leftNeighbor);
+            if (rightNeighbor && rightNeighbor.id !== leftNeighbor?.id) neighbors.push(rightNeighbor);
+
+            return neighbors;
+        }
+
+        function getSabineTargets() {
+            const wolves = getLivingPlayers('werwolf');
+            const nonWolves = getLivingPlayers().filter(p => p.roleDetails.team !== 'werwolf' && p.roleKey !== 'Oeko_Sabine');
+            if (wolves.length === 0) return []; // Sollte nicht passieren, aber sicher ist sicher
+
+            const targetWolf = wolves[Math.floor(Math.random() * wolves.length)];
+            const otherTargets = nonWolves.sort(() => 0.5 - Math.random()).slice(0, 2);
+
+            const targets = [targetWolf, ...otherTargets];
+            return targets.sort(() => Math.random() - 0.5); // Reihenfolge mischen
         }
 
 
         // --- Event Listener ---
-        btnAssignRoles.addEventListener('click', assignRolesAndStartGame);
+        btnGoToRoleAssignment.addEventListener('click', setupRoleAssignment);
+        btnStartGame.addEventListener('click', validateAndStartGame);
+        btnEventsYes.addEventListener('click', () => setupEvents(true));
+        btnEventsNo.addEventListener('click', () => setupEvents(false));
+
         btnNextAction.addEventListener('click', () => {
-            // Normalerweise wird confirmNightAction durch Klick auf Spieler ausgelöst,
-            // dieser Button ist ein Fallback oder für Aktionen ohne Ziel.
-            // In der aktuellen Logik wird er meist nicht direkt gebraucht,
-            // außer vielleicht für Rollen, die *nichts* tun wollen.
-             const currentPlayer = gameState.rolesInGame[gameState.currentRoleIndex];
-             if (currentPlayer && currentPlayer.roleDetails.actionType !== 'multi-player') { // Nur wenn keine Mehrfachauswahl nötig ist
-                 confirmNightAction(null); // Bestätigt, dass keine Aktion gewählt wurde (oder überspringt)
-             } else {
-                 // Hinweis für Mehrfachauswahl
-                 if (currentPlayer && currentPlayer.roleDetails.actionType === 'multi-player') {
-                     selectionInfo.textContent = "Bitte wähle genau zwei Spieler aus.";
-                 }
+            // Dieser Button dient hauptsächlich als "Weiter"-Button, wenn keine Auswahl nötig ist
+            // oder als Bestätigung für Aktionen, die keine Spielerliste verwenden (selten).
+            // Die meiste Logik läuft über die Buttons in der Spielerliste oder speziellen UIs.
+            const currentPlayer = gameState.rolesActingTonight[gameState.currentRoleIndex];
+             // Wenn eine Multi-Auswahl ansteht, aber nicht getroffen wurde
+            if (currentPlayer && currentPlayer.roleDetails.actionType === 'multi-player' && btnNextAction.disabled) {
+                 selectionInfo.textContent = `Bitte wähle genau ${currentPlayer.roleDetails.targetCount || 2} Spieler aus.`;
+                 return;
+            }
+            // Wenn keine Aktion nötig oder möglich war
+             if (currentPlayer && (currentPlayer.roleDetails.actionType === 'none' || nightPlayerList.innerHTML === '')) {
+                 confirmNightAction(null);
+             } else if (!btnNextAction.disabled) {
+                 // Fallback, falls eine Aktion ohne Ziel bestätigt werden muss
+                 // (Sollte idealerweise durch spezifische Buttons gehandhabt werden)
+                 confirmNightAction({}); // Leeres Objekt, um anzuzeigen, dass bestätigt wurde
              }
         });
+
         btnStartDiscussion.addEventListener('click', startDiscussion);
         btnConfirmLynch.addEventListener('click', confirmLynch);
-        btnStartNextNight.addEventListener('click', startNightPhase);
+        btnBeatrixIntervene.addEventListener('click', handleBeatrixIntervention);
+        btnStartNextNight.addEventListener('click', () => {
+             if (checkGameOver()) return; // Doppelte Prüfung
+             startNightPhase();
+        });
         btnNewGame.addEventListener('click', () => {
-            // Reset game state (vereinfacht)
+            // Vollständiger Reset
             gameState = {
                 players: [], playerCount: 0, currentScreen: 'screen-setup-players',
-                night: 0, day: 0, currentRoleIndex: -1, nightActions: [], lynchTarget: null,
-                rolesInGame: [], gameLog: [], usedAbilities: {}, specialConditions: {}
+                night: 0, day: 0, currentRoleIndex: -1, rolesActingTonight: [],
+                nightActions: [], lynchTarget: null, gameLog: [], usedAbilities: {},
+                specialConditions: { linkedPlayers: [], twinkDeactivated: false, bauerFoundBaerbel: false, eventsEnabled: false, lastEventDay: 0, activeEvent: null },
+                config: gameState.config // Konfiguration beibehalten
             };
-            setupPlayerCountButtons(); // Buttons neu generieren
+            clearInterval(discussionTimerInterval); // Timer stoppen
+            setupPlayerCountButtons();
             showScreen('screen-setup-players');
         });
 
