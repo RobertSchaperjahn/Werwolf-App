@@ -1,0 +1,338 @@
+[
+  {
+    "id": 1,
+    "title": "Startbildschirm",
+    "purpose": "Einleitung",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 2,
+    "title": "Ereignisse",
+    "purpose": "Festlegung der Sonderereignisse",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 3,
+    "title": "Spieleranzahl",
+    "purpose": "Festlegung der Spieler pro Spiel",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 4,
+    "title": "Automatische Zuweisung",
+    "purpose": "Automatische Rollenverteilung und Namen eintragen",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 5,
+    "title": "Manuelle Zuweisung",
+    "purpose": "Manuelle Rollenverteilung und Namen eintragen",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 6,
+    "title": "Deal gefällig?",
+    "purpose": "Die einäugige Dealerin zieht durchs Dorf",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 7,
+    "title": "Das Trärchen",
+    "purpose": "Festlegung der Rollen, die das Trärchen bilden",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 8,
+    "title": "Die Verwebten",
+    "purpose": "Festlegung der Rollen, die die Verwebten bilden",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 9,
+    "title": "Günni, komm aus deinem Loch",
+    "purpose": "Günni erfährt Identitäten",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 10,
+    "title": "Öko Sabine",
+    "purpose": "Öko Sabine erfährt mehr und kann sich schützen",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 11,
+    "title": "Der Twink",
+    "purpose": "Der Twink erfährt die Identotät eines Spielers",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 12,
+    "title": "Konversionstherapie Konny\t",
+    "purpose": "Konversionstherapie Konny erfährt mehr über einen Spieler",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 13,
+    "title": "Der geile Priester",
+    "purpose": "Der geile Priester erwacht",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 14,
+    "title": "Fisterin Frida",
+    "purpose": "Die Fisterin schlägt zu",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 15,
+    "title": "Die Boy-Butter Bäuerin",
+    "purpose": "Die Boy-Butter Bäuerin erfährt mehr",
+    "shown_when": "Setupphase oder bei Rollenvoraussetzung",
+    "condition": "Siehe Rollenauswahl"
+  },
+  {
+    "id": 16,
+    "title": "Tristan-Status",
+    "purpose": "Hat Tristan das Team gewechselt?",
+    "shown_when": "Vor jeder Nacht",
+    "condition": "Nur wenn Tristan im Spiel ist"
+  },
+  {
+    "id": 17,
+    "title": "Augen schließen",
+    "purpose": "Start der Nacht",
+    "shown_when": "Jede Nacht",
+    "condition": "Immer"
+  },
+  {
+    "id": 18,
+    "title": "Werwölfe wählen",
+    "purpose": "Werwölfe bestimmen ihr Opfer",
+    "shown_when": "Jede Nacht",
+    "condition": "Wenn Werwölfe im Spiel"
+  },
+  {
+    "id": 19,
+    "title": "Doppelmoral-Dörthe",
+    "purpose": "Dörthe erkennt WW und deren Opfer",
+    "shown_when": "Jede Nacht",
+    "condition": "Wenn Dörthe im Spiel"
+  },
+  {
+    "id": 20,
+    "title": "Heimscheißerin",
+    "purpose": "Erhält evtl. Hinweise",
+    "shown_when": "Jede Nacht",
+    "condition": "Wenn Heimscheißerin im Spiel"
+  },
+  {
+    "id": 21,
+    "title": "Keta Claudia",
+    "purpose": "Beobachtet Aktionen",
+    "shown_when": "Nur Nacht 1, dann jede 2. Nacht",
+    "condition": "Wenn Claudia im Spiel"
+  },
+  {
+    "id": 22,
+    "title": "Iltussy",
+    "purpose": "Würfelt auf Verwandlung in WW",
+    "shown_when": "Jede 2. Nacht",
+    "condition": "Wenn Iltussy im Spiel"
+  },
+  {
+    "id": 23,
+    "title": "Giftmischerin Gertrud",
+    "purpose": "Wählt Ziel für Vergiftung",
+    "shown_when": "Einmal pro Spiel",
+    "condition": "Wenn Gertrud im Spiel"
+  },
+  {
+    "id": 24,
+    "title": "Trip-Sitterin Tanja",
+    "purpose": "Rettet oder schaltet aus",
+    "shown_when": "Einmal pro Aktion",
+    "condition": "Wenn Tanja im Spiel"
+  },
+  {
+    "id": 25,
+    "title": "Kräuterhexe Hilde",
+    "purpose": "Wählt Trank-Effekt",
+    "shown_when": "Max 1/Nacht, 3x gesamt",
+    "condition": "Wenn Hilde im Spiel"
+  },
+  {
+    "id": 26,
+    "title": "Bordell Bärbel",
+    "purpose": "Wählt Schutzgast",
+    "shown_when": "Jede Nacht",
+    "condition": "Wenn Bärbel im Spiel"
+  },
+  {
+    "id": 27,
+    "title": "Schutzschild-Sigrid",
+    "purpose": "Schützt Nachbarn",
+    "shown_when": "Einmal pro Spiel",
+    "condition": "Wenn Sigrid im Spiel"
+  },
+  {
+    "id": 28,
+    "title": "Mansplaining Martin",
+    "purpose": "Erfährt Rolle eines Spielers",
+    "shown_when": "Jede Nacht",
+    "condition": "Wenn Martin im Spiel"
+  },
+  {
+    "id": 29,
+    "title": "Nekromant Norbert",
+    "purpose": "Befragt Tote über Lebende",
+    "shown_when": "Einmalig",
+    "condition": "Wenn Norbert im Spiel & Tote existieren"
+  },
+  {
+    "id": 30,
+    "title": "Bestatterin Brunhilde",
+    "purpose": "Belebt Toten mit neuer Rolle",
+    "shown_when": "Einmalig",
+    "condition": "Wenn Brunhilde im Spiel & Tote existieren"
+  },
+  {
+    "id": 31,
+    "title": "Nicht-binäre Türsteherperson Toni",
+    "purpose": "Checkt WW-Status",
+    "shown_when": "Jede Nacht",
+    "condition": "Wenn Toni im Spiel"
+  },
+  {
+    "id": 32,
+    "title": "Wachmann Wenzel",
+    "purpose": "Blockiert Nacht",
+    "shown_when": "Einmalig",
+    "condition": "Wenn Wenzel im Spiel"
+  },
+  {
+    "id": 33,
+    "title": "Dielenschleiferin",
+    "purpose": "Wählt Kunden für nächsten Tag",
+    "shown_when": "Jede Nacht",
+    "condition": "Wenn Dielenschleiferin im Spiel"
+  },
+  {
+    "id": 34,
+    "title": "Morgendämmerung",
+    "purpose": "Nachtopfer & Schutz prüfen",
+    "shown_when": "Jeden Tag",
+    "condition": "Immer"
+  },
+  {
+    "id": 35,
+    "title": "Kettenreaktionen",
+    "purpose": "Trärchen, Verwobene, Martin/Sabine",
+    "shown_when": "Jeden Tag",
+    "condition": "Wenn relevant"
+  },
+  {
+    "id": 36,
+    "title": "Wiederbelebung anzeigen",
+    "purpose": "Wiederbelebter Spieler erhält neue Rolle",
+    "shown_when": "Jeden Tag",
+    "condition": "Wenn Brunhilde aktiv war"
+  },
+  {
+    "id": 37,
+    "title": "Diskussion",
+    "purpose": "Dorf diskutiert",
+    "shown_when": "Jeden Tag",
+    "condition": "Immer"
+  },
+  {
+    "id": 38,
+    "title": "Tag des Schweigens",
+    "purpose": "Nur 1 Aussage erlaubt",
+    "shown_when": "Optional",
+    "condition": "Wenn aktiviert"
+  },
+  {
+    "id": 39,
+    "title": "Chaos-Trank",
+    "purpose": "Spieler verhält sich auffällig",
+    "shown_when": "Optional",
+    "condition": "Wenn Chaos-Trank aktiv war"
+  },
+  {
+    "id": 40,
+    "title": "Klatsch-Käthe",
+    "purpose": "Gerücht wird vorgelesen",
+    "shown_when": "Optional",
+    "condition": "Wenn Käthe aktiv war"
+  },
+  {
+    "id": 41,
+    "title": "Abstimmung",
+    "purpose": "Wer soll gelyncht werden?",
+    "shown_when": "Jeden Tag",
+    "condition": "Immer"
+  },
+  {
+    "id": 42,
+    "title": "Beatrix-Eingriff",
+    "purpose": "Blockiert evtl. Lynchung",
+    "shown_when": "Optional",
+    "condition": "Wenn Beatrix eingreift"
+  },
+  {
+    "id": 43,
+    "title": "Lynch-Folgen",
+    "purpose": "Wer stirbt? Folgeeffekte prüfen",
+    "shown_when": "Jeden Tag",
+    "condition": "Immer"
+  },
+  {
+    "id": 44,
+    "title": "Suizid Susie gewinnt",
+    "purpose": "Gewinn durch Lynch in Runde 1",
+    "shown_when": "Nur Tag 1",
+    "condition": "Wenn Susie im Spiel"
+  },
+  {
+    "id": 45,
+    "title": "Wut Wiebke gewinnt",
+    "purpose": "Letzte Überlebende",
+    "shown_when": "Jederzeit",
+    "condition": "Wenn Wiebke gewinnt"
+  },
+  {
+    "id": 46,
+    "title": "Dorf gewinnt",
+    "purpose": "Alle WW tot",
+    "shown_when": "Spielende",
+    "condition": "Standard-Ende"
+  },
+  {
+    "id": 47,
+    "title": "Werwölfe gewinnen",
+    "purpose": "Dorf eliminiert",
+    "shown_when": "Spielende",
+    "condition": "Standard-Ende"
+  },
+  {
+    "id": 48,
+    "title": "Sonderfall: Gleichstand",
+    "purpose": "Mehrere Sonderrollen gewinnen",
+    "shown_when": "Spielende",
+    "condition": "Unentschieden/Sonderfall"
+  }
+]
