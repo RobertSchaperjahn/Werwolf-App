@@ -468,34 +468,51 @@
          // Funktion zum Abrufen des Fähigkeitsstatus (verbleibende Nutzungen)
         function getAbilityUses(playerId, abilityKey = null) {
             const player = getPlayerData(playerId);
-            if (!player || !player.roleDetails.uses) return Infinity; // Unbegrenzt oder keine Fähigkeit
+            if (!player || !player.roleDetails?.uses) return Infinity; // Korrigiert: Prüfe auf roleDetails.uses
 
             const usesLimit = player.roleDetails.uses;
             const currentUses = gameState.usedAbilities[playerId];
 
             if (typeof usesLimit === 'number' && usesLimit !== -1) {
-                return usesLimit - (currentUses || 0);
+                return Math.max(0, usesLimit - (currentUses || 0)); // Sicherstellen, dass nicht negativ
             } else if (typeof usesLimit === 'object' && abilityKey) {
-                return usesLimit[abilityKey] - (currentUses?.[abilityKey] || 0);
+                 // Prüfen ob currentUses und currentUses[abilityKey] existieren
+                 const usedCount = (currentUses && currentUses[abilityKey] !== undefined) ? currentUses[abilityKey] : 0;
+                 return Math.max(0, usesLimit[abilityKey] - usedCount);
             } else if (typeof usesLimit === 'object') {
                 // Gibt zurück, ob *irgendeine* Fähigkeit noch Nutzungen hat
-                return Object.keys(usesLimit).some(key => (currentUses?.[key] || 0) < usesLimit[key]);
+                const currentAbilityUses = currentUses || {};
+                return Object.keys(usesLimit).some(key => (currentAbilityUses[key] || 0) < usesLimit[key]);
             }
+             // Fallback für uses: 1 (wenn nicht als Zahl oder Objekt definiert)
+             else if (usesLimit === 1) {
+                 return 1 - (currentUses || 0);
+             }
             return Infinity; // Unbegrenzt
         }
 
         // Funktion zum Markieren einer Fähigkeit als genutzt
         function markAbilityUsed(playerId, subAction = null) {
             const player = getPlayerData(playerId);
-            if (!player || !player.roleDetails.uses || !gameState.usedAbilities[playerId]) return;
+            if (!player || !player.roleDetails?.uses) return; // Korrigiert: Prüfe auf roleDetails.uses
 
-            if (typeof player.roleDetails.uses === 'number' && player.roleDetails.uses !== -1) {
-                gameState.usedAbilities[playerId]++;
+            // Initialisiere usedAbilities für den Spieler, falls noch nicht vorhanden
+            if (!gameState.usedAbilities[playerId]) {
+                gameState.usedAbilities[playerId] = {};
+            }
+
+            const usesLimit = player.roleDetails.uses;
+
+            if (typeof usesLimit === 'number' && usesLimit !== -1) {
+                // Einfacher Zähler für die Rolle
+                gameState.usedAbilities[playerId] = (gameState.usedAbilities[playerId] || 0) + 1;
                 logGameEvent(`${player.name} (${player.role}) hat Fähigkeit genutzt (${getAbilityUses(playerId)} verbleibend).`);
-            } else if (typeof player.roleDetails.uses === 'object' && subAction) {
+            } else if (typeof usesLimit === 'object' && subAction) {
+                // Zähler pro Fähigkeitstyp
                 gameState.usedAbilities[playerId][subAction] = (gameState.usedAbilities[playerId][subAction] || 0) + 1;
                 logGameEvent(`${player.name} (${player.role}) hat Fähigkeit '${subAction}' genutzt (${getAbilityUses(playerId, subAction)} verbleibend).`);
-            } else if (player.roleDetails.uses === 1) {
+            } else if (usesLimit === 1) {
+                 // Fallback für Rollen, die nur uses: 1 haben
                  gameState.usedAbilities[playerId] = (gameState.usedAbilities[playerId] || 0) + 1;
                  logGameEvent(`${player.name} (${player.role}) hat einmalige Fähigkeit genutzt.`);
             }
@@ -569,26 +586,27 @@
             const availableRoles = Object.keys(ROLES).map(key => ({ key: key, name: ROLES[key].name }));
             availableRoles.sort((a, b) => a.name.localeCompare(b.name)); // Alphabetisch sortieren
 
-            // Update player names from input fields before creating role assignments
-            // WICHTIG: Sicherstellen, dass gameState.players die korrekte Anzahl an Spielern hat
+            // Sicherstellen, dass gameState.players die korrekte Anzahl hat und Namen aktualisieren
              if (gameState.players.length !== gameState.playerCount) {
-                 console.error("Player array size mismatch!");
-                 // Ggf. setupNameInputs() erneut aufrufen oder Fehler anzeigen
-                 setupNameInputs(); // Versuch der Korrektur
+                 console.warn("Player array size mismatch in setupRoleAssignment. Reinitializing.");
+                 setupNameInputs(); // Re-initialize player array based on playerCount
                  if (gameState.players.length !== gameState.playerCount) {
                      roleAssignmentError.textContent = "Fehler bei der Spieleranzahl. Bitte zurückgehen.";
                      roleAssignmentError.classList.remove('hidden');
-                     return;
+                     return; // Abbruch, wenn immer noch falsch
                  }
+             } else {
+                 // Nur Namen aktualisieren, wenn die Anzahl stimmt
+                 gameState.players.forEach((player, i) => {
+                     const nameInput = document.getElementById(`player-name-${i}`);
+                     if (nameInput) {
+                         player.name = nameInput.value.trim() || `Spieler ${i + 1}`;
+                     }
+                 });
              }
 
-            gameState.players.forEach((player, i) => {
-                 // Update name from input field just in case
-                 const nameInput = document.getElementById(`player-name-${i}`);
-                 if (nameInput) {
-                     player.name = nameInput.value.trim() || `Spieler ${i + 1}`;
-                 }
 
+            gameState.players.forEach((player, i) => {
                 const div = document.createElement('div');
                 div.classList.add('flex', 'items-center', 'space-x-2', 'mb-2');
                 const nameLabel = document.createElement('span');
@@ -632,15 +650,19 @@
             // 1. Rollen auslesen und Spielern zuweisen
             for (let i = 0; i < gameState.playerCount; i++) {
                 const select = document.getElementById(`player-role-${i}`);
+                // Überprüfen, ob das Select-Element existiert
+                if (!select) {
+                    isValid = false; errorMessage = `Fehler: Rollen-Auswahl für Spieler ${i+1} nicht gefunden.`; break;
+                }
                 const roleKey = select.value;
                 const playerId = select.dataset.playerId;
                 const player = getPlayerData(playerId);
 
                 if (!player) {
-                    isValid = false; errorMessage = "Interner Fehler: Spielerdaten nicht gefunden."; break;
+                    isValid = false; errorMessage = `Interner Fehler: Spielerdaten für ID ${playerId} nicht gefunden.`; break;
                 }
                 if (!roleKey) {
-                    isValid = false; errorMessage = "Bitte allen Spielern eine Rolle zuweisen."; break;
+                    isValid = false; errorMessage = `Bitte für Spieler ${player.name} eine Rolle auswählen.`; break;
                 }
 
                 player.roleKey = roleKey;
@@ -660,11 +682,10 @@
                              gameState.usedAbilities[player.id][key] = 0;
                          }
                     }
-                 } else if (player.roleDetails.uses === 1) { // Fallback für uses: 1
+                 } else if (player.roleDetails.uses === 1) {
                      gameState.usedAbilities[player.id] = 0;
                  }
 
-                 // Sonderinitialisierungen
                  if (player.roleKey === 'DOPPELMORAL_DOERTHE') {
                      player.misc.knowsWerwolves = true;
                  }
@@ -676,7 +697,7 @@
                 return;
             }
 
-             // Post-assignment initializations (nachdem alle Rollen bekannt sind)
+             // Post-assignment initializations
              gameState.players.forEach(player => {
                  if (player.roleKey === 'GLORYHOLE_GUENNI') {
                      const twink = gameState.players.find(p => p.roleKey === 'DER_TWINK');
@@ -1611,7 +1632,7 @@
              if (!interactive) {
                  const allPlayers = gameState.players; // Hole alle Spieler
                  listElement.innerHTML = ''; // Leere die Liste nochmal
-                 allPlayers.forEach(p => {
+                 allPlayers.sort((a,b) => a.name.localeCompare(b.name)).forEach(p => { // Sortiere nach Namen für Anzeige
                      listElement.appendChild(createPlayerListItem(p)); // Erstelle Listenelement für jeden
                  });
              }
@@ -1674,8 +1695,9 @@
                          break;
                     case 'ask_dead':
                          const mediumName = action.medium; // Name statt ID
-                         if (targetId && mediumName) {
-                             const livingPlayer = getPlayerData(targetId);
+                         const livingTargetId = getPlayerByName(action.target)?.id; // ID des lebenden Ziels
+                         if (livingTargetId && mediumName) {
+                             const livingPlayer = getPlayerData(livingTargetId);
                              const isWolf = livingPlayer?.roleDetails.team === 'werwolf';
                              messages.push(`SL Info für Norbert (${actor.name}): Frage Geist ${mediumName} über ${action.target}. Antwort: ${isWolf ? 'Werwolf (Daumen runter)' : 'Kein Werwolf (Daumen hoch)'}.`);
                          }
@@ -1694,7 +1716,7 @@
                          }
                          break;
                     case 'sabine_actions': // Nur Schutz wird hier relevant
-                         if (action.protected) {
+                         if (actor && actor.misc?.sabineRolledSix) { // Prüfe den Status im Spielerobjekt
                              nightSummary.protections[actor.id] = 'Oeko_Sabine';
                              nightSummary.sabineProtected = true;
                          }
@@ -1848,6 +1870,7 @@
                  if (details.isProtectedBy) {
                      const protectorName = ROLES[details.isProtectedBy]?.name || details.isProtectedBy;
                      messages.push(`${player.name} wurde angegriffen (${details.causes.join('/')}), aber von ${protectorName} beschützt!`);
+                     player.isProtected = true; // Markiere Spieler als geschützt für die Icon-Anzeige
                  } else {
                      player.status = 'dead';
                      deathsThisNight.push(player);
@@ -1905,16 +1928,18 @@
              // Kettentod durch Verlinkung prüfen
              if (gameState.specialConditions.linkedPlayers.length > 0) {
                  const linkedGroup = gameState.specialConditions.linkedPlayers.map(id => getPlayerData(id)).filter(Boolean);
-                 const anyLinkedDied = linkedGroup.some(p => p.status === 'dead');
-                 if (anyLinkedDied) {
+                 // Prüfen, ob einer der *gerade eben* Verstorbenen Teil der Gruppe war
+                 const anyLinkedDiedNow = deathsThisNight.some(deadPlayer => gameState.specialConditions.linkedPlayers.includes(deadPlayer.id));
+
+                 if (anyLinkedDiedNow) {
                      linkedGroup.forEach(p => {
-                         if (p.status === 'alive') {
+                         if (p.status === 'alive') { // Nur lebende Mitglieder sterben mit
                              p.status = 'dead';
                              if (!deathsThisNight.some(dp => dp.id === p.id)) deathsThisNight.push(p);
                              messages.push(`${p.name} (${p.role}) stirbt aus Kummer/Schicksal mit!`);
                          }
                      });
-                     gameState.specialConditions.linkedPlayers = [];
+                     gameState.specialConditions.linkedPlayers = []; // Band ist gebrochen
                  }
              }
 
@@ -2003,7 +2028,7 @@
                      targetPlayer.roleDetails = ROLES[newRoleKey];
                      targetPlayer.role = ROLES[newRoleKey].name;
                      delete gameState.usedAbilities[targetPlayer.id];
-                     logGameEvent(`${targetPlayer.name} (ehemals ${oldRole}) wurde wiederbelebt als ${targetPlayer.role}.`);
+                     logGameEvent(`${targetPlayer.name} (ehemals ${oldRole}) wurde von Brunhilde wiederbelebt als ${targetPlayer.role}.`);
                      dayEventsList.innerHTML += `<li class="text-green-400">${targetPlayer.name} (ehemals ${oldRole}) wurde wiederbelebt als ${targetPlayer.role}!</li>`;
                      renderPlayerList(dayPlayerListStatus, gameState.players, false);
                  }
