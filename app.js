@@ -1,15 +1,30 @@
 let currentIndex = 0;
 let screens = [];
+let selectedRoles = [];
 
-// Erst nach Klick auf Start laden
 document.getElementById("start-game-btn").addEventListener("click", () => {
+  // Gespeicherte Rollen einsammeln
+  const checkboxes = document.querySelectorAll("input[name=role]:checked");
+  selectedRoles = Array.from(checkboxes).map(cb => cb.value);
+
+  // Umschalten der Ansicht
   document.getElementById("start-container").style.display = "none";
   document.getElementById("screen-container").style.display = "block";
 
+  // Screens laden und filtern
   fetch("screens.json")
-    .then((res) => res.json())
-    .then((data) => {
-      screens = data;
+    .then(res => res.json())
+    .then(data => {
+      screens = data.filter(screen => {
+        const cond = screen.condition.toLowerCase();
+        // Wenn keine Rolle in Bedingung vorkommt → immer zeigen
+        if (cond.includes("immer") || cond.includes("standard")) return true;
+
+        // Check: kommt eine gewählte Rolle in der Bedingung vor?
+        return selectedRoles.some(role =>
+          cond.includes(role.toLowerCase())
+        );
+      });
       showScreen(currentIndex);
     });
 });
