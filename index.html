@@ -1,37 +1,19 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Werwolf Spielleiter App</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Werwolf Spielleiter-App</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <h1>Werwolf Spielleiter App</h1>
+  <main id="screen-container">
+    <h1 id="screen-title">Werwolf: Düsterwald Deluxe</h1>
+    <p id="screen-purpose"></p>
+    <div id="screen-meta"></div>
+    <button id="next-btn">Weiter</button>
+  </main>
 
-    <div id="setup">
-        <h2>Spieleranzahl auswählen:</h2>
-        <div id="playerCountButtons">
-            <button data-count="8">8</button>
-            <button data-count="9">9</button>
-            <button data-count="10">10</button>
-            <button data-count="11">11</button>
-            <button data-count="12">12</button>
-            <button data-count="13">13</button>
-            <button data-count="14">14</button>
-            <button data-count="15">15</button>
-        </div>
-        <button id="manualStart">Manuelle Rollenzuweisung starten</button>
-    </div>
-
-    <div id="gameArea" class="hidden">
-        <h2>Spielerliste</h2>
-        <ul id="playerList"></ul>
-        <button id="assignRoles" class="hidden">Rollen zuweisen</button>
-        <button id="nextPhase" class="hidden">Nächste Phase</button>
-        <button id="startNightPhaseButton">Nachtphase Starten</button>
-    </div>
-
-    <script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
