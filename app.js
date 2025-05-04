@@ -1,12 +1,18 @@
 let currentIndex = 0;
 let screens = [];
 
-fetch("screens.json")
-  .then((res) => res.json())
-  .then((data) => {
-    screens = data;
-    showScreen(currentIndex);
-  });
+// Erst nach Klick auf Start laden
+document.getElementById("start-game-btn").addEventListener("click", () => {
+  document.getElementById("start-container").style.display = "none";
+  document.getElementById("screen-container").style.display = "block";
+
+  fetch("screens.json")
+    .then((res) => res.json())
+    .then((data) => {
+      screens = data;
+      showScreen(currentIndex);
+    });
+});
 
 function showScreen(index) {
   const screen = screens[index];
