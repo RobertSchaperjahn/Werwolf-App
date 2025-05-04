@@ -363,51 +363,64 @@
             WERWOLF: { name: 'Werwolf', team: 'werwolf', nightAction: true, actionType: 'kill', order: 10 },
         };
 
-        // --- DOM Elemente ---
-        const allScreens = document.querySelectorAll('.screen');
-        const playerCountButtonsContainer = document.getElementById('player-count-buttons');
-        const playerNameInputsContainer = document.getElementById('player-name-inputs');
-        const btnGoToRoleAssignment = document.getElementById('btn-go-to-role-assignment');
-        const playerRoleAssignmentContainer = document.getElementById('player-role-assignment');
-        const roleAssignmentError = document.getElementById('role-assignment-error');
-        const btnStartGame = document.getElementById('btn-start-game');
-        const nightCounter = document.getElementById('night-counter');
-        const nightRoleAction = document.getElementById('night-role-action');
-        const nightInstruction = document.getElementById('night-instruction');
-        const nightPlayerList = document.getElementById('night-player-list');
-        const nightSpecialUI = document.getElementById('night-special-ui');
-        const selectionInfo = document.getElementById('selection-info');
-        const btnNextAction = document.getElementById('btn-next-action');
-        const dayCounter = document.getElementById('day-counter');
-        const dayEventsList = document.getElementById('day-events-list');
-        const dayEventAnnouncement = document.getElementById('day-event-announcement');
-        const dayEventDetails = document.getElementById('day-event-details');
-        const dayPlayerListStatus = document.getElementById('day-player-list-status');
-        const btnStartDiscussion = document.getElementById('btn-start-discussion');
-        const dayCounterVote = document.getElementById('day-counter-vote');
-        const dayVoteList = document.getElementById('day-vote-list');
-        const dayVoteTimer = document.getElementById('day-vote-timer');
-        const dayVoteRestrictions = document.getElementById('day-vote-restrictions');
-        const lynchSelectionInfo = document.getElementById('lynch-selection-info');
-        const beatrixInterventionDiv = document.getElementById('beatrix-intervention');
-        const btnBeatrixIntervene = document.getElementById('btn-beatrix-intervene');
-        const beatrixResultSpan = document.getElementById('beatrix-result');
-        const btnConfirmLynch = document.getElementById('btn-confirm-lynch');
-        const lynchResultText = document.getElementById('lynch-result-text');
-        const lynchRoleReveal = document.getElementById('lynch-role-reveal');
-        const lynchConsequences = document.getElementById('lynch-consequences');
-        const lynchPlayerListStatus = document.getElementById('lynch-player-list-status');
-        const btnStartNextNight = document.getElementById('btn-start-next-night');
-        const gameOverMessage = document.getElementById('game-over-message');
-        const winnersList = document.getElementById('winners-list');
-        const btnNewGame = document.getElementById('btn-new-game');
-        const btnEventsYes = document.getElementById('btn-events-yes');
-        const btnEventsNo = document.getElementById('btn-events-no');
+        // --- DOM Elemente (Variablen deklarieren) ---
+        let allScreens, playerCountButtonsContainer, playerNameInputsContainer, btnGoToRoleAssignment,
+            playerRoleAssignmentContainer, roleAssignmentError, btnStartGame, nightCounter,
+            nightRoleAction, nightInstruction, nightPlayerList, nightSpecialUI, selectionInfo,
+            btnNextAction, dayCounter, dayEventsList, dayEventAnnouncement, dayEventDetails,
+            dayPlayerListStatus, btnStartDiscussion, dayCounterVote, dayVoteList, dayVoteTimer,
+            dayVoteRestrictions, lynchSelectionInfo, beatrixInterventionDiv, btnBeatrixIntervene,
+            beatrixResultSpan, btnConfirmLynch, lynchResultText, lynchRoleReveal, lynchConsequences,
+            lynchPlayerListStatus, btnStartNextNight, gameOverMessage, winnersList, btnNewGame,
+            btnEventsYes, btnEventsNo;
 
         let discussionTimerInterval = null; // Für den Timer
 
         // --- Hilfsfunktionen ---
+        function initializeDOMElements() {
+            allScreens = document.querySelectorAll('.screen');
+            playerCountButtonsContainer = document.getElementById('player-count-buttons');
+            playerNameInputsContainer = document.getElementById('player-name-inputs');
+            btnGoToRoleAssignment = document.getElementById('btn-go-to-role-assignment');
+            playerRoleAssignmentContainer = document.getElementById('player-role-assignment');
+            roleAssignmentError = document.getElementById('role-assignment-error');
+            btnStartGame = document.getElementById('btn-start-game');
+            nightCounter = document.getElementById('night-counter');
+            nightRoleAction = document.getElementById('night-role-action');
+            nightInstruction = document.getElementById('night-instruction');
+            nightPlayerList = document.getElementById('night-player-list');
+            nightSpecialUI = document.getElementById('night-special-ui');
+            selectionInfo = document.getElementById('selection-info');
+            btnNextAction = document.getElementById('btn-next-action');
+            dayCounter = document.getElementById('day-counter');
+            dayEventsList = document.getElementById('day-events-list');
+            dayEventAnnouncement = document.getElementById('day-event-announcement');
+            dayEventDetails = document.getElementById('day-event-details');
+            dayPlayerListStatus = document.getElementById('day-player-list-status');
+            btnStartDiscussion = document.getElementById('btn-start-discussion');
+            dayCounterVote = document.getElementById('day-counter-vote');
+            dayVoteList = document.getElementById('day-vote-list');
+            dayVoteTimer = document.getElementById('day-vote-timer');
+            dayVoteRestrictions = document.getElementById('day-vote-restrictions');
+            lynchSelectionInfo = document.getElementById('lynch-selection-info');
+            beatrixInterventionDiv = document.getElementById('beatrix-intervention');
+            btnBeatrixIntervene = document.getElementById('btn-beatrix-intervene');
+            beatrixResultSpan = document.getElementById('beatrix-result');
+            btnConfirmLynch = document.getElementById('btn-confirm-lynch');
+            lynchResultText = document.getElementById('lynch-result-text');
+            lynchRoleReveal = document.getElementById('lynch-role-reveal');
+            lynchConsequences = document.getElementById('lynch-consequences');
+            lynchPlayerListStatus = document.getElementById('lynch-player-list-status');
+            btnStartNextNight = document.getElementById('btn-start-next-night');
+            gameOverMessage = document.getElementById('game-over-message');
+            winnersList = document.getElementById('winners-list');
+            btnNewGame = document.getElementById('btn-new-game');
+            btnEventsYes = document.getElementById('btn-events-yes');
+            btnEventsNo = document.getElementById('btn-events-no');
+        }
+
         function showScreen(screenId) {
+            if (!allScreens) initializeDOMElements(); // Sicherstellen, dass Elemente initialisiert sind
             allScreens.forEach(screen => {
                 screen.classList.remove('active');
             });
@@ -430,8 +443,6 @@
         }
 
         function getLivingPlayers(team = null) {
-            // Filtert Spieler, die 'alive' sind und optional einem bestimmten Team angehören.
-            // Bezieht auch Rollen ein, die mit dem Dorf gewinnen (winCondition: 'dorf_wins').
             return gameState.players.filter(p => p.status === 'alive' && (team === null || p.roleDetails.team === team || (team === 'dorf' && p.roleDetails.winCondition === 'dorf_wins')));
         }
 
@@ -521,6 +532,7 @@
 
         // --- Spiel-Setup ---
         function setupPlayerCountButtons() {
+            if (!playerCountButtonsContainer) return; // Sicherstellen, dass das Element existiert
             playerCountButtonsContainer.innerHTML = '';
             for (let i = 8; i <= 15; i++) {
                 const button = document.createElement('button');
@@ -539,6 +551,7 @@
         }
 
         function setupNameInputs() {
+            if (!playerNameInputsContainer) return;
             playerNameInputsContainer.innerHTML = '';
             gameState.players = []; // Reset players array
             for (let i = 0; i < gameState.playerCount; i++) {
@@ -576,8 +589,27 @@
             }
         }
 
+        // NEU: Funktion zum Speichern der Namen vor dem Wechsel zum Rollen-Screen
+        function saveNamesAndGoToRoles() {
+            if (gameState.players.length !== gameState.playerCount) {
+                console.error("Player array size mismatch before saving names.");
+                // Optional: Fehler anzeigen oder setupNameInputs() erneut aufrufen
+                return;
+            }
+            gameState.players.forEach((player, i) => {
+                const nameInput = document.getElementById(`player-name-${i}`);
+                if (nameInput) {
+                    player.name = nameInput.value.trim() || `Spieler ${i + 1}`;
+                }
+            });
+            logGameEvent("Spielernamen gespeichert.");
+            console.log("Updated player names:", gameState.players.map(p => p.name));
+            setupRoleAssignment(); // Jetzt den Rollen-Screen aufbauen
+        }
+
 
         function setupRoleAssignment() {
+            if (!playerRoleAssignmentContainer) return; // Element-Check
             playerRoleAssignmentContainer.innerHTML = '';
             roleAssignmentError.classList.add('hidden');
             roleAssignmentError.textContent = '';
@@ -586,31 +618,19 @@
             const availableRoles = Object.keys(ROLES).map(key => ({ key: key, name: ROLES[key].name }));
             availableRoles.sort((a, b) => a.name.localeCompare(b.name)); // Alphabetisch sortieren
 
-            // Sicherstellen, dass gameState.players die korrekte Anzahl hat und Namen aktualisieren
+            // Sicherstellen, dass gameState.players die korrekte Anzahl hat
              if (gameState.players.length !== gameState.playerCount) {
-                 console.warn("Player array size mismatch in setupRoleAssignment. Reinitializing.");
-                 setupNameInputs(); // Re-initialize player array based on playerCount
-                 if (gameState.players.length !== gameState.playerCount) {
-                     roleAssignmentError.textContent = "Fehler bei der Spieleranzahl. Bitte zurückgehen.";
-                     roleAssignmentError.classList.remove('hidden');
-                     return; // Abbruch, wenn immer noch falsch
-                 }
-             } else {
-                 // Nur Namen aktualisieren, wenn die Anzahl stimmt
-                 gameState.players.forEach((player, i) => {
-                     const nameInput = document.getElementById(`player-name-${i}`);
-                     if (nameInput) {
-                         player.name = nameInput.value.trim() || `Spieler ${i + 1}`;
-                     }
-                 });
+                 console.error("Player array size mismatch in setupRoleAssignment. Expected:", gameState.playerCount, "Got:", gameState.players.length);
+                 roleAssignmentError.textContent = "Fehler: Spielerdaten nicht konsistent. Bitte neu starten.";
+                 roleAssignmentError.classList.remove('hidden');
+                 return; // Abbruch
              }
-
 
             gameState.players.forEach((player, i) => {
                 const div = document.createElement('div');
                 div.classList.add('flex', 'items-center', 'space-x-2', 'mb-2');
                 const nameLabel = document.createElement('span');
-                nameLabel.textContent = `${player.name}:`;
+                nameLabel.textContent = `${player.name}:`; // Namen aus gameState verwenden
                 nameLabel.classList.add('w-32', 'flex-shrink-0', 'truncate');
 
                 const select = document.createElement('select');
@@ -650,7 +670,6 @@
             // 1. Rollen auslesen und Spielern zuweisen
             for (let i = 0; i < gameState.playerCount; i++) {
                 const select = document.getElementById(`player-role-${i}`);
-                // Überprüfen, ob das Select-Element existiert
                 if (!select) {
                     isValid = false; errorMessage = `Fehler: Rollen-Auswahl für Spieler ${i+1} nicht gefunden.`; break;
                 }
@@ -1509,6 +1528,10 @@
 
         // --- Gemeinsame Render-Funktion für Spielerlisten ---
         function renderPlayerList(listElement, playersToRender, interactive = false, actionContext = null, targetCount = 1) {
+            if (!listElement) {
+                console.error("renderPlayerList: listElement is null or undefined.");
+                return;
+            }
             listElement.innerHTML = '';
             let currentSelection = []; // Für Mehrfachauswahl
 
@@ -1550,7 +1573,8 @@
 
                 // Interaktive Elemente (Buttons)
                 const isSelectable = p.status === 'alive' && selectablePlayers.some(sp => sp.id === p.id);
-                if (interactive && targetType !== 'none') {
+                 // Check if targetType is valid before proceeding
+                 if (interactive && targetType && targetType !== 'none') {
                     const actionsDiv = document.createElement('div');
                     actionsDiv.classList.add('player-actions');
 
@@ -1576,8 +1600,8 @@
                                     btnConfirmLynch.disabled = false;
                                     // Beatrix Button nur aktivieren, wenn ein Ziel gewählt ist
                                     const beatrix = gameState.players.find(p => p.status === 'alive' && p.roleKey === 'BLUTMAGIERIN_BEATRIX');
-                                    const beatrixUsed = (gameState.usedAbilities[beatrix?.id] || 0) >= (ROLES.BLUTMAGIERIN_BEATRIX.uses || 1);
-                                    if (btnBeatrixIntervene) btnBeatrixIntervene.disabled = !(beatrix && !beatrixUsed);
+                                    const beatrixAbilityUses = getAbilityUses(beatrix?.id);
+                                    if (btnBeatrixIntervene) btnBeatrixIntervene.disabled = !(beatrix && beatrixAbilityUses > 0);
                                 }
                             } else if (targetType === 'multi-player') {
                                 li.classList.toggle('selected');
@@ -1610,8 +1634,8 @@
             };
 
              // Füge "Nichts tun / Überspringen"-Button hinzu, wenn optional
-             const isOptional = targetType.endsWith('_optional');
-             if (isOptional && targetType !== 'special') {
+             const isOptional = targetType && targetType.endsWith('_optional');
+             if (interactive && isOptional && targetType !== 'special') {
                  const liSkip = document.createElement('li');
                  liSkip.style.backgroundColor = 'transparent';
                  const skipButton = document.createElement('button');
@@ -1620,8 +1644,10 @@
                  skipButton.onclick = () => confirmNightAction(null);
                  liSkip.appendChild(skipButton);
                  listElement.appendChild(liSkip);
+                 // Ensure targetType is reset for further logic if needed
                  targetType = targetType.replace('_optional', '');
              }
+
 
              // Spieler rendern
              playersToRender.forEach(p => {
@@ -2346,59 +2372,64 @@
 
 
         // --- Event Listener ---
-        btnGoToRoleAssignment.addEventListener('click', setupRoleAssignment);
-        btnStartGame.addEventListener('click', validateAndStartGame);
-        btnEventsYes.addEventListener('click', () => setupEvents(true));
-        btnEventsNo.addEventListener('click', () => setupEvents(false));
+        // Event Listener werden nach dem Laden des DOM hinzugefügt
+        function addEventListeners() {
+            btnGoToRoleAssignment.addEventListener('click', saveNamesAndGoToRoles); // Geänderte Funktion
+            btnStartGame.addEventListener('click', validateAndStartGame);
+            btnEventsYes.addEventListener('click', () => setupEvents(true));
+            btnEventsNo.addEventListener('click', () => setupEvents(false));
+            btnNextAction.addEventListener('click', defaultNextActionButtonLogic);
+            btnStartDiscussion.addEventListener('click', startDiscussion);
+            btnConfirmLynch.addEventListener('click', confirmLynch);
+            // Stelle sicher, dass der Button existiert, bevor der Listener hinzugefügt wird
+            if (btnBeatrixIntervene) {
+                btnBeatrixIntervene.addEventListener('click', handleBeatrixIntervention);
+            } else {
+                console.warn("Button btnBeatrixIntervene not found during initialization.");
+            }
+            btnStartNextNight.addEventListener('click', () => {
+                 if (checkGameOver()) return;
+                 startNightPhase();
+            });
+            btnNewGame.addEventListener('click', () => {
+                // Vollständiger Reset
+                gameState = {
+                    players: [], playerCount: 0, currentScreen: 'screen-setup-players',
+                    night: 0, day: 0, currentRoleIndex: -1, rolesActingTonight: [],
+                    nightActions: [], lynchTarget: null, gameLog: [], usedAbilities: {},
+                    specialConditions: { linkedPlayers: [], twinkDeactivated: false, bauerFoundBaerbel: false, eventsEnabled: false, lastEventDay: 0, activeEvent: null },
+                    config: gameState.config // Konfiguration beibehalten
+                };
+                clearInterval(discussionTimerInterval);
+                // Clear UI elements
+                if(playerNameInputsContainer) playerNameInputsContainer.innerHTML = '';
+                if(playerRoleAssignmentContainer) playerRoleAssignmentContainer.innerHTML = '';
+                if(nightPlayerList) nightPlayerList.innerHTML = '';
+                if(dayEventsList) dayEventsList.innerHTML = '';
+                if(dayPlayerListStatus) dayPlayerListStatus.innerHTML = '';
+                if(dayVoteList) dayVoteList.innerHTML = '';
+                if(lynchPlayerListStatus) lynchPlayerListStatus.innerHTML = '';
+                if(winnersList) winnersList.innerHTML = '';
+                // Reset error messages and special UI
+                if(roleAssignmentError) roleAssignmentError.classList.add('hidden');
+                if(nightSpecialUI) nightSpecialUI.innerHTML = '';
+                if(selectionInfo) selectionInfo.textContent = '';
+                if(lynchSelectionInfo) lynchSelectionInfo.textContent = '';
+                if(beatrixResultSpan) beatrixResultSpan.textContent = '';
+                if(beatrixInterventionDiv) beatrixInterventionDiv.classList.add('hidden');
+                if(dayEventAnnouncement) dayEventAnnouncement.classList.add('hidden');
 
-        btnNextAction.addEventListener('click', defaultNextActionButtonLogic); // Standard-Listener
-
-        btnStartDiscussion.addEventListener('click', startDiscussion);
-        btnConfirmLynch.addEventListener('click', confirmLynch);
-        btnBeatrixIntervene.addEventListener('click', handleBeatrixIntervention);
-        btnStartNextNight.addEventListener('click', () => {
-             if (checkGameOver()) return; // Doppelte Prüfung
-             startNightPhase();
-        });
-        btnNewGame.addEventListener('click', () => {
-            // Vollständiger Reset
-            gameState = {
-                players: [], playerCount: 0, currentScreen: 'screen-setup-players',
-                night: 0, day: 0, currentRoleIndex: -1, rolesActingTonight: [],
-                nightActions: [], lynchTarget: null, gameLog: [], usedAbilities: {},
-                specialConditions: { linkedPlayers: [], twinkDeactivated: false, bauerFoundBaerbel: false, eventsEnabled: false, lastEventDay: 0, activeEvent: null },
-                config: gameState.config // Konfiguration beibehalten
-            };
-            clearInterval(discussionTimerInterval); // Timer stoppen
-            // Clear UI elements that might hold old data
-            playerNameInputsContainer.innerHTML = '';
-            playerRoleAssignmentContainer.innerHTML = '';
-            nightPlayerList.innerHTML = '';
-            dayEventsList.innerHTML = '';
-            dayPlayerListStatus.innerHTML = '';
-            dayVoteList.innerHTML = '';
-            lynchPlayerListStatus.innerHTML = '';
-            winnersList.innerHTML = '';
-            // Reset error messages and special UI
-            roleAssignmentError.classList.add('hidden');
-            nightSpecialUI.innerHTML = '';
-            selectionInfo.textContent = '';
-            lynchSelectionInfo.textContent = '';
-            beatrixResultSpan.textContent = '';
-            beatrixInterventionDiv.classList.add('hidden');
-            dayEventAnnouncement.classList.add('hidden');
-
-            setupPlayerCountButtons();
-            showScreen('screen-setup-players');
-        });
+                setupPlayerCountButtons();
+                showScreen('screen-setup-players');
+            });
+        }
 
         // --- Initialisierung ---
-        // Wrap initialization in DOMContentLoaded
         document.addEventListener('DOMContentLoaded', () => {
             console.log("DOM fully loaded and parsed");
-            // Initialisiere DOM-Element-Variablen hier, falls sie nicht global sein sollen
-            // ...
-            setupPlayerCountButtons();
+            initializeDOMElements(); // DOM-Elemente initialisieren
+            addEventListeners(); // Event Listener hinzufügen
+            setupPlayerCountButtons(); // Spieleranzahl-Buttons erstellen
             showScreen('screen-setup-players'); // Startbildschirm anzeigen
         });
 
@@ -2406,3 +2437,14 @@
 
 </body>
 </html>
+```
+
+**Änderungen:**
+
+1.  **`saveNamesAndGoToRoles()` Funktion:** Eine neue Funktion wurde eingeführt. Sie wird aufgerufen, wenn der Button "Weiter zur Rollenverteilung" geklickt wird. Diese Funktion liest die Namen aus den Input-Feldern (`player-name-i`) aus, speichert sie in `gameState.players[i].name` und ruft *danach* `setupRoleAssignment()` auf.
+2.  **Event Listener für `btnGoToRoleAssignment`:** Der Event Listener für diesen Button ruft jetzt `saveNamesAndGoToRoles()` auf statt direkt `setupRoleAssignment()`.
+3.  **`setupRoleAssignment()` Anpassung:** Diese Funktion liest die Namen jetzt direkt aus dem `gameState.players`-Array, das zuvor von `saveNamesAndGoToRoles()` aktualisiert wurde. Es wird auch geprüft, ob die Spieleranzahl im `gameState` mit der erwarteten Anzahl übereinstimmt, um Fehler abzufangen.
+4.  **DOM Element Initialisierung:** Die Zuweisung der DOM-Elemente zu JavaScript-Variablen wurde in eine eigene Funktion `initializeDOMElements()` ausgelagert und wird nun sicher innerhalb von `DOMContentLoaded` aufgerufen, bevor die Event Listener hinzugefügt werden. Dies stellt sicher, dass alle Elemente verfügbar sind, wenn die Skripte darauf zugreifen.
+5.  **Diverse Checks:** Zusätzliche Prüfungen wurden eingebaut, um sicherzustellen, dass auf Elemente und Daten zugegriffen wird, die auch existieren, um Laufzeitfehler zu vermeiden.
+
+Bitte probiere diese Version aus. Der Screen "Rollen verteilen" sollte jetzt korrekt die zuvor eingegebenen Spielernamen anzeigen und für jeden Spieler ein Dropdown zur Rollenauswahl bereitstellen. Der Button "Spiel starten" sollte dann die Validierung und den Start der nächsten Phase auslös
